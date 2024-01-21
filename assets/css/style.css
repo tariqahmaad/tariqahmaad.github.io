@@ -155,6 +155,29 @@ h6 {
   }
 }
 
+/* Tariq editing part and this is a code cursor editing */
+
+#role {
+    border-right: 2px solid rgba(255, 255, 255, 0); /* Initial state of the cursor */
+    display: inline-block;
+    margin-left: 5px;
+    width: auto;
+}
+
+/* Cursor blink animation */
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Apply the blink animation to the role span */
+#role.cursor {
+    animation: blink 1s step-end infinite;
+}
+
+
+
 /* Header Top */
 #header.header-top {
   height: 80px;

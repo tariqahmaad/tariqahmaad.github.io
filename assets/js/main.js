@@ -250,4 +250,47 @@
    */
   new PureCounter();
 
+  // Typing effect for role text on home page (index.html)
+      const roles = ["Full Stack Developer", "Backend Engineer", "Software Engineer", "Tech Enthusiast"];
+        let currentRole = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let timer;
+
+        function typeEffect() {
+          const roleSpan = document.getElementById('role');
+          const fullText = roles[currentRole];
+
+          if (isDeleting) {
+            // Erase character
+            charIndex--;
+            timer = 60; // Faster erase speed
+          } else {
+            // Type character
+            charIndex++;
+            timer = 150; // Typing speed
+          }
+
+          // Update text in the span
+          roleSpan.textContent = fullText.substring(0, charIndex);
+
+          if (!isDeleting && charIndex === fullText.length) {
+            // Pause at end of typing
+            timer = 2000;
+            isDeleting = true;
+          } else if (isDeleting && charIndex === 0) {
+            // Move to next role
+            isDeleting = false;
+            currentRole = (currentRole + 1) % roles.length;
+            timer = 500; // Pause before start typing next role
+          }
+
+          setTimeout(typeEffect, timer);
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+          const roleSpan = document.getElementById('role');
+          roleSpan.classList.add('cursor'); // Add cursor class
+          typeEffect();
+        });
+
 })()
