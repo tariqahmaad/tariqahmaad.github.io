@@ -195,16 +195,51 @@ h6 {
     height: 60px;
   }
 
+    #header.header-top .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    }
+
   #header.header-top h1 {
     font-size: 26px;
+    margin-right: 20px;
+  }
+  #header.header-top img {
+    order: -1;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 922px) {
+  #header.header-top {
+    height: 60px;
+  }
+
+    #header.header-top .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    }
+
+  #header.header-top h1 {
+    font-size: 26px;
+    margin-right: 20px;
+  }
+  #header.header-top img {
+    order: -1;
+    margin-right: 10px;
   }
 }
 
 /* Tariq editing part and this is a code slash icon editing */
 .ri-code-s-slash-fill {
-    font-size: 90px; /* Adjust size as needed */
+    font-size: 70px; /* Adjust size as needed */
     color: #18d26e; /* Adjust color as needed */
 }
+
 
 /*--------------------------------------------------------------
 # Navigation Menu
