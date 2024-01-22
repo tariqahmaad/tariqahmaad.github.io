@@ -295,7 +295,8 @@
       //     typeEffect();
       //   });
 
-      const roles = ["Full Stack Developer", "Backend Engineer", "Software Engineer", "DevOps Engineer", "Network Engineer", "UI/UX Designer"];
+      // Typing effect for role text on home page as a matrix animations(index.html)
+      const roles = ["Computer Engineer","Full-Stack Developer", "Backend Engineer", "Software Engineer", "DevOps Engineer", "Network Engineer", "UI/UX Designer"];
       let currentRole = 0;
       let charIndex = 0;
       let isDeleting = false;
