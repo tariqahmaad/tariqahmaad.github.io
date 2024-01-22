@@ -28,12 +28,12 @@ body::before {
   height: 100vh;
   z-index: -1;
   /* tariq made those changes and it is for blurring effect */
-  -webkit-filter: blur(5px); 
-  -moz-filter: blur(5px);
-  -o-filter: blur(5px);
-  -ms-filter: blur(5px);
-  filter: blur(5px);
-  
+  /* -webkit-filter: blur(2px); 
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+   */
 }
 
 @media (min-width: 1024px) {
