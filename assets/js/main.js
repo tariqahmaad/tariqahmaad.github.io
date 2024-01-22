@@ -332,7 +332,7 @@
           // Move to next role
           isDeleting = false;
           currentRole = (currentRole + 1) % roles.length;
-          timer = 1000; // Pause before start typing next role
+          timer = 500; // Pause before start typing next role
         }
 
         setTimeout(typeEffect, timer);
