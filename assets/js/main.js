@@ -312,7 +312,7 @@
         } else {
           // Type character
           charIndex++;
-          timer = 150; // Typing speed
+          timer = 120; // Typing speed
         }
 
         // Generate matrix-like text
