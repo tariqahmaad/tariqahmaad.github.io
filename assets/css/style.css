@@ -237,6 +237,11 @@ h6 {
 }
 
 @media (max-width: 768px) {
+
+  body{
+    overflow: hidden;
+  }
+
   #header.header-top {
     height: 60px;
   }
