@@ -39,7 +39,7 @@ body::before {
 /* My name font and style */
 .stylish-name {
             font-family: 'Courier New', Courier, monospace; /* Change to any desired font */
-            font-size: 2em;
+            font-size: 1.6em;
             color: #4CAF50; /* Change to any desired color */
             text-shadow: 2px 2px 4px #000000; /* Optional: Add a shadow effect */
         }
