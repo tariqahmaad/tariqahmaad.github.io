@@ -38,15 +38,15 @@ body::before {
 
 /* My name font and style */
 .stylish-name {
-            font-family: 'Courier New', Courier, monospace; /* Change to any desired font */
-            font-size: 1.6em;
-            color: #4CAF50; /* Change to any desired color */
-            text-shadow: 2px 2px 4px #000000; /* Optional: Add a shadow effect */
-        }
-
-         #role {
-            font-family: 'Cascadia Mono', monospace;
-        }
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.6em;
+    color: #4CAF50;
+    text-shadow: 2px 2px 4px #000000;
+    display: inline-flex; /* Use flexbox to align elements in a row */
+    align-items: center; /* Vertically center elements */
+    gap: 10px; /* Adjust space between text and the icon */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
@@ -59,10 +59,27 @@ body {
     -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
 
-@media (min-width: 1024px) {
-  body::before {
-    background-attachment: fixed;
-  }
+
+@media (max-width: 480px) {
+    .stylish-name {
+        font-size: 1em;
+        gap: 4px;
+    }
+
+    .ri-code-s-slash-fill {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 1024px) {
+    .stylish-name {
+        font-size: 1.3em;
+        gap: 8px;
+    }
+
+    .ri-code-s-slash-fill {
+        font-size: 1.1em;
+    }
 }
 
 a {
@@ -185,6 +202,8 @@ h6 {
     display: inline-block;
     margin-left: 5px;
     width: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
 }
 
 /* Cursor blink animation */
@@ -238,9 +257,18 @@ h6 {
 
 @media (max-width: 768px) {
 
-  body{
-    /* overflow: hidden; */
-  }
+  /* body{
+    overflow: hidden;
+  } */
+
+  .stylish-name {
+        font-size: 1.2em;
+        gap: 6px;
+    }
+
+    .ri-code-s-slash-fill {
+        font-size: 1em;
+    }
 
   #header.header-top {
     height: 60px;
@@ -287,10 +315,10 @@ h6 {
 
 /* Tariq editing part and this is a code slash icon editing */
 .ri-code-s-slash-fill {
-    font-size: 70px; /* Adjust size as needed */
+    font-size: 1.2em; /* Use relative units for responsiveness */
     color: #18d26e; /* Adjust color as needed */
+    margin-right: -8px;
 }
-
 
 /*--------------------------------------------------------------
 # Navigation Menu
