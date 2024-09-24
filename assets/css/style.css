@@ -71,7 +71,21 @@ body {
     font-size: 1.3em;
     white-space: wrap;
   }
+
+  .ri-code-s-slash-fill {
+    font-size: 70px !important; /* Adjust size as needed */
+  }
+
 }
+
+
+/* Tariq editing part and this is a code slash icon editing */
+.ri-code-s-slash-fill {
+    font-size: 100px; /* Adjust size as needed */
+    color: #18d26e; /* Adjust color as needed */
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
 
 a {
   color: #18d26e;
@@ -293,12 +307,6 @@ h6 {
   }
 }
 
-/* Tariq editing part and this is a code slash icon editing */
-.ri-code-s-slash-fill {
-    font-size: 70px; /* Adjust size as needed */
-    color: #18d26e; /* Adjust color as needed */
-    margin-right: 10px; /* Adjust margin as needed */
-}
 
 
 /*--------------------------------------------------------------
