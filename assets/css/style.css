@@ -239,7 +239,7 @@ h6 {
 @media (max-width: 768px) {
 
   body{
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
   #header.header-top {
