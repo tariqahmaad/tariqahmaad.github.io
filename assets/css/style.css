@@ -42,9 +42,10 @@ body::before {
             font-size: 1.6em;
             color: #4CAF50; /* Change to any desired color */
             text-shadow: 2px 2px 4px #000000; /* Optional: Add a shadow effect */
+            white-space: nowrap; /* Prevent text wrapping */
         }
 
-         #role {
+        #role {
             font-family: 'Cascadia Mono', monospace;
         }
 
@@ -62,6 +63,13 @@ body {
 @media (min-width: 1024px) {
   body::before {
     background-attachment: fixed;
+  }
+}
+
+@media (max-width: 450px) {
+  .stylish-name {
+    font-size: 1.3em;
+    white-space: wrap;
   }
 }
 
@@ -289,6 +297,7 @@ h6 {
 .ri-code-s-slash-fill {
     font-size: 70px; /* Adjust size as needed */
     color: #18d26e; /* Adjust color as needed */
+    margin-right: 10px; /* Adjust margin as needed */
 }
 
 
