@@ -248,16 +248,120 @@
     let charIndex = 0;
     let isDeleting = false;
     let typingTimeout;
+    let glitchInterval;
+    let matrixChars = [];
 
-    // Character set for matrix effect
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*_-+=';
+    // Extended character set for matrix effect with special symbols
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=<>{}[]|/\\:;.,~`░▒▓█▄▀■□▪▫▬▲►▼◄◊○●◘◙♠♣♥♦';
+    const glitchChars = '!@#$%^&*<>{}[]|/\\:;░▒▓█▄▀■□▪▫';
+
+    // Color variations for advanced matrix effect
+    const colors = ['#00ff41', '#0f0', '#11ff00', '#22dd33', '#33cc33'];
 
     // Get random character for matrix effect
     const getRandomChar = (intensity = 1) => {
+      // Just return the character itself - no HTML wrapping
       if (Math.random() > 0.92) return '█';
       if (Math.random() > 0.96) return '░';
+
       const visibleChars = Math.max(1, Math.floor(chars.length * (intensity * 0.8 + 0.2)));
       return chars[Math.floor(Math.random() * visibleChars)];
+    };
+
+    // Format a character with styling
+    const formatChar = (char, isStable = false) => {
+      if (char === ' ') return '<span style="opacity: 0.2"> </span>';
+
+      // Stable characters are white
+      if (isStable) return `<span style="color: white">${char}</span>`;
+
+      // Random characters have matrix styling
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const opacity = 0.5 + (Math.random() * 0.5);
+      return `<span class="matrix-char" style="color: ${color}; opacity: ${opacity}">${char}</span>`;
+    };
+
+    // Create glitch effect
+    const glitchEffect = (element, text, duration = 500) => {
+      // Clear any existing interval first
+      if (glitchInterval) clearInterval(glitchInterval);
+
+      // Add the glitch class temporarily
+      element.classList.add('glitch');
+
+      const originalText = text;
+      let glitchText = text;
+      let glitchCount = 0;
+      const maxGlitches = 5;
+
+      glitchInterval = setInterval(() => {
+        if (glitchCount >= maxGlitches) {
+          clearInterval(glitchInterval);
+          element.classList.remove('glitch');
+
+          // Restore original text with white color
+          element.innerHTML = originalText.split('').map(char =>
+            `<span style="color: white">${char}</span>`
+          ).join('');
+          return;
+        }
+
+        // Create glitch text by replacing random characters
+        glitchText = originalText.split('').map(char => {
+          if (Math.random() > 0.7) {
+            const glitchChar = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+            return `<span style="color: #ff3300; text-shadow: 2px 0 #00ffff;">${glitchChar}</span>`;
+          }
+          return `<span style="color: white">${char}</span>`;
+        }).join('');
+
+        element.innerHTML = glitchText;
+        glitchCount++;
+      }, duration / maxGlitches);
+    };
+
+    // Initialize matrix character tracking
+    const initMatrixChars = (length) => {
+      matrixChars = [];
+      for (let i = 0; i < length; i++) {
+        matrixChars.push({
+          char: getRandomChar(1),  // Just the character, no HTML
+          stability: Math.random() * 0.5,  // Start with lower stability
+          finalChar: '',  // Will be set later
+          isFlickering: Math.random() > 0.8  // Some characters flicker
+        });
+      }
+    };
+
+    // Update matrix characters gradually
+    const updateMatrixChars = (finalText) => {
+      // Initialize if not already done
+      if (matrixChars.length < finalText.length) {
+        initMatrixChars(finalText.length);
+      }
+
+      for (let i = 0; i < finalText.length; i++) {
+        // Set the target final character
+        matrixChars[i].finalChar = finalText[i];
+
+        // Increase stability of characters that match their final state
+        if (matrixChars[i].char === matrixChars[i].finalChar) {
+          matrixChars[i].stability += 0.2;
+        } else {
+          // Randomize characters with probability based on stability
+          if (Math.random() > matrixChars[i].stability) {
+            matrixChars[i].char = getRandomChar(matrixChars[i].stability + 0.3);
+          } else {
+            matrixChars[i].char = matrixChars[i].finalChar;
+          }
+
+          // Gradually increase stability
+          matrixChars[i].stability = Math.min(1, matrixChars[i].stability + 0.1);
+        }
+
+        // Sometimes characters flicker
+        matrixChars[i].isFlickering = Math.random() > 0.9;
+      }
     };
 
     return function () {
@@ -277,29 +381,52 @@
         if (charIndex === fullText.length) {
           roleSpan.classList.remove('typing');
           roleSpan.classList.add('completed');
+          // Create glitch effect when text is complete
+          glitchEffect(roleSpan, fullText);
         } else {
           roleSpan.classList.remove('completed');
           roleSpan.classList.add('typing');
         }
       }
 
-      // Generate matrix-like text
-      let matrixText = fullText.substring(0, charIndex);
+      // Make sure matrix characters are initialized
+      if (matrixChars.length === 0) {
+        initMatrixChars(fullText.length);
+      }
+
+      // Update matrix characters
+      updateMatrixChars(fullText);
+
+      // Build matrix-like HTML
+      let matrixHTML = "";
+
+      // Add visible characters as stable
+      for (let i = 0; i < charIndex; i++) {
+        matrixHTML += formatChar(fullText[i], true);
+      }
 
       // Add matrix effect for remaining characters
       if (charIndex < fullText.length) {
-        const bufferSize = Math.min(5, fullText.length - charIndex);
+        const bufferSize = Math.min(8, fullText.length - charIndex);
+
         for (let i = 0; i < bufferSize; i++) {
           const position = charIndex + i;
-          if (position < fullText.length) {
+          if (position < fullText.length && position < matrixChars.length) {
             const intensity = (bufferSize - i) / bufferSize;
-            matrixText += Math.random() > (0.3 + intensity * 0.6) ? getRandomChar(intensity) : ' ';
+
+            if (Math.random() > (0.3 + intensity * 0.6)) {
+              // Use the character from our tracking array
+              const flickerClass = matrixChars[position].isFlickering ? ' flicker' : '';
+              matrixHTML += formatChar(matrixChars[position].char);
+            } else {
+              matrixHTML += '<span style="opacity: 0.2"> </span>';
+            }
           }
         }
       }
 
-      // Update text
-      roleSpan.textContent = matrixText;
+      // Update text with HTML
+      roleSpan.innerHTML = matrixHTML;
 
       // Set next state
       if (!isDeleting && charIndex === fullText.length) {
@@ -311,6 +438,9 @@
         currentRole = (currentRole + 1) % roles.length;
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(typeEffect, 300);
+
+        // Reset matrix characters for new role
+        initMatrixChars(roles[currentRole].length);
       } else {
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(typeEffect, timer);

@@ -1270,6 +1270,42 @@ section .container {
   border: 2px solid var(--primary-color);
 }
 
+/* Resume Download Button Styles */
+.download-cv-btn {
+  display: flex;
+  justify-content: flex-start;  /* Align to the left */
+  margin-top: 10px;
+  margin-bottom: 30px;
+  margin-left: 5px;  /* Add a bit of left margin */
+}
+
+.btn-cv {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(45deg, #1f1f1f, #2b2b2b);
+  color: #18d26e;
+  border: 2px solid #18d26e;
+  padding: 6px 18px;  /* Smaller padding */
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 14px;  /* Smaller font size */
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);  /* Smaller shadow */
+}
+
+.btn-cv:hover {
+  background: #18d26e;
+  color: #fff;
+  transform: translateY(-2px);  /* Smaller lift effect */
+  box-shadow: 0 5px 15px rgba(24, 210, 110, 0.4);
+}
+
+.btn-cv i {
+  margin-right: 6px;  /* Smaller margin */
+  font-size: 1em;  /* Smaller icon */
+}
+
 /*--------------------------------------------------------------
 # Services
 --------------------------------------------------------------*/
