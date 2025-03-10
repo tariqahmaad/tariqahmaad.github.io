@@ -413,8 +413,92 @@ a:hover {
   margin: 0;
 }
 
-@media (max-width: 768px) {
+/* Position the hire-me-btn in header-top mode */
+#header.header-top .hire-me-btn {
+  display: none; /* Hide by default */
+}
 
+/* Show hire-me-btn in the top nav for laptop screens */
+@media (min-width: 992px) {
+  #header.header-top .hire-me-btn {
+    display: flex !important;
+    align-items: center;
+    margin: 0;
+    margin-right: 20px; /* Add right margin to create space between button and nav */
+    position: relative; /* Use relative positioning */
+  }
+  
+  #header.header-top .container {
+    position: relative; /* Enable positioning context */
+    justify-content: flex-end;
+  }
+  
+  #header.header-top .navbar {
+    margin-left: 15px; /* Add left margin to create gap from the hire button */
+  }
+  
+  #header.header-top h1 {
+    margin-right: auto; /* Push the h1 to the left */
+  }
+  
+  /* Style the button in the header-top mode */
+  #header.header-top .btn-hire {
+    padding: 5px 15px;
+    font-size: 11px;
+    background: linear-gradient(45deg, #18d26e, #0f9d53);
+    color: #fff;
+  }
+  
+  #header.header-top .btn-hire:hover {
+    background: transparent;
+    color: #18d26e;
+  }
+}
+
+/* Ensure hire-me-btn is always visible on mobile */
+@media (max-width: 991px) {
+  #header .hire-me-btn {
+    position: static;
+    margin: 15px auto 20px;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+  }
+  
+  #header .btn-hire {
+    padding: 6px 15px;
+    font-size: 12px;
+    box-shadow: 0 4px 12px rgba(24, 210, 110, 0.3);
+  }
+  
+  /* Hide the hire-me-btn when header is in top position on mobile */
+  #header.header-top .hire-me-btn {
+    display: none !important;
+  }
+  
+  /* Adjust spacing for proper positioning */
+  #header h2 {
+    margin-bottom: 5px;
+  }
+  
+  #header .navbar {
+    margin-top: 10px;
+  }
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 375px) {
+  #header .hire-me-btn {
+    margin: 10px auto 15px;
+  }
+  
+  #header .btn-hire {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
   body{
     /* overflow: hidden; */
   }
@@ -423,12 +507,12 @@ a:hover {
     height: 60px;
   }
 
-    #header.header-top .container {
+  #header.header-top .container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    }
+  }
 
   #header.header-top h1 {
     font-size: 26px;
@@ -606,6 +690,23 @@ a:hover {
 .navbar-mobile a:focus {
   font-size: 16px;
   position: relative;
+}
+
+/* Adjust navbar-mobile for smaller screens with hire-me button */
+@media (max-width: 400px) {
+  #header .hire-me-btn {
+    right: 50px; /* Move closer to toggle on very small screens */
+  }
+  
+  #header .btn-hire {
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+  
+  #header .btn-hire i {
+    margin-right: 4px;
+    font-size: 0.9em;
+  }
 }
 
 /*--------------------------------------------------------------
@@ -1316,6 +1417,68 @@ section .container {
 .btn-cv i {
   margin-right: 6px;  /* Smaller margin */
   font-size: 1em;  /* Smaller icon */
+}
+
+/* Hire Me Button Styles */
+.hire-me-btn {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-align: left; /* Align left by default for larger screens */
+}
+
+/* For medium screens and above, add specific positioning */
+@media (min-width: 577px) {
+  .hire-me-btn {
+    margin-left: 0; /* Ensure no left margin */
+    padding-left: 0; /* Ensure no left padding */
+    margin-top: 15px; /* Increase top margin for better spacing */
+    text-align: left;
+  }
+  
+  .btn-hire {
+    margin-left: 0; /* Ensure button starts at the left edge */
+    padding: 8px 20px; /* Slightly larger button on desktop */
+    font-size: 14px;
+  }
+  
+  /* In case h2 has any specific text alignment */
+  #header h2 {
+    text-align: left;
+  }
+}
+
+/* Keep the mobile styling (centered) for phone screens */
+@media (max-width: 576px) {
+  .hire-me-btn {
+    text-align: center;
+  }
+}
+
+.btn-hire {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(45deg, #18d26e, #0f9d53);
+  color: #fff;
+  border: 2px solid #18d26e;
+  padding: 7px 10px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(24, 210, 110, 0.3);
+}
+
+.btn-hire:hover {
+  background: transparent;
+  color: #18d26e;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(24, 210, 110, 0.5);
+}
+
+.btn-hire i {
+  margin-right: 8px;
+  font-size: 1.1em;
 }
 
 /*--------------------------------------------------------------
