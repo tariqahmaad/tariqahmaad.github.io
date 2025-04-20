@@ -509,4 +509,28 @@
   }
 
   window.addEventListener('scroll', animateOnScroll);
+
+  // Scroll animation
+  function handleScrollAnimations() {
+    const elements = document.querySelectorAll('.animate-on-scroll');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    elements.forEach(element => {
+      observer.observe(element);
+    });
+  }
+
+  // Initialize scroll animations
+  document.addEventListener('DOMContentLoaded', () => {
+    handleScrollAnimations();
+  });
 })();
