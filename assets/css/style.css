@@ -17,6 +17,7 @@
   --card-bg: rgba(255, 255, 255, 0.08);
   --card-hover-bg: rgba(200, 255, 200, 0.9);
   --transition: all 0.3s ease;
+  --mobile-menu-bg: rgba(10, 10, 10, 0.95);
 }
 
 /* Base Styles */
@@ -634,6 +635,7 @@ a:hover {
   position: fixed;
   right: 15px;
   top: 15px;
+  z-index: 1000;
 }
 
 @media (max-width: 991px) {
@@ -653,34 +655,51 @@ a:hover {
   right: 0;
   left: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  transition: 0.3s;
+  background: var(--mobile-menu-bg);
+  transition: 0.4s;
   z-index: 999;
   margin-top: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .navbar-mobile .mobile-nav-toggle {
   position: absolute;
   top: 15px;
   right: 15px;
+  color: var(--primary-color);
 }
 
 .navbar-mobile ul {
-  display: block;
+  display: flex;
   position: absolute;
-  top: 55px;
-  right: 15px;
-  bottom: 45px;
-  left: 15px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 10px 0;
-  overflow-y: auto;
   transition: 0.3s;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  width: 90%;
+  max-width: 300px;
 }
 
 .navbar-mobile li {
+  margin: 0;
   padding: 12px 20px;
+  width: 100%;
+  text-align: center;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.4s forwards;
 }
+
+.navbar-mobile li:nth-child(1) { animation-delay: 0.1s; }
+.navbar-mobile li:nth-child(2) { animation-delay: 0.2s; }
+.navbar-mobile li:nth-child(3) { animation-delay: 0.3s; }
+.navbar-mobile li:nth-child(4) { animation-delay: 0.4s; }
+.navbar-mobile li:nth-child(5) { animation-delay: 0.5s; }
 
 .navbar-mobile li+li {
   margin: 0;
@@ -688,25 +707,80 @@ a:hover {
 
 .navbar-mobile a,
 .navbar-mobile a:focus {
-  font-size: 16px;
+  font-size: 18px;
   position: relative;
+  display: inline-block;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 15px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Adjust navbar-mobile for smaller screens with hire-me button */
-@media (max-width: 400px) {
-  #header .hire-me-btn {
-    right: 50px; /* Move closer to toggle on very small screens */
+.navbar-mobile a:hover,
+.navbar-mobile .active,
+.navbar-mobile .active:focus,
+.navbar-mobile li:hover>a {
+  color: #fff;
+  background: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(24, 210, 110, 0.3);
+}
+
+.navbar-mobile a:before {
+  display: none;
+}
+
+/* Mobile social links in menu */
+.navbar-mobile .mobile-social-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  opacity: 0;
+  animation: fadeIn 0.6s forwards 0.6s;
+}
+
+.navbar-mobile .mobile-social-links a {
+  margin: 0 8px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  transition: 0.3s;
+  border: none;
+  padding: 0;
+}
+
+.navbar-mobile .mobile-social-links a:hover {
+  background: var(--primary-color);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* Animation for menu opening */
+@keyframes menuOverlay {
+  from {
+    opacity: 0;
+    visibility: hidden;
   }
-  
-  #header .btn-hire {
-    padding: 3px 8px;
-    font-size: 9px;
+  to {
+    opacity: 1;
+    visibility: visible;
   }
-  
-  #header .btn-hire i {
-    margin-right: 4px;
-    font-size: 0.9em;
-  }
+}
+
+.navbar-mobile {
+  animation: menuOverlay 0.3s forwards;
 }
 
 /*--------------------------------------------------------------
@@ -2033,4 +2107,10 @@ section .container {
 
 .credits a:hover {
   color: #fff;
+}
+
+@media (min-width: 992px) {
+  .mobile-social-links {
+    display: none !important;
+  }
 }
