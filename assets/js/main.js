@@ -251,7 +251,7 @@
 
   // Optimized typing effect for role text
   const typeEffect = (() => {
-    const roles = ["Computer Engineer", "Full-Stack Developer", "Backend Engineer", "Software Engineer", "DevOps Engineer", "Network Engineer", "UI/UX Designer"];
+    const roles = ["Cybersecurity Analyst", "Security Consultant", "Penetration Tester", "Security Engineer", "Incident Response Specialist", "Ethical Hacker", "Computer Engineer"];
     let currentRole = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -455,6 +455,39 @@
       }
     };
   })();
+
+  // Animate metric counters
+  const metricValues = document.querySelectorAll('.metric-value');
+  if (metricValues.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = +entry.target.getAttribute('data-target');
+          const duration = 2000;
+          const startTime = Date.now();
+
+          const updateCounter = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const value = Math.floor(progress * target);
+
+            entry.target.textContent = value.toLocaleString() + (target > 100 ? 'K' : '');
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            } else {
+              entry.target.textContent = target.toLocaleString() + (target > 100 ? 'K' : '%');
+            }
+          };
+
+          requestAnimationFrame(updateCounter);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    metricValues.forEach(value => observer.observe(value));
+  }
 
   // Initialize components when DOM is ready
   document.addEventListener("DOMContentLoaded", function () {

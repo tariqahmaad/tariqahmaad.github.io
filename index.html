@@ -18,7 +18,7 @@
 
   <!-- Google Fonts -->
   <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i"
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:100,100i,300,300i,400,400i,500,500i,600,600i,700,700i"
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
@@ -31,6 +31,9 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/branding.css" rel="stylesheet">
+  <link href="assets/css/glassmorphism.css" rel="stylesheet">
+  <link href="assets/css/testimonials-professional.css" rel="stylesheet">
 
   <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -82,15 +85,16 @@
   <div id="particles-js"></div>
 
   <!-- ======= Header ======= -->
-  <header id="header">
+  <header id="header" role="banner">
     <div class="container">
 
       <a href="index.html" class="mr-auto"><img src="" alt="" class="img-fluid"><i class="ri-code-s-slash-fill"></i></a>
       <h1><a href="index.html" class="stylish-name">Tariq Ahmad</a></h1>
-      <h2>I'm a passionate <span id="role"></span> <br>based in Istanbul</h2>
+      <h2 class="header-subtitle">I'm a passionate</h2>
+      <h2 class="header-subtitle role-h2"><span id="role"></span></h2> <br>
 
       <div class="hire-me-btn">
-        <a href="mailto:tariq_muzamil@live.com?subject=Job%20Opportunity%20for%20You" class="btn-hire">
+        <a href="mailto:tariq_muzamil@live.com?subject=Job%20Opportunity%20for%20You" class="btn-brand glass-btn">
           <i class="bi bi-briefcase"></i> Hire Me
         </a>
       </div>
@@ -102,19 +106,22 @@
           <li><a class="nav-link" href="#resume">Resume</a></li>
           <li><a class="nav-link" href="#services">Projects</a></li>
           <li><a class="nav-link" href="#contact">Contact</a></li>
-          <div class="mobile-social-links">
-            <a href="https://x.com/arrick007" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
-            <a href="https://www.facebook.com/tariq.ahmaaad" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="https://www.instagram.com/0xtahmad/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" aria-label="LinkedIn"><i
+          <div class="mobile-social-links glass-social">
+            <a href="https://x.com/arrick007" class="twitter" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
+            <a href="https://www.facebook.com/tariq.ahmaaad" class="facebook" aria-label="Facebook"><i
+                class="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/0xtahmad/" class="instagram" aria-label="Instagram"><i
+                class="bi bi-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
                 class="bi bi-linkedin"></i></a>
-            <a href="https://github.com/tariqahmaad" aria-label="GitHub"><i class="ri-github-fill"></i></a>
+            <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
+                class="ri-github-fill"></i></a>
           </div>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <div class="social-links">
+      <div class="social-links glass-social">
         <a href="https://x.com/arrick007" class="twitter"><i class="ri-twitter-x-line"></i></a>
         <a href="https://www.facebook.com/tariq.ahmaaad" class="facebook"><i class="bi bi-facebook"></i></a>
         <a href="https://www.instagram.com/0xtahmad/" class="instagram"><i class="bi bi-instagram"></i></a>
@@ -193,7 +200,8 @@
 
       <div class="row counts-modern">
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="count-card">
+          <div class="count-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="count-icon">
               <i class="bi bi-emoji-smile"></i>
             </div>
@@ -207,7 +215,8 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="count-card">
+          <div class="count-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="count-icon">
               <i class="bi bi-journal-richtext"></i>
             </div>
@@ -221,7 +230,8 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="count-card">
+          <div class="count-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="count-icon">
               <i class="bi bi-headset"></i>
             </div>
@@ -235,7 +245,8 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="count-card">
+          <div class="count-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="count-icon">
               <i class="bi bi-award"></i>
             </div>
@@ -260,111 +271,119 @@
       <div class="row skills-modern">
         <!-- Markup & Style -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-file-code"></i></div>
             <h4>Markup & Style</h4>
             <div class="skill-tags">
-              <span>HTML</span>
-              <span>CSS</span>
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
             </div>
           </div>
         </div>
 
         <!-- Languages -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-terminal"></i></div>
             <h4>Languages</h4>
             <div class="skill-tags">
-              <span>C</span>
-              <span>C++</span>
-              <span>C#</span>
-              <span>Java</span>
-              <span>Python</span>
-              <span>JavaScript</span>
-              <span>PHP</span>
+              <span class="tech-tag">C</span>
+              <span class="tech-tag">C++</span>
+              <span class="tech-tag">C#</span>
+              <span class="tech-tag">Java</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">PHP</span>
             </div>
           </div>
         </div>
 
         <!-- Frameworks & Libraries -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-boxes"></i></div>
             <h4>Frameworks & Libraries</h4>
             <div class="skill-tags">
-              <span>Django (Python)</span>
-              <span>Spring Boot (Java)</span>
-              <span>React (JavaScript)</span>
-              <span>Bootstrap (CSS/JavaScript)</span>
+              <span class="tech-tag">Django (Python)</span>
+              <span class="tech-tag">Spring Boot (Java)</span>
+              <span class="tech-tag">React (JavaScript)</span>
+              <span class="tech-tag">Bootstrap (CSS/JavaScript)</span>
             </div>
           </div>
         </div>
 
         <!-- Databases -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-database"></i></div>
             <h4>Databases</h4>
             <div class="skill-tags">
-              <span>MySQL</span>
-              <span>MongoDB</span>
-              <span>PostgreSQL</span>
-              <span>SQLite</span>
+              <span class="tech-tag">MySQL</span>
+              <span class="tech-tag">MongoDB</span>
+              <span class="tech-tag">PostgreSQL</span>
+              <span class="tech-tag">SQLite</span>
             </div>
           </div>
         </div>
 
         <!-- Tools -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-tools"></i></div>
             <h4>Tools</h4>
             <div class="skill-tags">
-              <span>Git</span>
-              <span>Docker</span>
-              <span>VS Code</span>
-              <span>Photoshop</span>
+              <span class="tech-tag">Git</span>
+              <span class="tech-tag">Docker</span>
+              <span class="tech-tag">VS Code</span>
+              <span class="tech-tag">Photoshop</span>
             </div>
           </div>
         </div>
 
         <!-- Networking -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-globe"></i></div>
             <h4>Networking</h4>
             <div class="skill-tags">
-              <span>CCNA</span>
-              <span>TCP/IP</span>
-              <span>LAN/WAN</span>
+              <span class="tech-tag">CCNA</span>
+              <span class="tech-tag">TCP/IP</span>
+              <span class="tech-tag">LAN/WAN</span>
             </div>
           </div>
         </div>
 
         <!-- OS & Systems -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-window-desktop"></i></div>
             <h4>OS & Systems</h4>
             <div class="skill-tags">
-              <span>Windows</span>
-              <span>Linux</span>
-              <span>MacOS</span>
+              <span class="tech-tag">Windows</span>
+              <span class="tech-tag">Linux</span>
+              <span class="tech-tag">MacOS</span>
             </div>
           </div>
         </div>
 
         <!-- Soft Skills -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="skill-card">
+          <div class="skill-card glass-projects">
+            <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-briefcase"></i></div>
             <h4>Soft Skills</h4>
             <div class="skill-tags">
-              <span>Teamwork</span>
-              <span>Communication</span>
-              <span>Problem Solving</span>
-              <span>Time Management</span>
+              <span class="tech-tag">Teamwork</span>
+              <span class="tech-tag">Communication</span>
+              <span class="tech-tag">Problem Solving</span>
+              <span class="tech-tag">Time Management</span>
             </div>
           </div>
         </div>
@@ -382,77 +401,92 @@
         <div class="swiper-wrapper">
 
           <div class="swiper-slide">
-            <div class="testimonial-item">
-              <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Your ability to tackle complex problems with innovative solutions is truly impressive. Your passion
-                for technology
-                shines through in your work, making you an invaluable asset to any team
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-              </p>
-              <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-              <h3>ALPARSLAN HORASAN</h3>
-              <h4>Assistant Professor</h4>
+            <div class="testimonial-item glass-projects">
+              <div class="light-reflection"></div>
+              <div class="testimonial-header">
+                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="Alparslan Horasan">
+                <div class="testimonial-info">
+                  <h3>ALPARSLAN HORASAN</h3>
+                  <h4>Assistant Professor</h4>
+                </div>
+              </div>
+              <div class="testimonial-quote">
+                <p><i class="bx bxs-quote-alt-left quote-icon-left"></i>Your ability to tackle complex problems with
+                  innovative solutions is truly impressive. Your passion for technology shines through in your work,
+                  making you an invaluable asset to any team.<i class="bx bxs-quote-alt-right quote-icon-right"></i></p>
+              </div>
             </div>
           </div><!-- End testimonial item -->
 
           <div class="swiper-slide">
-            <div class="testimonial-item">
-              <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                I am consistently amazed by your dedication and teamwork. You have a knack for bringing people
-                together and fostering a
-                collaborative environment that leads to incredible results.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-              </p>
-              <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-              <h3>SELÇUK ŞENER</h3>
-              <h4>Senior Software Developer</h4>
+            <div class="testimonial-item glass-projects">
+              <div class="light-reflection"></div>
+              <div class="testimonial-header">
+                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="Selçuk Şener">
+                <div class="testimonial-info">
+                  <h3>SELÇUK ŞENER</h3>
+                  <h4>Senior Software Developer</h4>
+                </div>
+              </div>
+              <div class="testimonial-quote">
+                <p><i class="bx bxs-quote-alt-left quote-icon-left"></i>I am consistently amazed by your dedication and
+                  teamwork. You have a knack for bringing people together and fostering a collaborative environment that
+                  leads to incredible results.<i class="bx bxs-quote-alt-right quote-icon-right"></i></p>
+              </div>
             </div>
           </div><!-- End testimonial item -->
 
           <div class="swiper-slide">
-            <div class="testimonial-item">
-              <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Your coding skills are exceptional. You have a deep understanding of computer engineering principles,
-                and your ability
-                to write efficient, clean code is commendable.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-              </p>
-              <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-              <h3>ROA'A ALI</h3>
-              <h4>Assistant Professor</h4>
+            <div class="testimonial-item glass-projects">
+              <div class="light-reflection"></div>
+              <div class="testimonial-header">
+                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="Roa'a Ali">
+                <div class="testimonial-info">
+                  <h3>ROA'A ALI</h3>
+                  <h4>Assistant Professor</h4>
+                </div>
+              </div>
+              <div class="testimonial-quote">
+                <p><i class="bx bxs-quote-alt-left quote-icon-left"></i>Your coding skills are exceptional. You have a
+                  deep understanding of computer engineering principles, and your ability to write efficient, clean code
+                  is commendable.<i class="bx bxs-quote-alt-right quote-icon-right"></i></p>
+              </div>
             </div>
           </div><!-- End testimonial item -->
 
           <div class="swiper-slide">
-            <div class="testimonial-item">
-              <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Your creativity in approaching engineering challenges is outstanding. You have a unique way of
-                thinking outside the box,
-                which leads to innovative and effective solutions.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-              </p>
-              <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-              <h3>WASIM RAED</h3>
-              <h4>Senior Professor</h4>
+            <div class="testimonial-item glass-projects">
+              <div class="light-reflection"></div>
+              <div class="testimonial-header">
+                <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="Wasim Raed">
+                <div class="testimonial-info">
+                  <h3>WASIM RAED</h3>
+                  <h4>Senior Professor</h4>
+                </div>
+              </div>
+              <div class="testimonial-quote">
+                <p><i class="bx bxs-quote-alt-left quote-icon-left"></i>Your creativity in approaching engineering
+                  challenges is outstanding. You have a unique way of thinking outside the box, which leads to
+                  innovative and effective solutions.<i class="bx bxs-quote-alt-right quote-icon-right"></i></p>
+              </div>
             </div>
           </div><!-- End testimonial item -->
 
           <div class="swiper-slide">
-            <div class="testimonial-item">
-              <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Your passion for continuous learning and staying updated with the latest technological trends is
-                admirable. It's rare to
-                see someone so dedicated to personal and professional growth.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-              </p>
-              <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-              <h3>ZAFER ASLAN</h3>
-              <h4>Vice Dean</h4>
+            <div class="testimonial-item glass-projects">
+              <div class="light-reflection"></div>
+              <div class="testimonial-header">
+                <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="Zafer Aslan">
+                <div class="testimonial-info">
+                  <h3>ZAFER ASLAN</h3>
+                  <h4>Vice Dean</h4>
+                </div>
+              </div>
+              <div class="testimonial-quote">
+                <p><i class="bx bxs-quote-alt-left quote-icon-left"></i>Your passion for continuous learning and staying
+                  updated with the latest technological trends is admirable. It's rare to see someone so dedicated to
+                  personal and professional growth.<i class="bx bxs-quote-alt-right quote-icon-right"></i></p>
+              </div>
             </div>
           </div><!-- End testimonial item -->
 
@@ -479,12 +513,11 @@
 
       <div class="row">
         <div class="col-lg-6">
+          <a href="assets/CV.pdf" download class="btn-cv btn-brand glass-btn">
+            <i class="bi bi-download"></i> Download CV
+          </a>
           <h3 class="resume-title">Summary</h3>
-          <div class="download-cv-btn">
-            <a href="assets/CV.pdf" download class="btn-cv">
-              <i class="bi bi-download"></i> Download CV
-            </a>
-          </div>
+
           <div class="resume-item pb-0">
             <h4>Tariq Ahmad</h4>
             <p><em>Dynamic and innovative Computer Engineering Graduate with a strong foundation in software
@@ -640,53 +673,123 @@
 
       <div class="row">
 
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-          <div class="icon-box">
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
             <div class="icon"><i class="ri-question-answer-line"></i></div>
             <h4><a href="https://tariqahmaad.github.io/quizlet/index.html" target="_blank">Quizlet – Interactive
                 University Quiz
                 Platform</a></h4>
+            <div class="tech-tags">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Responsive</span>
+            </div>
             <p>
               A web-based quiz application designed to help students practice and test their knowledge in
               university-level
               courses.
               The platform supports course-specific quizzes, timer-based sessions, real-time scoring, and a responsive
               interface.
-              Built with HTML, CSS, and JavaScript, it also features a leaderboard system and lightweight user
-              authentication.
             </p>
+            <div class="project-actions">
+              <a href="https://tariqahmaad.github.io/quizlet/index.html" target="_blank" class="action-btn">
+                <i class="bi bi-eye"></i>Live Demo
+              </a>
+              <a href="https://github.com/tariqahmaad/quizlet" target="_blank" class="action-btn">
+                <i class="ri-github-fill"></i>View Code
+              </a>
+            </div>
           </div>
         </div>
 
 
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-          <div class="icon-box">
-            <div class="icon"><i class="ri-notion-line"></i></div>
-            <h4><a href="https://github.com/godofcode007/Note-Taking-Web-Application">Note-Taking Web Applications</a>
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
+            <div class="icon"><i class="bi bi-file-earmark-ppt"></i></div>
+            <h4><a href="https://github.com/tariqahmaad/Presentation" target="_blank">Graduation Project
+                Presentation</a>
             </h4>
-            <p>Developed a web-based note-taking app with PHP, MySQL, and front-end technologies, offering secure user
-              authentication,
-              role-specific functions, and a responsive, cross-browser interface.</p>
+            <div class="tech-tags">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Presentation</span>
+            </div>
+            <p>Developed an interactive presentation showcasing my graduation project, utilizing HTML, CSS, and
+              JavaScript for a dynamic and engaging user experience.</p>
+            <div class="project-actions">
+              <a href="https://tariqahmaad.github.io/Presentation/index.html" target="_blank" class="action-btn">
+                <i class="bi bi-eye"></i>Live Demo
+              </a>
+              <a href="https://github.com/tariqahmaad/Presentation" target="_blank" class="action-btn">
+                <i class="ri-github-fill"></i>View Code
+              </a>
+            </div>
           </div>
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-          <div class="icon-box">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
+            <div class="icon"><i class="ri-notion-line"></i></div>
+            <h4><a href="https://github.com/godofcode007/Note-Taking-Web-Application">Note-Taking Web Applications</a>
+            </h4>
+            <div class="tech-tags">
+              <span class="tech-tag">PHP</span>
+              <span class="tech-tag">MySQL</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Authentication</span>
+            </div>
+            <p>Developed a web-based note-taking app with PHP, MySQL, and front-end technologies, offering secure user
+              authentication,
+              role-specific functions, and a responsive, cross-browser interface.</p>
+            <div class="project-actions">
+              <a href="https://github.com/godofcode007/Note-Taking-Web-Application" target="_blank" class="action-btn">
+                <i class="ri-github-fill"></i>View Code
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hospital-fill"></i></div>
             <h4><a href="https://github.com/godofcode007/Hospital-Management-System">Hospital Management System</a>
             </h4>
+            <div class="tech-tags">
+              <span class="tech-tag">Java</span>
+              <span class="tech-tag">Spring Boot</span>
+              <span class="tech-tag">MySQL</span>
+              <span class="tech-tag">REST API</span>
+            </div>
             <p>Created a Java Spring Boot-based Hospital Management System to streamline hospital functions, featuring
               patient, doctor,
               and appointment management with RESTful APIs and MySQL, demonstrating strong backend development and
               system design
               skills in healthcare software solutions.</p>
+            <div class="project-actions">
+              <a href="https://github.com/godofcode007/Hospital-Management-System" target="_blank" class="action-btn">
+                <i class="ri-github-fill"></i>View Code
+              </a>
+            </div>
           </div>
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="icon-box">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hand"></i></div>
             <h4><a href="">Hand-Written Digital Classifier using Neural Networking</a></h4>
+            <div class="tech-tags">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Neural Networks</span>
+              <span class="tech-tag">Deep Learning</span>
+              <span class="tech-tag">TensorFlow</span>
+            </div>
             <p>Developed a Hand-Written Digit Classifier with Neural Networks in a Deep Learning project,
               demonstrating
               proficiency in
@@ -695,9 +798,16 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="icon-box">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-building"></i></div>
             <h4><a href="">Hotel Management System</a></h4>
+            <div class="tech-tags">
+              <span class="tech-tag">C#</span>
+              <span class="tech-tag">.NET</span>
+              <span class="tech-tag">MySQL</span>
+              <span class="tech-tag">CRUD</span>
+            </div>
             <p>Developed a C# Hotel Management System in Microsoft Visual Studio, featuring CRUD operations for
               customer
               and room
@@ -707,9 +817,16 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="icon-box">
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-bank"></i></div>
             <h4><a href="">Banking Management System</a></h4>
+            <div class="tech-tags">
+              <span class="tech-tag">Java</span>
+              <span class="tech-tag">Swing</span>
+              <span class="tech-tag">GUI</span>
+              <span class="tech-tag">Security</span>
+            </div>
             <p>Created a Java-based Banking Management System with a user-friendly interface for account management,
               including features
               like deposit, withdrawal, and account details, enhancing user experience in secure financial
@@ -719,14 +836,26 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="icon-box">
-            <div class="icon"><i class="bi bi-airplane-engines"></i></i></div>
-            <h4><a href="https://github.com/tariqahmaad/vercel-project">Airport Managment System</a>
+          <div class="icon-box glass-projects">
+            <div class="light-reflection"></div>
+            <div class="icon"><i class="bi bi-airplane-engines"></i></div>
+            <h4><a href="https://github.com/tariqahmaad/vercel-project">Airport Management System</a>
             </h4>
-            <p>Developed a web-based Ariport Management System app with HTML, CSS, JS, Python, Django (Framework), and
+            <div class="tech-tags">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Django</span>
+              <span class="tech-tag">MySQL</span>
+              <span class="tech-tag">HTML/CSS</span>
+            </div>
+            <p>Developed a web-based Airport Management System app with HTML, CSS, JS, Python, Django (Framework), and
               MySQL (Database), and front-end technologies, offering secure user
               authentication,
               role-specific functions, and a responsive, cross-browser interface.</p>
+            <div class="project-actions">
+              <a href="https://github.com/tariqahmaad/vercel-project" target="_blank" class="action-btn">
+                <i class="ri-github-fill"></i>View Code
+              </a>
+            </div>
           </div>
 
         </div>
@@ -735,6 +864,67 @@
   </section><!-- End Services Section -->
 
   <!-- ======= Portfolio Section ======= -->
+  <section id="case-studies" class="case-studies">
+    <div class="container">
+      <div class="section-title">
+        <h2>Case Studies</h2>
+        <p>Detailed Design Process</p>
+      </div>
+
+      <div class="case-study">
+        <div class="study-header">
+          <h3>E-Commerce Platform Redesign</h3>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-value" data-target="42">0</div>
+              <div class="metric-label">Conversion Increase</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" data-target="15">0</div>
+              <div class="metric-label">User Research Sessions</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="process-timeline">
+          <div class="timeline-phase">
+            <div class="phase-icon"><i class="bi bi-search"></i></div>
+            <h4>Research & Discovery</h4>
+            <ul>
+              <li>Competitive analysis</li>
+              <li>User interviews (8 participants)</li>
+              <li>Analytics review</li>
+            </ul>
+          </div>
+
+          <div class="timeline-phase">
+            <div class="phase-icon"><i class="bi bi-pencil"></i></div>
+            <h4>Design Iterations</h4>
+            <ul>
+              <li>3 concept prototypes</li>
+              <li>Usability testing (2 rounds)</li>
+              <li>Accessibility audit</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collaboration-details">
+          <h4>Team Collaboration</h4>
+          <div class="team-roles">
+            <div class="role-card">
+              <h5>Frontend Developers</h5>
+              <p>Implemented interactive components using React</p>
+            </div>
+            <div class="role-card">
+              <h5>Product Managers</h5>
+              <p>Defined success metrics and business requirements</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="portfolio" class="portfolio">
     <div class="container">
 
@@ -879,7 +1069,7 @@
           <div class="info-box">
             <i class="bx bx-share-alt"></i>
             <h3>Social Profiles</h3>
-            <div class="social-links">
+            <div class="social-links glass-social">
               <a href="https://twitter.com/taahmad007" class="twitter"><i class="ri-twitter-x-line"></i></a>
               <a href="https://www.facebook.com/tariq.ahmaaad" class="facebook"><i class="bi bi-facebook"></i></a>
               <a href="https://www.instagram.com/0xtahmad/" class="instagram"><i class="bi bi-instagram"></i></a>
@@ -925,7 +1115,7 @@
           <div class="error-message"></div>
           <div class="sent-message">Your message has been sent. Thank you!</div>
         </div>
-        <div class="text-center"><button type="submit">Send Message</button></div>
+        <div class="text-center"><button type="submit" class="btn-brand">Send Message</button></div>
       </form>
 
     </div>

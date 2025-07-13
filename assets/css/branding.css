@@ -1,0 +1,244 @@
+/* Branding System */
+:root {
+  /* Color Palette */
+  --primary-brand: #0fa958; /* WCAG compliant green */
+  --secondary-brand: #6f42c1; /* Purple accent */
+  --dark-bg: #040404;
+  --light-text: #ffffff;
+  --dark-text: #121412;
+  
+  /* Typography */
+  --display-font: 'Raleway', sans-serif;
+  --body-font: 'Open Sans', sans-serif;
+  --code-font: 'Courier New', monospace;
+  
+  /* Spacing System */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 3rem;
+  --space-xl: 4rem;
+  
+  /* Effects */
+  --glow-effect: 0 0 15px rgba(15, 169, 88, 0.5);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Brand Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--display-font);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+body {
+  font-family: var(--body-font);
+  line-height: 1.6;
+}
+
+/* Brand Colors */
+.brand-primary {
+  color: var(--primary-brand);
+}
+
+.brand-secondary {
+  color: var(--secondary-brand);
+}
+
+.bg-brand-primary {
+  background-color: var(--primary-brand);
+}
+
+/* Icon System */
+.brand-icon {
+  fill: var(--primary-brand);
+  transition: var(--transition);
+}
+
+.brand-icon:hover {
+  fill: var(--secondary-brand);
+  filter: var(--glow-effect);
+}
+
+/* Modern Button System */
+.btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-family: var(--display-font);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  color: var(--light-text);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 2;
+  
+  /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Outer glow */
+  box-shadow:
+    0 4px 20px rgba(24, 210, 110, 0.3),
+    inset 0 0 12px rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced edge glow effect */
+.btn-brand::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(
+    45deg,
+    var(--primary-brand),
+    #6f42c1,
+    var(--primary-brand),
+    #6f42c1,
+    var(--primary-brand)
+  );
+  background-size: 300% 300%;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-glow 4s ease infinite;
+  filter: blur(10px);
+  opacity: 0.9;
+}
+
+@keyframes border-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Ripple effect */
+.btn-brand::after {
+  content: '';
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  transform: translate(-50%, -50%) scale(0);
+  width: 200%;
+  padding-bottom: 200%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  transition: transform 0.6s, opacity 0.3s;
+  z-index: -1;
+}
+
+/* Hover states */
+.btn-brand:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 25px rgba(24, 210, 110, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.btn-brand:hover::before {
+  animation-duration: 1.5s;
+}
+
+/* Active/Click state */
+.btn-brand:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow:
+    0 2px 10px rgba(24, 210, 110, 0.4),
+    inset 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.1s ease;
+}
+
+.btn-brand:active::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: transform 0s, opacity 0.1s;
+}
+
+/* Focus state */
+.btn-brand:focus-visible {
+  outline: 2px solid var(--primary-brand);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 4px rgba(24, 210, 110, 0.3),
+    0 8px 25px rgba(24, 210, 110, 0.5);
+}
+
+/* Icon animation */
+.btn-brand i {
+  margin-right: 10px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.btn-brand:hover i {
+  transform: scale(1.15) rotate(5deg);
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+}
+
+/* Border rotation animation */
+@keyframes rotate-border {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* Social Media Buttons */
+.social-links a,
+.mobile-social-links a {
+  transition: all 0.4s ease !important;
+}
+
+.social-links a:hover,
+.mobile-social-links a:hover {
+  transform: translateY(-5px) scale(1.1) !important;
+  box-shadow: 0 8px 15px rgba(24, 210, 110, 0.4) !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .btn-brand {
+    padding: 8px 18px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-brand i {
+    margin-right: 8px;
+    transform: scale(0.9);
+  }
+  
+  
+  /* Simplify animations for mobile */
+  .btn-brand::before {
+    animation-duration: 6s;
+  }
+  
+  .btn-brand:hover::before {
+    animation-duration: 3s;
+  }
+}
