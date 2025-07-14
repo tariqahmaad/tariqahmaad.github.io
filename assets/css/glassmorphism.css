@@ -1830,63 +1830,7 @@
   transform: rotate(-45deg) translateX(100%);
 }
 
-/* Enhanced count icon styling */
-.count-card.glass-projects .count-icon {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.2), rgba(24, 210, 110, 0.1)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(24, 210, 110, 0.3);
-  border-radius: 16px;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-  z-index: 2;
-}
-
-.count-card.glass-projects .count-icon::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #18d26e, #35e888, #18d26e);
-  border-radius: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.count-card.glass-projects:hover .count-icon {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.3), rgba(24, 210, 110, 0.2)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
-  border: 1px solid rgba(24, 210, 110, 0.5);
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 0 20px rgba(24, 210, 110, 0.4);
-}
-
-.count-card.glass-projects:hover .count-icon::before {
-  opacity: 0.3;
-}
-
-.count-card.glass-projects .count-icon i {
-  color: #18d26e;
-  font-size: 1.8rem;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 0 10px rgba(24, 210, 110, 0.3));
-}
-
-.count-card.glass-projects:hover .count-icon i {
-  color: #35e888;
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 15px rgba(24, 210, 110, 0.6));
-}
+/* REMOVED: Duplicate count icon styling - kept enhanced version below */ 
 
 /* Enhanced skill card styling */
 .skill-card.glass-projects {
@@ -1955,63 +1899,7 @@
   transform: rotate(-45deg) translateX(100%);
 }
 
-/* Enhanced skill icon styling */
-.skill-card.glass-projects .skill-icon {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.2), rgba(24, 210, 110, 0.1)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(24, 210, 110, 0.3);
-  border-radius: 16px;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-  z-index: 2;
-}
-
-.skill-card.glass-projects .skill-icon::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #18d26e, #35e888, #18d26e);
-  border-radius: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.skill-card.glass-projects:hover .skill-icon {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.3), rgba(24, 210, 110, 0.2)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
-  border: 1px solid rgba(24, 210, 110, 0.5);
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 0 20px rgba(24, 210, 110, 0.4);
-}
-
-.skill-card.glass-projects:hover .skill-icon::before {
-  opacity: 0.3;
-}
-
-.skill-card.glass-projects .skill-icon i {
-  color: #18d26e;
-  font-size: 1.8rem;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 0 10px rgba(24, 210, 110, 0.3));
-}
-
-.skill-card.glass-projects:hover .skill-icon i {
-  color: #35e888;
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 15px rgba(24, 210, 110, 0.6));
-}
+  /* REMOVED: Duplicate skill icon styling - kept enhanced version below */
 
 /* Enhanced testimonial styling */
 .testimonial-item.glass-projects {
@@ -2580,15 +2468,11 @@
 }
 
 .navbar-mobile .mobile-social-links.glass-social a i {
-  display: block;
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 16px;
   line-height: 1;
-  vertical-align: middle;
   text-align: center;
   margin: 0;
   padding: 0;
@@ -2961,5 +2845,55 @@
   .glass-social a::before,
   .glass-social a::after {
     transition: none;
+  }
+}
+
+/* ==========================================================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 768px) {
+
+  /*
+    Disable expensive backdrop-filter on mobile to prevent scrolling lag.
+    Replace with a simple translucent background.
+  */
+  .glass,
+  .glass-subtle,
+  .glass-medium,
+  .glass-heavy,
+  .glass-dark,
+  .glass-gradient,
+  .glass-accent,
+  .glass-header,
+  .glass-nav,
+  .glass-section-title,
+  .glass-card,
+  .glass-btn,
+  .icon-box.glass-projects,
+  .count-card.glass-projects,
+  .skill-card.glass-projects,
+  .testimonial-item.glass-projects,
+  .glass-social a {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    /* A dark, translucent fallback that matches the site's aesthetic */
+    background: rgb(37 48 41 / 53%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    /* A simpler shadow for performance */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  /*
+    Additionally, remove transitions and transforms that can be costly on mobile.
+  */
+  .glass:hover,
+  .glass-card:hover,
+  .icon-box.glass-projects:hover,
+  .count-card.glass-projects:hover,
+  .skill-card.glass-projects:hover,
+  .testimonial-item.glass-projects:hover,
+  .glass-social a:hover {
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
   }
 }
