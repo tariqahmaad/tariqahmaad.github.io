@@ -60,7 +60,7 @@ body {
   filter: var(--glow-effect);
 }
 
-/* Modern Button System */
+  /* Modern Button System */
 .btn-brand {
   display: inline-flex;
   align-items: center;
@@ -68,7 +68,7 @@ body {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: 10px 24px;
+  padding: 10px 14px;
   border-radius: 12px;
   font-family: var(--display-font);
   font-weight: 600;
@@ -240,5 +240,38 @@ body {
   
   .btn-brand:hover::before {
     animation-duration: 3s;
+  }
+}
+
+/* Medium screens (900px - 1200px) */
+@media (min-width: 900px) and (max-width: 1200px) {
+  .btn-brand {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    min-width: 100px;
+  }
+  
+  .btn-brand i {
+    margin-right: 6px;
+    transform: none;
+    font-size: 0.9em;
+  }
+  
+  /* Adjust positioning elements */
+  .btn-brand::before,
+  .btn-brand::after {
+    transform-origin: center;
+  }
+  
+  /* Prevent text wrapping */
+  .btn-brand span {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 }

@@ -8,38 +8,9 @@
   /* Glass effects */
   --glass-blur: blur(8px);
   --glass-blur-strong: blur(12px);
-  
+
   /* Glass transitions */
   --glass-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-/* ==========================================================================
-   GLASS BUTTONS
-   ========================================================================== */
-
-.glass-btn {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
-  padding: 12px 24px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  transition: var(--glass-transition);
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.glass-btn:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 15px 35px 0 rgba(31, 38, 135, 0.4);
-  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -51,7 +22,7 @@
 .testimonial-item.glass-projects,
 .icon-box.glass-projects {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.15));
+    linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.15));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -103,10 +74,10 @@
 .testimonial-item.glass-projects:hover,
 .icon-box.glass-projects:hover {
   background: linear-gradient(135deg, rgba(24, 210, 110, 0.15), rgba(24, 210, 110, 0.08)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
+    linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
   border: 1px solid rgba(24, 210, 110, 0.4);
   box-shadow: 0 20px 40px 0 rgba(24, 210, 110, 0.2),
-              0 0 80px 0 rgba(24, 210, 110, 0.1);
+    0 0 80px 0 rgba(24, 210, 110, 0.1);
   transform: translateY(-4px) scale(1.02);
 }
 
@@ -159,7 +130,7 @@
   width: 70px;
   height: 70px;
   background: linear-gradient(135deg, rgba(24, 210, 110, 0.2), rgba(24, 210, 110, 0.1)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
+    linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(24, 210, 110, 0.3);
@@ -174,7 +145,7 @@
 .skill-card.glass-projects:hover .skill-icon,
 .icon-box.glass-projects:hover .icon {
   background: linear-gradient(135deg, rgba(24, 210, 110, 0.3), rgba(24, 210, 110, 0.2)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
+    linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
   border: 1px solid rgba(24, 210, 110, 0.5);
   transform: scale(1.15);
   box-shadow: 0 0 20px rgba(24, 210, 110, 0.4);
@@ -246,7 +217,8 @@
 }
 
 .icon-box.glass-projects:hover h4 a {
-  color: #18d26e; /* Ensures the link color matches the h4 color on hover */
+  color: #18d26e;
+  /* Ensures the link color matches the h4 color on hover */
 }
 
 .count-card.glass-projects .count-detail p,
@@ -488,9 +460,10 @@
 }
 
 /* Contact section social links */
-.contact .info-box .social-links.glass-social {
-  margin: 5px 0 0 68px;
+.contact .info-box .contact-social-links.glass-social {
+  margin: 10px 0 0 0 !important; /* Reset margin */
   display: flex;
+  justify-content: flex-start !important; /* Align to the left */
   gap: 12px;
 }
 
@@ -536,13 +509,14 @@
    ========================================================================== */
 
 @media (max-width: 768px) {
+
   .count-card.glass-projects,
   .skill-card.glass-projects,
   .testimonial-item.glass-projects,
   .icon-box.glass-projects {
     padding: 1.5rem;
   }
-  
+
   .count-card.glass-projects .count-icon,
   .skill-card.glass-projects .skill-icon,
   .icon-box.glass-projects .icon {
@@ -550,40 +524,45 @@
     height: 60px;
     margin-bottom: 1rem;
   }
-  
+
   .count-card.glass-projects .count-icon i,
   .skill-card.glass-projects .skill-icon i,
   .icon-box.glass-projects .icon i {
     font-size: 1.5rem;
   }
-  
+
   .count-card.glass-projects h4,
   .skill-card.glass-projects h4,
   .icon-box.glass-projects h4 {
     font-size: 1.1rem;
   }
-  
+
   .count-card.glass-projects .purecounter {
     font-size: 2rem;
   }
-  
+
   .skill-card.glass-projects .tech-tag,
   .icon-box.glass-projects .tech-tag {
     font-size: 0.7rem;
     padding: 0.2rem 0.6rem;
   }
-  
+
   .glass-social a {
     width: 36px;
     height: 36px;
     font-size: 14px;
   }
-  
+
   .contact .info-box .social-links.glass-social {
-    margin: 5px 0 0 48px;
+    /* This rule is intentionally left to be overridden by contact-social-links */
+  }
+
+  .contact .info-box .contact-social-links.glass-social {
+    margin: 5px 0 0 0 !important; /* Reset margin */
+    justify-content: flex-start !important; /* Align to the left */
     gap: 8px;
   }
-  
+
   .contact .info-box .social-links.glass-social a {
     width: 38px;
     height: 38px;
@@ -592,31 +571,32 @@
 }
 
 @media (max-width: 576px) {
+
   .count-card.glass-projects,
   .skill-card.glass-projects,
   .testimonial-item.glass-projects,
   .icon-box.glass-projects {
     padding: 1.2rem;
   }
-  
+
   .count-card.glass-projects:hover,
   .skill-card.glass-projects:hover,
   .testimonial-item.glass-projects:hover,
   .icon-box.glass-projects:hover {
     transform: translateY(-2px) scale(1.01);
   }
-  
+
   .skill-card.glass-projects .skill-tags,
   .icon-box.glass-projects .tech-tags {
     gap: 0.3rem;
   }
-  
+
   .glass-social a {
     width: 34px;
     height: 34px;
     font-size: 13px;
   }
-  
+
   .contact .info-box .social-links.glass-social {
     margin: 5px 0 0 0;
     justify-content: center;
@@ -624,10 +604,11 @@
 }
 
 /* ==========================================================================
-   MOBILE PERFORMANCE OPTIMIZATIONS
+  MOBILE PERFORMANCE OPTIMIZATIONS
    ========================================================================== */
 @media (max-width: 768px) {
-  /* Disable expensive backdrop-filter on mobile to prevent scrolling lag */
+
+  /* Disable expensive effects on mobile to prevent scrolling lag */
   .glass-btn,
   .count-card.glass-projects,
   .skill-card.glass-projects,
@@ -636,12 +617,16 @@
   .glass-social a {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    background: rgb(37 48 41 / 53%) !important;
+    background: rgb(20 35 26 / 68%) !important;
+    /* Simplified background */
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: none !important;
+    /* Removed shadow */
+    transition: none !important;
+    /* Removed transitions */
   }
 
-  /* Remove costly transforms on mobile */
+  /* Remove costly transforms and hover effects on mobile */
   .glass-btn:hover,
   .count-card.glass-projects:hover,
   .skill-card.glass-projects:hover,
@@ -649,6 +634,43 @@
   .icon-box.glass-projects:hover,
   .glass-social a:hover {
     transform: none !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: none !important;
+    background: linear-gradient(95deg, rgba(24, 210, 110, 0.12), rgba(35, 232, 136, 0.08)), rgba(15, 25, 30, 0.92) !important;
+    border: 1px solid rgba(24, 210, 110, 0.25) !important;
+  }
+
+  /* Remove pseudo-elements and light reflection on mobile */
+  .count-card.glass-projects::before,
+  .skill-card.glass-projects::before,
+  .testimonial-item.glass-projects::before,
+  .icon-box.glass-projects::before,
+  .count-card.glass-projects::after,
+  .skill-card.glass-projects::after,
+  .testimonial-item.glass-projects::after,
+  .icon-box.glass-projects::after,
+  .count-card.glass-projects .light-reflection,
+  .skill-card.glass-projects .light-reflection,
+  .testimonial-item.glass-projects .light-reflection,
+  .icon-box.glass-projects .light-reflection {
+    display: none !important;
+  }
+
+  /* Simplify icon and tag styling on mobile */
+  .count-card.glass-projects .count-icon,
+  .skill-card.glass-projects .skill-icon,
+  .icon-box.glass-projects .icon,
+  .skill-card.glass-projects .tech-tag,
+  .icon-box.glass-projects .tech-tag,
+  .icon-box.glass-projects .action-btn {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    transition: none !important;
+  }
+
+  .count-card.glass-projects:hover .count-icon,
+  .skill-card.glass-projects:hover .skill-icon,
+  .icon-box.glass-projects:hover .icon {
+    transform: none !important;
+    box-shadow: none !important;
   }
 }
