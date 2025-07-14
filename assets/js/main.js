@@ -151,21 +151,6 @@
 
   // Initialize common components on page load
   window.addEventListener('load', () => {
-    // Skills animation
-    let skillsContent = select('.skills-content');
-    if (skillsContent) {
-      new Waypoint({
-        element: skillsContent,
-        offset: '80%',
-        handler: function (direction) {
-          let progress = select('.progress .progress-bar', true);
-          progress.forEach((el) => {
-            el.style.width = el.getAttribute('aria-valuenow') + '%'
-          });
-        }
-      })
-    }
-
     // Portfolio isotope setup
     let portfolioContainer = select('.portfolio-container');
     if (portfolioContainer) {
@@ -229,21 +214,6 @@
     selector: '.portfolio-details-lightbox',
     width: '90%',
     height: '90vh'
-  });
-
-  // Portfolio details slider
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
   });
 
   // Initialize Pure Counter
@@ -456,39 +426,6 @@
     };
   })();
 
-  // Animate metric counters
-  const metricValues = document.querySelectorAll('.metric-value');
-  if (metricValues.length > 0) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const target = +entry.target.getAttribute('data-target');
-          const duration = 2000;
-          const startTime = Date.now();
-
-          const updateCounter = () => {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const value = Math.floor(progress * target);
-
-            entry.target.textContent = value.toLocaleString() + (target > 100 ? 'K' : '');
-
-            if (progress < 1) {
-              requestAnimationFrame(updateCounter);
-            } else {
-              entry.target.textContent = target.toLocaleString() + (target > 100 ? 'K' : '%');
-            }
-          };
-
-          requestAnimationFrame(updateCounter);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    metricValues.forEach(value => observer.observe(value));
-  }
-
   // Initialize components when DOM is ready
   document.addEventListener("DOMContentLoaded", function () {
     // Initialize typing effect
@@ -502,46 +439,7 @@
     if (typeof particlesJS !== 'undefined') {
       particlesJS.load('particles-js', 'assets/js/particles-config.js');
     }
-
-    // Initialize skill cards animation
-    animateOnScroll();
-
-    // Toggle skill details view
-    const toggleButton = document.getElementById('toggle-skills-view');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', function () {
-        const detailedSkills = document.getElementById('detailed-skills');
-        detailedSkills.classList.toggle('show');
-        detailedSkills.style.display = detailedSkills.style.display === 'none' ? 'block' : 'none';
-        document.getElementById('toggle-text').textContent =
-          detailedSkills.style.display === 'none' ? 'Show Skill Details' : 'Hide Skill Details';
-      });
-    }
   });
-
-  // Check if element is in viewport
-  function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
-
-  // Animate elements on scroll
-  function animateOnScroll() {
-    const cards = document.querySelectorAll('.skill-card');
-    cards.forEach((card, index) => {
-      card.style.animationDelay = `${index * 0.1}s`;
-      if (isElementInViewport(card)) {
-        card.classList.add('animate__animated', 'animate__fadeInUp');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', animateOnScroll);
 
   // Scroll animation
   function handleScrollAnimations() {
