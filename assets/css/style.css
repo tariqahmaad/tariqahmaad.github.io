@@ -208,7 +208,11 @@ a:hover {
 }
 
 /* Responsive adjustments */
-@media (min-width: 1024px) {
+body::before {
+  background-attachment: fixed;
+}
+
+@media (max-width: 1024px) {
   body::before {
     background-attachment: fixed;
   }
