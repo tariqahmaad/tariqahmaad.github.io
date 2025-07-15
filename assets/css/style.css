@@ -197,6 +197,10 @@ a:hover {
   text-shadow: 2px 2px 4px #000000;
   white-space: nowrap;
   margin-right: 10px;
+  contain: layout style paint;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 #role {
@@ -1268,11 +1272,11 @@ section.section-show {
 }
 
 section .container {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.95)),
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.188), rgba(0, 0, 0, 0.95)),
               linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
   padding: 30px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(125, 247, 101, 0.085);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }

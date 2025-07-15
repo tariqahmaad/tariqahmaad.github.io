@@ -437,16 +437,24 @@
 
   // Initialize components when DOM is ready
   document.addEventListener("DOMContentLoaded", function () {
-    // Initialize typing effect
-    const roleSpan = document.getElementById('role');
-    if (roleSpan) {
-      roleSpan.classList.add('cursor', 'typing');
-      typeEffect();
-    }
-
-    // Initialize particles.js
+    // Initialize particles.js immediately for background
     if (typeof particlesJS !== 'undefined') {
       particlesJS.load('particles-js', 'assets/js/particles-config.js');
+    }
+
+    // Defer typing effect to improve LCP
+    const roleSpan = document.getElementById('role');
+    if (roleSpan) {
+      // Set initial text immediately for LCP
+      roleSpan.textContent = "Cybersecurity Analyst";
+      roleSpan.classList.add('completed');
+      
+      // Start complex animation after LCP
+      setTimeout(() => {
+        roleSpan.classList.add('cursor', 'typing');
+        roleSpan.textContent = "";
+        typeEffect();
+      }, 1000);
     }
   });
 

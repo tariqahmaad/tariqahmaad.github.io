@@ -16,10 +16,11 @@
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:100,100i,300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap"></noscript>
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,6 +30,23 @@
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+  <!-- Critical CSS for LCP optimization -->
+  <style>
+    .stylish-name {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.6em;
+      color: #18d26e;
+      text-shadow: 2px 2px 4px #000000;
+      white-space: nowrap;
+      margin-right: 10px;
+    }
+    #role {
+      font-family: 'Cascadia Mono', monospace;
+      color: #ffffff;
+      border-bottom: 2px solid #18d26e;
+      padding-bottom: 6px;
+    }
+  </style>
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/branding.css" rel="stylesheet">
@@ -1069,8 +1087,8 @@
   <script src="assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS Files -->
-  <script src="assets/js/particles-config.js"></script>
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/particles-config.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 
 </body>
 
