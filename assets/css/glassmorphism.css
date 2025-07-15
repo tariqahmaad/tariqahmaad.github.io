@@ -550,13 +550,10 @@
   .glass-social a {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    background: rgb(20 35 26 / 68%) !important;
-    /* Simplified background */
+    background: linear-gradient(135deg, rgba(0, 255, 55, 0.044), rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: none !important;
-    /* Removed shadow */
     transition: none !important;
-    /* Removed transitions */
   }
 
   /* Remove costly transforms and hover effects on mobile */
@@ -568,8 +565,8 @@
   .glass-social a:hover {
     transform: none !important;
     box-shadow: none !important;
-    background: linear-gradient(95deg, rgba(24, 210, 110, 0.12), rgba(35, 232, 136, 0.08)), rgba(15, 25, 30, 0.92) !important;
-    border: 1px solid rgba(24, 210, 110, 0.25) !important;
+    background: linear-gradient(135deg, rgba(24, 210, 111, 0.17), rgba(24, 210, 111, 0.052)) !important;
+    border: 1px solid rgba(24, 210, 110, 0.4) !important;
   }
 
   /* Remove pseudo-elements and light reflection on mobile */
