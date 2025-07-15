@@ -33,11 +33,21 @@ body::before {
   position: fixed;
   background: var(--bg-color) url("../img/bg.jpg") top right no-repeat;
   background-size: cover;
+  background-attachment: fixed;
+  background-position: top right;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   left: 0;
   right: 0;
   top: 0;
   height: 100vh;
+  width: 100%;
   z-index: -1;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Hide scrollbar */
@@ -232,12 +242,87 @@ body::before {
     border-bottom: none;
     padding-bottom: 0;
   }
+/* iPad-specific fixes for background attachment */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    body::before {
+      background-attachment: fixed !important;
+      background-position: top right !important;
+      background-size: cover !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      transform: translate3d(0, 0, 0) !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      backface-visibility: hidden !important;
+      -webkit-backface-visibility: hidden !important;
+      will-change: transform !important;
+    }
+    
+    /* Force hardware acceleration on iPad */
+    body {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+}
+
+/* iPad Pro fixes */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+    body::before {
+      background-attachment: fixed !important;
+      background-position: top right !important;
+      background-size: cover !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      transform: translate3d(0, 0, 0) !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      backface-visibility: hidden !important;
+      -webkit-backface-visibility: hidden !important;
+      will-change: transform !important;
+    }
+}
+
+/* Alternative iPad fix using viewport units */
+@supports (-webkit-touch-callout: none) {
+  body::before {
+    background-attachment: fixed;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: top right;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
 }
 
 /* Animations */
 @keyframes blink {
   0%, 100% { border-color: rgba(255, 255, 255, 0.8); }
   50% { border-color: transparent; }
+}
+
+/* Mobile devices - keep original positioning */
+@media only screen
+  and (max-device-width: 767px) {
+    body::before {
+      background-attachment: scroll;
+      background-position: top right !important;
+      background-size: cover;
+    }
 }
 
 @keyframes textGlow {
