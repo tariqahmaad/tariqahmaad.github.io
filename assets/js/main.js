@@ -229,8 +229,8 @@
   new PureCounter();
 
   // Optimized typing effect for role text
+  const roles = ["Cybersecurity Analyst", "Security Consultant", "Penetration Tester", "Security Engineer", "Incident Response Specialist", "Ethical Hacker", "Computer Engineer"];
   const typeEffect = (() => {
-    const roles = ["Cybersecurity Analyst", "Security Consultant", "Penetration Tester", "Security Engineer", "Incident Response Specialist", "Ethical Hacker", "Computer Engineer"];
     let currentRole = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -445,16 +445,30 @@
     // Defer typing effect to improve LCP
     const roleSpan = document.getElementById('role');
     if (roleSpan) {
-      // Set initial text immediately for LCP
-      roleSpan.textContent = "Cybersecurity Analyst";
-      roleSpan.classList.add('completed');
-      
-      // Start complex animation after LCP
-      setTimeout(() => {
-        roleSpan.classList.add('cursor', 'typing');
-        roleSpan.textContent = "";
-        typeEffect();
-      }, 1000);
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        // Show one role at a time with cycling
+        let currentIndex = 0;
+        roleSpan.textContent = roles[currentIndex];
+        roleSpan.setAttribute('aria-live', 'polite');
+        
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % roles.length;
+          roleSpan.textContent = roles[currentIndex];
+        }, 3000);
+      } else {
+        // Animated version
+        roleSpan.textContent = roles[0];
+        roleSpan.classList.add('completed');
+        
+        setTimeout(() => {
+          roleSpan.classList.add('cursor', 'typing');
+          roleSpan.textContent = "";
+          typeEffect();
+        }, 1500);
+      }
     }
   });
 

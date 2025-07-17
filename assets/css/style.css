@@ -878,7 +878,7 @@ body::before {
   }
   
   #header .navbar {
-    margin-top: 10px;
+    /* margin-top: 10px; */
   }
 }
 
@@ -1079,7 +1079,7 @@ body::before {
   position: fixed;
   right: 15px;
   top: 15px;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 @media (max-width: 991px) {
@@ -1099,12 +1099,17 @@ body::before {
   right: 0;
   left: 0;
   bottom: 0;
-  background: var(--mobile-menu-bg);
-  transition: 0.4s;
+  background: rgba(0, 0, 0, 0.375);
+  transition: 0.3s ease-out;
   z-index: 999;
   margin-top: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  will-change: transform, opacity;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .navbar-mobile .mobile-nav-toggle {
@@ -1112,6 +1117,7 @@ body::before {
   top: 15px;
   right: 15px;
   color: var(--primary-color);
+  z-index: 1001;
 }
 
 .navbar-mobile ul {
@@ -1248,6 +1254,31 @@ body::before {
 
 .navbar-mobile {
   animation: menuOverlay 0.3s forwards;
+/* Performance-optimized glass highlight */
+.navbar-mobile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  opacity: 0.6;
+  z-index: 1;
+  will-change: opacity;
+}
+}
+/* Mobile performance optimization */
+@media (max-width: 768px) {
+  .navbar-mobile {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: 0.25s ease-out;
+  }
+  
+  .navbar-mobile::before {
+    display: none; /* Remove highlight on very small screens for performance */
+  }
 }
 
 /*--------------------------------------------------------------
