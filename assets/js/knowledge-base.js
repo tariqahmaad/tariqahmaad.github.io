@@ -1,7 +1,16 @@
 /**
  * AI Assistant Knowledge Base
  * This file contains all the portfolio data for the AI assistant.
+ * Version: 20251023
  */
+
+// Debug: Log when knowledge base is loaded
+console.log('📚 Knowledge Base Loading:', {
+    timestamp: new Date().toISOString(),
+    version: '20251023',
+    file: 'knowledge-base.js'
+});
+
 export const knowledgeBase = {
     personal: {
         name: "Tariq Ahmad",
@@ -267,3 +276,13 @@ export const knowledgeBase = {
         }
     ]
 };
+
+// Debug: Log when knowledge base is fully loaded
+console.log('✅ Knowledge Base Loaded Successfully:', {
+    timestamp: new Date().toISOString(),
+    totalProjects: knowledgeBase.projects.length,
+    totalCertifications: knowledgeBase.certifications.length,
+    totalExperience: knowledgeBase.experience.length,
+    latestCertification: knowledgeBase.certifications[0]?.name || 'None',
+    latestProject: knowledgeBase.projects[0]?.name || 'None'
+});
