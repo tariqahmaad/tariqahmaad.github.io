@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://tariqahmaad.github.io/</loc>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/me.jpg</image:loc>
+      <image:title>Tariq Ahmad - Computer Engineer</image:title>
+      <image:caption>Professional photo of Tariq Ahmad, Computer Engineer from Istanbul, Turkey</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/bg.jpg</image:loc>
+      <image:title>Portfolio Background Image</image:title>
+      <image:caption>Background image for Tariq Ahmad's portfolio website</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-1.jpg</image:loc>
+      <image:title>Professional Testimonial 1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-2.jpg</image:loc>
+      <image:title>Professional Testimonial 2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-3.jpg</image:loc>
+      <image:title>Professional Testimonial 3</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-4.jpg</image:loc>
+      <image:title>Professional Testimonial 4</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-5.jpg</image:loc>
+      <image:title>Professional Testimonial 5</image:title>
+    </image:image>
+  </url>
+</urlset>

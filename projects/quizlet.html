@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Quizlet - Interactive University Quiz Platform - Tariq Ahmad</title>
+  <meta content="Interactive quiz platform built with HTML, CSS, and JavaScript for university students. Features multiple question types, real-time scoring, and interactive learning tools." name="description">
+  <meta content="quiz platform, educational app, HTML, CSS, JavaScript, web development, e-learning, student tools, portfolio" name="keywords">
+  <meta name="author" content="Tariq Ahmad">
+  <meta name="theme-color" content="#18d26e">
+  <meta name="google-site-verification" content="geLpufK_dlELVa0MzvHuTVrULt-Ml6grrN9XzVVdP_8" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://tariqahmaad.github.io/projects/quizlet/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tariqahmaad.github.io/projects/quizlet/">
+  <meta property="og:title" content="Quizlet - Interactive University Quiz Platform - Tariq Ahmad">
+  <meta property="og:description" content="Interactive quiz platform for university students with multiple question types and real-time scoring.">
+  <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/me.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://tariqahmaad.github.io/projects/quizlet/">
+  <meta property="twitter:title" content="Quizlet - Interactive University Quiz Platform">
+  <meta property="twitter:description" content="Interactive quiz platform for university students with multiple question types and real-time scoring.">
+  <meta property="twitter:image" content="https://tariqahmaad.github.io/assets/img/me.jpg">
+
+  <!-- Favicons -->
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap">
+  </noscript>
+    <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Critical CSS for LCP optimization -->
+  <style>
+    :root {
+      --primary-color: #18d26e;
+      --primary-color-hover: #35e888;
+      --bg-color: #040404;
+      --text-color: #fff;
+    }
+
+    body {
+      font-family: "Open Sans", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .project-header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #040404 100%);
+      padding: 100px 0 50px;
+      margin-top: 70px;
+    }
+
+    .project-content {
+      padding: 50px 0;
+    }
+
+    .tech-badge {
+      background-color: var(--primary-color);
+      color: #000;
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin: 5px;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .project-link-btn {
+      background-color: var(--primary-color);
+      color: #000;
+      padding: 12px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 10px;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .project-link-btn:hover {
+      background-color: var(--primary-color-hover);
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      color: var(--primary-color-hover);
+    }
+  </style>
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+  <link href="../assets/css/branding.css" rel="stylesheet">
+  <link href="../assets/css/glassmorphism.css" rel="stylesheet">
+  <link href="../assets/css/testimonials-professional.css" rel="stylesheet">
+  <link href="../assets/css/projects-custom.css" rel="stylesheet">
+  <link href="../assets/css/ai-assistant.css" rel="stylesheet">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Quizlet - Interactive University Quiz Platform",
+    "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students featuring multiple question types and real-time scoring",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web Browser",
+    "programmingLanguage": ["HTML", "CSS", "JavaScript"],
+    "author": {
+      "@type": "Person",
+      "name": "Tariq Ahmad",
+      "url": "https://tariqahmaad.github.io/"
+    },
+    "dateCreated": "2024",
+    "keywords": "quiz platform, educational app, HTML, CSS, JavaScript, web development, e-learning, student tools",
+    "educationalLevel": "University",
+    "inLanguage": "en"
+  }
+  </script>
+
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://tariqahmaad.github.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Projects",
+        "item": "https://tariqahmaad.github.io/#projects"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Quizlet - Interactive University Quiz Platform",
+        "item": "https://tariqahmaad.github.io/projects/quizlet/"
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="../index.html" class="logo">
+        <span class="stylish-name">&lt;TA&gt;</span>
+      </a>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link" href="../index.html#home">Home</a></li>
+          <li><a class="nav-link" href="../index.html#about">About</a></li>
+          <li><a class="nav-link" href="../index.html#resume">Resume</a></li>
+          <li><a class="nav-link active" href="../index.html#projects">Projects</a></li>
+          <li><a class="nav-link" href="../index.html#contact">Contact</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Project Header -->
+    <section class="project-header">
+      <div class="container">
+        <a href="../index.html#projects" class="back-link">
+          <i class="bi bi-arrow-left"></i> Back to Projects
+        </a>
+        <h1 style="margin-top: 20px;">Quizlet - Interactive University Quiz Platform</h1>
+        <p style="font-size: 18px; color: #aaa; max-width: 800px;">Engaging quiz platform for effective learning and assessment</p>
+      </div>
+    </section>
+
+    <!-- Project Content -->
+    <section class="project-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <!-- Project Overview -->
+            <div class="mb-5">
+              <h2>Project Overview</h2>
+              <p>Quizlet is an interactive web-based quiz platform designed specifically for university students. The platform provides an engaging and user-friendly interface for creating, taking, and managing quizzes across various subjects. Built entirely with HTML, CSS, and JavaScript, it demonstrates modern frontend development techniques and interactive user experience design.</p>
+              <p>The application includes multiple question types, real-time scoring, progress tracking, and a responsive design that works seamlessly across desktop and mobile devices. It helps students prepare for exams and instructors assess student knowledge effectively.</p>
+            </div>
+
+            <!-- Technologies Used -->
+            <div class="mb-5">
+              <h2>Technologies Used</h2>
+              <div>
+                <span class="tech-badge">HTML5</span>
+                <span class="tech-badge">CSS3</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">Bootstrap</span>
+                <span class="tech-badge">Local Storage</span>
+                <span class="tech-badge">Responsive Design</span>
+              </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="mb-5">
+              <h2>Key Features</h2>
+              <ul>
+                <li>Multiple question types (Multiple Choice, True/False, Short Answer)</li>
+                <li>Real-time score calculation and display</li>
+                <li>Immediate feedback on answers</li>
+                <li>Progress bar and timer for quizzes</li>
+                <li>Results summary with correct/incorrect answers review</li>
+                <li>Responsive design for all devices</li>
+                <li>Local storage for quiz history</li>
+                <li>Customizable quiz settings</li>
+              </ul>
+            </div>
+
+            <!-- Project Links -->
+            <div class="mb-5">
+              <h2>Project Links</h2>
+              <a href="#" class="project-link-btn" target="_blank">
+                <i class="bi bi-globe"></i> Live Demo
+              </a>
+              <a href="#" class="project-link-btn" target="_blank">
+                <i class="bi bi-github"></i> View Source
+              </a>
+            </div>
+
+            <!-- Challenges & Solutions -->
+            <div class="mb-5">
+              <h2>Challenges & Solutions</h2>
+              <p><strong>Challenge:</strong> Creating an intuitive and engaging user interface for diverse question types.<br>
+              <strong>Solution:</strong> Implemented a modular component-based design with dynamic question rendering. Used CSS animations and transitions to create smooth user interactions.</p>
+              <p><strong>Challenge:</strong> Managing quiz state and progress across different screen sizes.<br>
+              <strong>Solution:</strong> Leveraged localStorage for persistence and implemented responsive design patterns with Bootstrap grid system and media queries.</p>
+            </div>
+
+            <!-- Lessons Learned -->
+            <div class="mb-5">
+              <h2>Lessons Learned</h2>
+              <p>This project taught me the importance of user experience design in educational applications. I learned to create dynamic, interactive interfaces using vanilla JavaScript and how to manage application state effectively. The project enhanced my skills in DOM manipulation, event handling, and responsive web design. It also emphasized the value of accessibility and creating inclusive learning tools.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- AI Assistant Widget -->
+  <div class="ai-assistant" id="ai-assistant">
+    <div class="chat-toggle" id="chat-toggle">
+      <i class="bi bi-chat-dots"></i>
+    </div>
+    <div class="chat-widget" id="chat-widget">
+      <div class="chat-header">
+        <h3>AI Assistant</h3>
+        <button class="close-chat" id="close-chat">&times;</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="message assistant">
+          <p>Hi! I'm Tariq's AI assistant. Ask me about the Quizlet platform!</p>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-btn"><i class="bi bi-send"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/ai-assistant.js"></script>
+</body>
+</html>

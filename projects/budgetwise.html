@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>BudgetWise - React Native Expense Tracker - Tariq Ahmad</title>
+  <meta content="BudgetWise is a React Native mobile app for tracking expenses with Node.js backend and Firebase integration. Features budget management, transaction history, and analytics." name="description">
+  <meta content="React Native, expense tracker, mobile app, Node.js, Firebase, finance app, budget management, portfolio, computer engineering" name="keywords">
+  <meta name="author" content="Tariq Ahmad">
+  <meta name="theme-color" content="#18d26e">
+  <meta name="google-site-verification" content="geLpufK_dlELVa0MzvHuTVrULt-Ml6grrN9XzVVdP_8" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://tariqahmaad.github.io/projects/budgetwise/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://tariqahmaad.github.io/projects/budgetwise/">
+  <meta property="og:title" content="BudgetWise - React Native Expense Tracker - Tariq Ahmad">
+  <meta property="og:description" content="React Native mobile app for tracking expenses with Node.js backend and Firebase integration.">
+  <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/me.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://tariqahmaad.github.io/projects/budgetwise/">
+  <meta property="twitter:title" content="BudgetWise - React Native Expense Tracker">
+  <meta property="twitter:description" content="React Native mobile app for tracking expenses with Node.js backend and Firebase integration.">
+  <meta property="twitter:image" content="https://tariqahmaad.github.io/assets/img/me.jpg">
+
+  <!-- Favicons -->
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap">
+  </noscript>
+    <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Critical CSS for LCP optimization -->
+  <style>
+    :root {
+      --primary-color: #18d26e;
+      --primary-color-hover: #35e888;
+      --bg-color: #040404;
+      --text-color: #fff;
+    }
+
+    body {
+      font-family: "Open Sans", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .project-header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #040404 100%);
+      padding: 100px 0 50px;
+      margin-top: 70px;
+    }
+
+    .project-content {
+      padding: 50px 0;
+    }
+
+    .tech-badge {
+      background-color: var(--primary-color);
+      color: #000;
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin: 5px;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .project-link-btn {
+      background-color: var(--primary-color);
+      color: #000;
+      padding: 12px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 10px;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .project-link-btn:hover {
+      background-color: var(--primary-color-hover);
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      color: var(--primary-color-hover);
+    }
+  </style>
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+  <link href="../assets/css/branding.css" rel="stylesheet">
+  <link href="../assets/css/glassmorphism.css" rel="stylesheet">
+  <link href="../assets/css/testimonials-professional.css" rel="stylesheet">
+  <link href="../assets/css/projects-custom.css" rel="stylesheet">
+  <link href="../assets/css/ai-assistant.css" rel="stylesheet">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "BudgetWise - React Native Expense Tracker",
+    "description": "React Native mobile app for tracking expenses with Node.js backend and Firebase integration. Features budget management, transaction history, and analytics.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "iOS, Android",
+    "programmingLanguage": ["React Native", "JavaScript", "Node.js", "Firebase"],
+    "author": {
+      "@type": "Person",
+      "name": "Tariq Ahmad",
+      "url": "https://tariqahmaad.github.io/"
+    },
+    "dateCreated": "2024",
+    "keywords": "React Native, expense tracker, mobile app, Node.js, Firebase, finance app, budget management",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://tariqahmaad.github.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Projects",
+        "item": "https://tariqahmaad.github.io/#projects"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "BudgetWise - React Native Expense Tracker",
+        "item": "https://tariqahmaad.github.io/projects/budgetwise/"
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="../index.html" class="logo">
+        <span class="stylish-name">&lt;TA&gt;</span>
+      </a>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link" href="../index.html#home">Home</a></li>
+          <li><a class="nav-link" href="../index.html#about">About</a></li>
+          <li><a class="nav-link" href="../index.html#resume">Resume</a></li>
+          <li><a class="nav-link active" href="../index.html#projects">Projects</a></li>
+          <li><a class="nav-link" href="../index.html#contact">Contact</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Project Header -->
+    <section class="project-header">
+      <div class="container">
+        <a href="../index.html#projects" class="back-link">
+          <i class="bi bi-arrow-left"></i> Back to Projects
+        </a>
+        <h1 style="margin-top: 20px;">BudgetWise - React Native Expense Tracker</h1>
+        <p style="font-size: 18px; color: #aaa; max-width: 800px;">Smart expense tracking with real-time analytics and budget management</p>
+      </div>
+    </section>
+
+    <!-- Project Content -->
+    <section class="project-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <!-- Project Overview -->
+            <div class="mb-5">
+              <h2>Project Overview</h2>
+              <p>BudgetWise is a comprehensive mobile expense tracking application built with React Native for iOS and Android platforms. The app helps users manage their finances by tracking expenses, setting budgets, and providing detailed analytics on spending patterns.</p>
+              <p>The application features a Node.js backend API for data processing and Firebase for real-time data synchronization and authentication. Users can add expenses, categorize transactions, set monthly budgets, and view spending analytics through beautiful charts and graphs.</p>
+            </div>
+
+            <!-- Technologies Used -->
+            <div class="mb-5">
+              <h2>Technologies Used</h2>
+              <div>
+                <span class="tech-badge">React Native</span>
+                <span class="tech-badge">Node.js</span>
+                <span class="tech-badge">Firebase</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">MongoDB</span>
+                <span class="tech-badge">Chart.js</span>
+                <span class="tech-badge">REST API</span>
+              </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="mb-5">
+              <h2>Key Features</h2>
+              <ul>
+                <li>User authentication and profile management</li>
+                <li>Add, edit, and delete expenses with categories</li>
+                <li>Set and track monthly budgets by category</li>
+                <li>Real-time spending analytics with charts</li>
+                <li>Transaction history with search and filter</li>
+                <li>Export data to CSV format</li>
+                <li>Responsive and intuitive user interface</li>
+                <li>Offline support with data synchronization</li>
+              </ul>
+            </div>
+
+            <!-- Project Links -->
+            <div class="mb-5">
+              <h2>Project Links</h2>
+              <a href="#" class="project-link-btn" target="_blank">
+                <i class="bi bi-globe"></i> Live Demo
+              </a>
+              <a href="#" class="project-link-btn" target="_blank">
+                <i class="bi bi-github"></i> View Source
+              </a>
+            </div>
+
+            <!-- Challenges & Solutions -->
+            <div class="mb-5">
+              <h2>Challenges & Solutions</h2>
+              <p><strong>Challenge:</strong> Implementing real-time data synchronization across multiple devices.<br>
+              <strong>Solution:</strong> Utilized Firebase Realtime Database to handle automatic data syncing. Implemented offline support using AsyncStorage to cache data locally and sync when online.</p>
+              <p><strong>Challenge:</strong> Handling large datasets efficiently for analytics.<br>
+              <strong>Solution:</strong> Implemented data aggregation on the backend and used lazy loading for transaction history. Optimized chart rendering using React Native performance best practices.</p>
+            </div>
+
+            <!-- Lessons Learned -->
+            <div class="mb-5">
+              <h2>Lessons Learned</h2>
+              <p>This project taught me the importance of mobile-specific design patterns, such as navigation gestures and touch-friendly interfaces. I gained hands-on experience with cross-platform development and learned to optimize performance for mobile devices. Working with Firebase and Node.js gave me valuable insights into full-stack development and real-time data handling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- AI Assistant Widget -->
+  <div class="ai-assistant" id="ai-assistant">
+    <div class="chat-toggle" id="chat-toggle">
+      <i class="bi bi-chat-dots"></i>
+    </div>
+    <div class="chat-widget" id="chat-widget">
+      <div class="chat-header">
+        <h3>AI Assistant</h3>
+        <button class="close-chat" id="close-chat">&times;</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="message assistant">
+          <p>Hi! I'm Tariq's AI assistant. Feel free to ask about BudgetWise or my other projects!</p>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-btn"><i class="bi bi-send"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/ai-assistant.js"></script>
+</body>
+</html>
