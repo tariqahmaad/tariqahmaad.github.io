@@ -1,7 +1,7 @@
 particlesJS("particles-js", {
   particles: {
     number: {
-      value: 95,
+      value: 85,
       density: { enable: true, value_area: 800 }
     },
     color: { value: "#18d26e" },
@@ -38,7 +38,7 @@ particlesJS("particles-js", {
     }
   },
   interactivity: {
-    detect_on: "window", // Changed from canvas to window for better detection
+    detect_on: "canvas", // Standard valid value for particle detection
     events: {
       onhover: {
         enable: true,
