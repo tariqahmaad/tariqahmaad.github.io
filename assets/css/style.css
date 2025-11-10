@@ -983,33 +983,33 @@ body::before {
   transition: 0.3s;
 }
 
-/* Compress navbar tabs for screens between 1000px and 1400px */
-@media (min-width: 1000px) and (max-width: 1400px) {
+/* Compress navbar tabs for screens between 1200px and 1400px */
+@media (min-width: 1200px) and (max-width: 1400px) {
   /* Reduce spacing between nav items */
   .navbar li+li {
     margin-left: 15px;
   }
-  
+
   /* Reduce font size slightly for nav links */
   .navbar a,
   .navbar a:focus {
     font-size: 14px;
   }
-  
+
   /* Keep the slash icon and name at original size */
   #header.header-top h1 {
     font-size: 36px !important;
   }
-  
+
   #header.header-top .ri-code-s-slash-fill {
     font-size: 100px !important;
   }
-  
+
   /* Adjust container to fit compressed nav */
   #header.header-top .container {
     gap: 0px;
   }
-  
+
   /* Reduce padding in nav items */
   #header.header-top .navbar ul {
     gap: 15px;
@@ -1018,17 +1018,48 @@ body::before {
 
 /* Further compression for tighter screens within range */
 @media (min-width: 1000px) and (max-width: 1200px) {
+  /* Reduce spacing between navbar items for better fit */
   .navbar li+li {
-    margin-left: 12px;
+    margin-left: 10px;
   }
-  
+
+  /* Reduce font size for nav links to fit better */
   .navbar a,
   .navbar a:focus {
-    font-size: 16px;
+    font-size: 14px;
   }
-  
+
+  /* Adjust navbar container gap */
   #header.header-top .navbar ul {
     gap: 12px;
+  }
+
+  /* Ensure hire button has proper spacing from logo */
+  #header.header-top .hire-me-btn {
+    margin-left: 8px;
+    margin-right: 12px;
+  }
+
+  /* Optimize logo size for tablet */
+  #header.header-top h1 {
+    font-size: 30px;
+    margin-right: 8px;
+  }
+
+  /* Adjust slash icon size */
+  #header.header-top .ri-code-s-slash-fill {
+    font-size: 90px;
+  }
+
+  /* Container spacing for tablet */
+  #header.header-top .container {
+    gap: 8px;
+  }
+
+  /* Optimize button size for tablet */
+  #header.header-top .btn-hire {
+    padding: 4px 8px;
+    font-size: 10px;
   }
 }
 

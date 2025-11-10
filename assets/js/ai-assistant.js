@@ -67,14 +67,14 @@ class AIAssistant {
         }
 
         // Set initial state based on viewport size before any other operations
-        const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+        const isSmallPhone = window.matchMedia('(max-width: 479px)').matches;
         this.isMinimized = true; // Start minimized by default
 
         // Initialize the assistant
         this.init();
 
-        // Set up scroll listener for mobile to hide/show assistant based on section
-        if (isMobileViewport) {
+        // Set up scroll listener for small phones to hide/show assistant based on section
+        if (isSmallPhone) {
             this.setupSectionWatcher();
         }
 
@@ -84,12 +84,13 @@ class AIAssistant {
     }
 
     shouldDisableAssistant() {
-        const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
-        if (!isMobileViewport) {
+        // Only disable on small phones (< 480px), enable on tablets
+        const isSmallPhone = window.matchMedia('(max-width: 479px)').matches;
+        if (!isSmallPhone) {
             return false;
         }
 
-        // Check if we're in the home/header section
+        // Check if we're in the home/header section on small phones
         const currentSection = this.getCurrentSection();
         return currentSection !== 'header' && currentSection !== 'home';
     }
@@ -3680,15 +3681,18 @@ His projects demonstrate both technical proficiency and practical application of
                     return;
                 }
 
-                const isMobile = window.innerWidth < 768;
-                const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1024;
+                const isSmallPhone = window.innerWidth < 480;
+                const isIPad = window.innerWidth >= 768 && window.innerWidth <= 1024;
+                const isLargePhone = window.innerWidth >= 480 && window.innerWidth < 768;
 
-                // Update FAB position for mobile/tablet
-                if (isMobile || isTablet) {
+                // Update FAB position: ONLY center on small phones (< 480px)
+                if (isSmallPhone) {
                     this.elements.chatFab.style.left = '50%';
                     this.elements.chatFab.style.right = 'auto';
                     this.elements.chatFab.style.transform = 'translateX(-50%)';
-                } else {
+                }
+                // iPad and large phones use fixed right position (like desktop)
+                else if (isIPad || isLargePhone || window.innerWidth > 1024) {
                     this.elements.chatFab.style.left = 'auto';
                     this.elements.chatFab.style.right = '1.5rem';
                     this.elements.chatFab.style.transform = 'translateX(0)';

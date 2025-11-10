@@ -1,7 +1,16 @@
-particlesJS("particles-js", {
+// Adaptive particle configuration based on device capabilities
+const isMobile = window.innerWidth < 768;
+const isTablet = window.innerWidth >= 768 && window.innerWidth < 1200;
+const isIPad = /iPad|iPadOS/.test(navigator.userAgent);
+
+// iPad needs fewer particles for better performance
+const particleCount = isMobile ? 30 : (isTablet ? 25 : 85);
+
+// Configure particles based on device type
+const particleConfig = {
   particles: {
     number: {
-      value: 85,
+      value: particleCount,
       density: { enable: true, value_area: 800 }
     },
     color: { value: "#18d26e" },
@@ -21,14 +30,14 @@ particlesJS("particles-js", {
     },
     line_linked: {
       enable: true,
-      distance: 150,
+      distance: isMobile ? 120 : 150,
       color: "#18d26e",
       opacity: 0.4,
       width: 1
     },
     move: {
       enable: true,
-      speed: 3,
+      speed: isMobile ? 2 : (isTablet ? 2.5 : 3),
       direction: "none",
       random: false,
       straight: false,
@@ -38,15 +47,15 @@ particlesJS("particles-js", {
     }
   },
   interactivity: {
-    detect_on: "canvas", // Standard valid value for particle detection
+    detect_on: "canvas",
     events: {
       onhover: {
-        enable: true,
-        mode: "repulse" // Changed from grab to repulse for more dynamic effect
+        enable: !isMobile, // Disable hover effects on mobile for better performance
+        mode: "repulse"
       },
       onclick: {
         enable: true,
-        mode: "push" // Keeping push but will adjust its speed in modes
+        mode: "push"
       },
       resize: true
     },
@@ -61,7 +70,7 @@ particlesJS("particles-js", {
       },
       push: {
         particles_nb: 0,
-        quantity: 4
+        quantity: isMobile ? 2 : 4
       },
       remove: { particles_nb: 2 },
       bubble: {
@@ -74,5 +83,7 @@ particlesJS("particles-js", {
     }
   },
   retina_detect: true,
-  fps_limit: 30 // Added to control overall animation speed
-});
+  fps_limit: isMobile ? 20 : (isTablet ? 25 : 30)
+};
+
+particlesJS("particles-js", particleConfig);
