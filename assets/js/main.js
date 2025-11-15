@@ -35,8 +35,10 @@
     const element = select(el);
     if (element) {
       const headerOffset = select('#header').offsetHeight;
+      // Add 20px buffer to account for section top positioning
+      const additionalBuffer = 60;
       window.scrollTo({
-        top: element.offsetTop - headerOffset,
+        top: element.offsetTop - headerOffset - additionalBuffer,
         behavior: 'smooth'
       });
     }
@@ -55,6 +57,34 @@
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+    }
+  })
+
+  /**
+   * Close mobile menu when clicking outside
+   */
+  document.addEventListener('click', function (e) {
+    const navbar = select('#navbar');
+    const toggle = select('.mobile-nav-toggle');
+
+    if (!navbar || !toggle) return;
+
+    // Check if menu is open
+    if (navbar.classList.contains('navbar-mobile')) {
+      const clickedInsideNavbar = navbar.contains(e.target);
+      const clickedToggle = toggle.contains(e.target);
+      const clickedNavLink = e.target.closest('.nav-link');
+      const clickedSocialLink = e.target.closest('.mobile-social-links a');
+
+      // Close if: outside navbar AND not on toggle
+      // OR clicked on social links (even though they're in navbar)
+      if ((!clickedInsideNavbar && !clickedToggle) || clickedSocialLink) {
+        // Close the menu
+        navbar.classList.remove('navbar-mobile');
+        toggle.classList.remove('bi-x');
+        toggle.classList.add('bi-list');
+        document.body.style.overflow = '';
+      }
     }
   })
 
@@ -144,28 +174,7 @@
 
   // Initialize common components on page load
   window.addEventListener('load', () => {
-    // Portfolio isotope setup
-    let portfolioContainer = select('.portfolio-container');
-    if (portfolioContainer) {
-      let portfolioIsotope = new Isotope(portfolioContainer, {
-        itemSelector: '.portfolio-item',
-        layoutMode: 'fitRows'
-      });
-
-      let portfolioFilters = select('#portfolio-flters li', true);
-
-      on('click', '#portfolio-flters li', function (e) {
-        e.preventDefault();
-        portfolioFilters.forEach(function (el) {
-          el.classList.remove('filter-active');
-        });
-        this.classList.add('filter-active');
-
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-      }, true);
-    }
+    // Components initialized on load
   });
 
   /**
@@ -211,18 +220,6 @@
         spaceBetween: 35
       }
     }
-  });
-
-  // Portfolio lightbox
-  const portfolioLightbox = GLightbox({
-    selector: '.portfolio-lightbox'
-  });
-
-  // Portfolio details lightbox
-  const portfolioDetailsLightbox = GLightbox({
-    selector: '.portfolio-details-lightbox',
-    width: '90%',
-    height: '90vh'
   });
 
   // Initialize Pure Counter

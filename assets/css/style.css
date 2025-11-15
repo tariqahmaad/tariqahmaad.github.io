@@ -198,9 +198,10 @@ a:hover {
   white-space: nowrap;
   margin-right: 10px;
   contain: layout style paint;
-  will-change: transform;
+  will-change: auto;
   transform: translateZ(0);
   backface-visibility: hidden;
+  transition: none !important;
 }
 
 #role {
@@ -219,6 +220,7 @@ a:hover {
   font-size: 100px;
   color: var(--primary-color);
   margin-right: 10px;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Responsive adjustments */
@@ -235,16 +237,30 @@ body::before {
 @media (max-width: 450px) {
   .stylish-name {
     font-size: 1.3em;
-    white-space: wrap;
+    white-space: nowrap;
   }
 
   .ri-code-s-slash-fill {
     font-size: 70px !important;
   }
-  
+
   #header h2 #role {
     border-bottom: none;
     padding-bottom: 0;
+  }
+
+  /* Ensure navbar name doesn't wrap on very small screens */
+  #header.header-top h1 {
+    font-size: 22px !important;
+  }
+
+  #header.header-top h1 .stylish-name {
+    font-size: 1.3em;
+    white-space: nowrap !important;
+  }
+
+  #header.header-top img {
+    max-height: 50px !important;
   }
 /* iPad-specific fixes for background attachment */
 @media only screen 
@@ -507,19 +523,19 @@ body::before {
 @media (min-width: 1000px) and (max-width: 1400px) {
   .about-me .content ul li {
     font-size: 14px;
-    word-break: break-word;
   }
-  
+
   .about-me .content ul strong {
     min-width: 100px;
     font-size: 14px;
+    flex-shrink: 0;
   }
-  
-  .about-me .content ul li span {
-    word-break: break-all;
-    overflow-wrap: break-word;
-    max-width: 100%;
-    display: inline-block;
+
+  .about-me .content ul li .value {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -527,31 +543,66 @@ body::before {
   .section-title p {
     font-size: 28px;
   }
-  
+
   .about-me .content h3 {
     font-size: 24px;
   }
-  
-  .about-me .content ul strong {
-    min-width: 100px;
+
+  .about-me .content ul li {
     font-size: 14px;
+    padding: 12px 15px;
+    flex-wrap: nowrap;
   }
-  
+
+  .about-me .content ul strong {
+    min-width: 95px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .about-me .content ul li .value {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .count-card .purecounter {
     font-size: 32px;
   }
-  
+
   .count-card h4 {
     font-size: 14px;
   }
-  
+
   .skill-card h4 {
     font-size: 1.1rem;
   }
-  
+
   .skill-tags span {
     font-size: 0.7rem;
     padding: 4px 10px;
+  }
+}
+
+/* Transition range between small and very small screens */
+@media (max-width: 479px) and (min-width: 431px) {
+  .about-me .content ul li {
+    font-size: 13px;
+    padding: 12px 15px;
+  }
+
+  .about-me .content ul strong {
+    min-width: 95px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .about-me .content ul li .value {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -561,18 +612,24 @@ body::before {
     font-size: 13px;
     word-break: break-word;
     padding: 12px 15px;
+    flex-wrap: wrap;
+    align-items: flex-start;
   }
-  
+
   .about-me .content ul strong {
     min-width: 90px;
     font-size: 13px;
-  }
-  
-  .about-me .content ul li span {
+    flex-shrink: 0;
     display: inline-block;
-    max-width: calc(100% - 100px);
-    word-break: break-all;
-    overflow-wrap: anywhere;
+  }
+
+  .about-me .content ul li .value {
+    font-size: 13px;
+    display: inline-block;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 }
 
@@ -652,6 +709,17 @@ body::before {
   transition: ease-in-out 0.3s;
 }
 
+/* Prevent transitions on specific elements during header transformation */
+#header h1,
+#header h1 a,
+#header h1 .stylish-name,
+#header img,
+#header .ri-code-s-slash-fill,
+#header .social-links,
+#header .social-links a {
+  transition: none !important;
+}
+
 #header h1 {
   font-size: 48px;
   margin: 0;
@@ -672,6 +740,7 @@ body::before {
   font-size: 24px;
   margin-top: 20px;
   color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease-in-out;
 }
 
 /* Override for header subtitle to ensure it uses the new styling */
@@ -784,16 +853,33 @@ body::before {
 #header.header-top .social-links,
 #header.header-top h2 {
   display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#header.header-top .hire-me-btn {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 #header.header-top h1 {
   margin-right: auto;
   font-size: 36px;
+  transition: none;
+}
+
+#header.header-top h1 .stylish-name {
+  font-size: 1.6em;
+  transition: none !important;
 }
 
 #header.header-top img {
   max-height: 60px;
   margin-right: 20px !important;
+  transition: none;
 }
 
 #header.header-top .container {
@@ -805,38 +891,37 @@ body::before {
   margin: 0;
 }
 
-/* Position the hire-me-btn in header-top mode */
-#header.header-top .hire-me-btn {
-  display: none; /* Hide by default */
-}
-
 /* Show hire-me-btn in the top nav for laptop screens */
 @media (min-width: 992px) {
   #header.header-top .hire-me-btn {
     display: flex !important;
+    opacity: 1;
+    visibility: visible;
     align-items: center;
-    margin-right: 20px; /* Specific right margin */
+    margin-right: 20px;
     position: relative;
+    transform: scale(1);
+    pointer-events: auto;
   }
-  
+
   #header.header-top .container {
     position: relative;
     justify-content: flex-end;
-    gap: 20px; /* Consistent gap between elements */
+    gap: 20px;
   }
-  
+
   #header.header-top .navbar {
-    margin: 0; /* Reset margins */
+    margin: 0;
   }
-  
+
   #header.header-top .navbar ul {
-    gap: 25px; /* Consistent spacing between nav items */
+    gap: 25px;
   }
-  
+
   #header.header-top h1 {
-    margin-right: auto; /* Push the h1 to the left */
+    margin-right: auto;
   }
-  
+
   /* Style the button in the header-top mode */
   #header.header-top .btn-hire {
     padding: 5px 10px;
@@ -844,7 +929,7 @@ body::before {
     background: linear-gradient(45deg, #18d26e, #0f9d53);
     color: #fff;
   }
-  
+
   #header.header-top .btn-hire:hover {
     background: transparent;
     color: #18d26e;
@@ -882,15 +967,71 @@ body::before {
   }
 }
 
+/* Small screen adjustments (between 375px and 450px) */
+@media (max-width: 450px) and (min-width: 376px) {
+  #header.header-top .container {
+    padding: 0 10px;
+    margin-top: 2px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #header.header-top img {
+    max-height: 42px !important;
+    margin-right: 10px !important;
+    margin-top: 2px;
+  }
+
+  #header.header-top h1 {
+    font-size: 18px !important;
+    margin: 0;
+    margin-top: 2px;
+    line-height: 1;
+  }
+
+  #header.header-top h1 .stylish-name {
+    font-size: 1.3em;
+    white-space: nowrap !important;
+    line-height: 1;
+  }
+}
+
 /* Further adjustments for very small screens */
 @media (max-width: 375px) {
   #header .hire-me-btn {
     margin: 10px auto 15px;
   }
-  
+
   #header .btn-hire {
     padding: 5px 12px;
     font-size: 11px;
+  }
+
+  /* Extra small screen navbar adjustments */
+  #header.header-top .container {
+    padding: 0 8px;
+    margin-top: 2px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #header.header-top img {
+    max-height: 38px !important;
+    margin-right: 8px !important;
+    margin-top: 2px;
+  }
+
+  #header.header-top h1 {
+    font-size: 16px !important;
+    margin: 0;
+    margin-top: 2px;
+    line-height: 1;
+  }
+
+  #header.header-top h1 .stylish-name {
+    font-size: 1.2em;
+    white-space: nowrap !important;
+    line-height: 1;
   }
 }
 
@@ -908,15 +1049,41 @@ body::before {
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0 15px;
+    margin-top: 3px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #header.header-top img {
+    order: -1;
+    max-height: 50px;
+    margin-right: 12px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
   }
 
   #header.header-top h1 {
-    font-size: 26px;
-    margin-right: 20px;
+    font-size: 22px;
+    margin: 0;
+    margin-top: 3px;
+    padding: 0;
+    white-space: nowrap;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    line-height: 1;
   }
-  #header.header-top img {
-    order: -1;
-    margin-right: 10px;
+
+  #header.header-top h1 .stylish-name {
+    font-size: 1.4em;
+    white-space: nowrap !important;
+    overflow: visible;
+    margin: 0;
+    line-height: 1;
   }
 }
 
@@ -925,20 +1092,46 @@ body::before {
     height: 60px;
   }
 
-    #header.header-top .container {
+  #header.header-top .container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    }
-
-  #header.header-top h1 {
-    font-size: 26px;
-    margin-right: 20px;
+    flex-wrap: nowrap;
+    padding: 0 15px;
+    margin: 3px 25px 0 0;
+    max-width: 100%;
+    width: 100%;
   }
+
   #header.header-top img {
     order: -1;
-    margin-right: 10px;
+    max-height: 55px;
+    margin-right: 15px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  #header.header-top h1 {
+    font-size: 24px;
+    margin: 0;
+    margin-top: 3px;
+    padding: 0;
+    white-space: nowrap;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  #header.header-top h1 .stylish-name {
+    font-size: 2.1rem;
+    white-space: nowrap !important;
+    overflow: visible;
+    margin: 0;
+    line-height: 1;
   }
 }
 
@@ -1113,6 +1306,48 @@ body::before {
   z-index: 9999;
 }
 
+/* Mobile nav toggle positioning */
+.mobile-nav-toggle {
+  top: 16px;
+  right: 15px;
+}
+
+/* Hamburger to X animation - optimized for mobile */
+.mobile-nav-toggle {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+  transform: translateZ(0);
+  will-change: transform, color;
+}
+
+.mobile-nav-toggle.bi-x {
+  color: var(--primary-color);
+  transform: translateZ(0) scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    top: 16px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 450px) {
+  .mobile-nav-toggle {
+    font-size: 28px;
+    top: 18px;
+    right: 10px;
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 375px) {
+  .mobile-nav-toggle {
+    font-size: 22px;
+    top: 19px;
+    right: 8px;
+  }
+}
+
 @media (max-width: 991px) {
   .mobile-nav-toggle {
     display: block;
@@ -1144,9 +1379,6 @@ body::before {
 }
 
 .navbar-mobile .mobile-nav-toggle {
-  position: absolute;
-  top: 15px;
-  right: 15px;
   color: var(--primary-color);
   z-index: 1001;
 }
@@ -1387,11 +1619,21 @@ section .container {
   font-weight: 500;
 }
 
+.about-me .content ul li .value {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
 .about-me .content ul strong {
   margin-right: 10px;
   color: #fff;
   font-weight: 600;
   min-width: 120px;
+  flex-shrink: 0;
 }
 
 .about-me .content ul i {
@@ -1929,24 +2171,28 @@ section .container {
 .hire-me-btn {
   margin-top: 10px;
   margin-bottom: 20px;
-  text-align: left; /* Align left by default for larger screens */
+  text-align: left;
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 /* For medium screens and above, add specific positioning */
 @media (min-width: 577px) {
   .hire-me-btn {
-    margin-left: 0; /* Ensure no left margin */
-    padding-left: 0; /* Ensure no left padding */
-    margin-top: 15px; /* Increase top margin for better spacing */
+    margin-left: 0;
+    padding-left: 0;
+    margin-top: 15px;
     text-align: left;
   }
-  
+
   .btn-hire {
-    margin-left: 0; /* Ensure button starts at the left edge */
-    padding: 8px 20px; /* Slightly larger button on desktop */
+    margin-left: 0;
+    padding: 8px 20px;
     font-size: 14px;
   }
-  
+
   /* In case h2 has any specific text alignment */
   #header h2 {
     text-align: left;
@@ -1972,190 +2218,6 @@ section .container {
 .btn-hire i {
   margin-right: 8px;
   font-size: 1.1em;
-}
-
-/*--------------------------------------------------------------
-# Services
---------------------------------------------------------------*/
-
-/*--------------------------------------------------------------
-# Portfolio
---------------------------------------------------------------*/
-.portfolio .portfolio-item {
-  margin-bottom: 30px;
-}
-
-.portfolio #portfolio-flters {
-  padding: 0;
-  margin: 0 auto 15px auto;
-  list-style: none;
-  text-align: center;
-  border-radius: 50px;
-  padding: 2px 15px;
-}
-
-.portfolio #portfolio-flters li {
-  cursor: pointer;
-  display: inline-block;
-  padding: 8px 16px 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  text-transform: uppercase;
-  color: #fff;
-  background: var(--card-bg);
-  margin: 0 3px 10px 3px;
-  transition: all 0.3s ease-in-out;
-  border-radius: 20px;
-  border: var(--card-border);
-  box-shadow: var(--card-shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.portfolio #portfolio-flters li:hover,
-.portfolio #portfolio-flters li.filter-active {
-  background: var(--card-hover-bg);
-  color: #000;
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-  box-shadow: var(--card-hover-shadow);
-}
-
-.portfolio #portfolio-flters li:last-child {
-  margin-right: 0;
-}
-
-.portfolio .portfolio-wrap {
-  transition: 0.3s;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.portfolio .portfolio-wrap::before {
-  content: "";
-  background: rgba(0, 0, 0, 0.6);
-  position: absolute;
-  left: 30px;
-  right: 30px;
-  top: 30px;
-  bottom: 30px;
-  transition: all ease-in-out 0.3s;
-  z-index: 2;
-  opacity: 0;
-}
-
-.portfolio .portfolio-wrap .portfolio-info {
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  text-align: center;
-  z-index: 3;
-  transition: all ease-in-out 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.portfolio .portfolio-wrap .portfolio-info::before {
-  display: block;
-  content: "";
-  width: 48px;
-  height: 48px;
-  position: absolute;
-  top: 35px;
-  left: 35px;
-  border-top: 3px solid #fff;
-  border-left: 3px solid #fff;
-  transition: all 0.5s ease 0s;
-  z-index: 9994;
-}
-
-.portfolio .portfolio-wrap .portfolio-info::after {
-  display: block;
-  content: "";
-  width: 48px;
-  height: 48px;
-  position: absolute;
-  bottom: 35px;
-  right: 35px;
-  border-bottom: 3px solid #fff;
-  border-right: 3px solid #fff;
-  transition: all 0.5s ease 0s;
-  z-index: 9994;
-}
-
-.portfolio .portfolio-wrap .portfolio-info h4 {
-  font-size: 20px;
-  color: #fff;
-  font-weight: 600;
-}
-
-.portfolio .portfolio-wrap .portfolio-info p {
-  color: #ffffff;
-  font-size: 14px;
-  text-transform: uppercase;
-  padding: 0;
-  margin: 0;
-}
-
-.portfolio .portfolio-wrap .portfolio-links {
-  text-align: center;
-  z-index: 4;
-}
-
-.portfolio .portfolio-wrap .portfolio-links a {
-  color: #fff;
-  margin: 0 2px;
-  font-size: 28px;
-  display: inline-block;
-  transition: 0.3s;
-}
-
-.portfolio .portfolio-wrap .portfolio-links a:hover {
-  color: var(--primary-color);
-}
-
-.portfolio .portfolio-wrap:hover::before {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 1;
-  background: var(--card-hover-bg); /* Light green background */
-}
-
-.portfolio .portfolio-wrap:hover .portfolio-info {
-  opacity: 1;
-}
-
-.portfolio .portfolio-wrap:hover .portfolio-info::before {
-  top: 15px;
-  left: 15px;
-}
-
-.portfolio .portfolio-wrap:hover .portfolio-info::after {
-  bottom: 15px;
-  right: 15px;
-}
-
-.portfolio .portfolio-wrap:hover .portfolio-info h4,
-.portfolio .portfolio-wrap:hover .portfolio-info p {
-  color: #000; /* Black text on hover */
-}
-
-.portfolio .portfolio-wrap:hover .portfolio-links a {
-  color: #000; /* Black icon on hover */
-}
-
-.portfolio .portfolio-wrap:hover .portfolio-links a:hover {
-  color: var(--primary-color); /* Keep the green hover effect for links */
 }
 
 /*--------------------------------------------------------------
@@ -2416,7 +2478,6 @@ section .container {
 /* Smooth transitions for all interactive elements */
 .btn-hire,
 .btn-cv,
-.portfolio #portfolio-flters li,
 .social-links a,
 .navbar a {
   transition: all 0.3s ease;
