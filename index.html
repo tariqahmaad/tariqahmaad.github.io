@@ -43,12 +43,23 @@
     <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap">
   </noscript>
-    <!-- Vendor CSS Files -->
+
+  <!-- Critical CSS: Bootstrap for layout -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
+  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet"></noscript>
+
+  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"></noscript>
+
+  <link rel="preload" href="assets/vendor/remixicon/remixicon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/vendor/remixicon/remixicon.min.css" rel="stylesheet"></noscript>
+
+  <!-- Non-Critical CSS: Swiper for testimonials (below fold) -->
+  <link rel="preload" href="assets/vendor/swiper/swiper-bundle.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"></noscript>
 
   <!-- Critical CSS for LCP optimization -->
   <style>
@@ -106,13 +117,28 @@
       pointer-events: none;
     }
   </style>
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/branding.css" rel="stylesheet">
-  <link href="assets/css/glassmorphism.css" rel="stylesheet">
-  <link href="assets/css/testimonials-professional.css" rel="stylesheet">
-  <link href="assets/css/projects-custom.css" rel="stylesheet">
-  <link href="assets/css/ai-assistant.css" rel="stylesheet">
+  <!-- Critical CSS: Main layout and branding (above fold) -->
+  <link href="assets/css/style.min.css" rel="stylesheet">
+  <link href="assets/css/branding.min.css" rel="stylesheet">
+
+  <!-- Non-Critical CSS: Below-fold content and visual effects (async) -->
+  <link rel="preload" href="assets/css/glassmorphism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/css/glassmorphism.min.css" rel="stylesheet"></noscript>
+
+  <link rel="preload" href="assets/css/testimonials-professional.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/css/testimonials-professional.min.css" rel="stylesheet"></noscript>
+
+  <link rel="preload" href="assets/css/projects-custom.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/css/projects-custom.min.css" rel="stylesheet"></noscript>
+
+  <link rel="preload" href="assets/css/ai-assistant.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="assets/css/ai-assistant.min.css" rel="stylesheet"></noscript>
+
+  <!-- CSS Preload Polyfill for older browsers -->
+  <script>
+    /*! loadCSS rel=preload polyfill. [c]2017 Filament Group, Inc. MIT License */
+    !function(n){"use strict";n.loadCSS||(n.loadCSS=function(){});var o=loadCSS.relpreload={};if(o.support=function(){var o;try{o=n.document.createElement("link").relList.supports("preload")}catch(e){o=!1}return function(){return o}}(),o.bindMediaToggle=function(n){var o=n.media||"all";function e(){n.addEventListener?n.removeEventListener("load",e):n.attachEvent&&n.detachEvent("onload",e),n.setAttribute("onload",null),n.media=o}n.addEventListener?n.addEventListener("load",e):n.attachEvent&&n.attachEvent("onload",e),setTimeout(function(){n.rel="stylesheet",n.media="only x"}),setTimeout(e,3e3)},!o.support()){o.poly();var e=n.document.getElementsByTagName("link");if(e)for(var t=0;t<e.length;t++){var l=e[t];"preload"!==l.rel||"style"!==l.getAttribute("as")||l.getAttribute("data-loadcss")||(l.setAttribute("data-loadcss",!0),o.bindMediaToggle(l))}!function e(){if(!n.document.querySelectorAll)return;for(var t=n.document.querySelectorAll("link[rel=preload][as=style]:not([data-loadcss])"),l=0;l<t.length;l++)t[l].setAttribute("data-loadcss",!0),o.bindMediaToggle(t[l]);setTimeout(e,500)}()}}(this);
+  </script>
 
   <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" defer></script>
@@ -340,7 +366,7 @@
               <ul>
                 <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span class="value">10 June 2000</span></li>
                 <li><i class="bi bi-chevron-right"></i> <strong>LinkedIn:</strong> <span class="value"> <a
-                      href="https://www.linkedin.com/in/tariq-ahmad-a43320264"> Click Here</a></span></li>
+                      href="https://www.linkedin.com/in/tariq-ahmad-a43320264">View LinkedIn Profile</a></span></li>
                 <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span class="value">+90 534 540 3345</span></li>
               </ul>
             </div>
@@ -1184,18 +1210,20 @@
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- EmailJS SDK -->
+  <!-- EmailJS SDK (Load BEFORE validate.js to prevent retry messages) -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <!-- Form Validation (Depends on EmailJS, loaded after) -->
+  <script src="assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS Files -->
   <script src="assets/js/particles-config.js" defer></script>
   <script src="assets/js/performance-monitor.js" defer></script>
   <script src="assets/js/progressive-enhancement.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/knowledge-base.js?v=20251023" type="module" defer></script>
-  <script src="assets/js/ai-assistant.js?v=20251023" type="module" defer></script>
+  <script src="assets/js/main.min.js" defer></script>
+  <script src="assets/js/knowledge-base.min.js?v=20251023" type="module" defer></script>
+  <script src="assets/js/ai-assistant.min.js?v=20251023" type="module" defer></script>
 
 </body>
 

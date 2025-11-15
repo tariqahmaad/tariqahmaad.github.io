@@ -434,10 +434,8 @@
 
   // Initialize components when DOM is ready
   document.addEventListener("DOMContentLoaded", function () {
-    // Initialize particles.js immediately for background
-    if (typeof particlesJS !== 'undefined') {
-      particlesJS.load('particles-js', 'assets/js/particles-config.js');
-    }
+    // NOTE: Particles.js is initialized by particles-config.js
+    // No need to load it here as particles-config.js handles initialization
 
     // Defer typing effect to improve LCP
     const roleSpan = document.getElementById('role');
