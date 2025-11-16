@@ -140,138 +140,19 @@
     !function(n){"use strict";n.loadCSS||(n.loadCSS=function(){});var o=loadCSS.relpreload={};if(o.support=function(){var o;try{o=n.document.createElement("link").relList.supports("preload")}catch(e){o=!1}return function(){return o}}(),o.bindMediaToggle=function(n){var o=n.media||"all";function e(){n.addEventListener?n.removeEventListener("load",e):n.attachEvent&&n.detachEvent("onload",e),n.setAttribute("onload",null),n.media=o}n.addEventListener?n.addEventListener("load",e):n.attachEvent&&n.attachEvent("onload",e),setTimeout(function(){n.rel="stylesheet",n.media="only x"}),setTimeout(e,3e3)},!o.support()){o.poly();var e=n.document.getElementsByTagName("link");if(e)for(var t=0;t<e.length;t++){var l=e[t];"preload"!==l.rel||"style"!==l.getAttribute("as")||l.getAttribute("data-loadcss")||(l.setAttribute("data-loadcss",!0),o.bindMediaToggle(l))}!function e(){if(!n.document.querySelectorAll)return;for(var t=n.document.querySelectorAll("link[rel=preload][as=style]:not([data-loadcss])"),l=0;l<t.length;l++)t[l].setAttribute("data-loadcss",!0),o.bindMediaToggle(t[l]);setTimeout(e,500)}()}}(this);
   </script>
 
-  <!-- Particles.js -->
+  <!-- Particles.js - Deferred for faster LCP -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" defer></script>
-  <!-- Schema.org Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Tariq Ahmad",
-    "url": "https://tariqahmaad.github.io/",
-    "image": "https://tariqahmaad.github.io/assets/img/me.jpg",
-    "sameAs": [
-      "https://x.com/arrick007",
-      "https://www.facebook.com/tariq.ahmaaad",
-      "https://www.instagram.com/0xtahmad/",
-      "https://www.linkedin.com/in/tariq-ahmad-a43320264",
-      "https://github.com/tariqahmaad"
-    ],
-    "jobTitle": "Computer Engineer",
-    "alumniOf": "Istanbul Aydin University",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Freelance"
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Istanbul",
-      "addressCountry": "Turkey"
-    },
-    "knowsAbout": [
-      "Python",
-      "C++",
-      "C#",
-      "Java",
-      "JavaScript",
-      "PHP",
-      "Django",
-      "Spring Boot",
-      "React",
-      "Bootstrap",
-      "MySQL",
-      "MongoDB",
-      "PostgreSQL",
-      "SQLite",
-      "Git",
-      "Docker",
-      "CCNA",
-      "Windows",
-      "Linux",
-      "MacOS"
-    ]
-  }
-  </script>
 
-  <!-- BreadcrumbList Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://tariqahmaad.github.io/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Projects",
-        "item": "https://tariqahmaad.github.io/#projects"
-      }
-    ]
-  }
-  </script>
-
-  <!-- Projects Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Tariq Ahmad Portfolio Projects",
-    "description": "Collection of software development projects by Tariq Ahmad",
-    "numberOfItems": 9,
-    "itemListElement": [
-      {
-        "@type": "SoftwareApplication",
-        "position": 1,
-        "name": "Quizlet - Interactive University Quiz Platform",
-        "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Web Browser",
-        "programmingLanguage": ["HTML", "CSS", "JavaScript"]
-      },
-      {
-        "@type": "SoftwareApplication",
-        "position": 2,
-        "name": "BudgetWise - React Native Expense Tracker",
-        "description": "Mobile expense tracking app built with React Native, Node.js, and Firebase",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "iOS, Android",
-        "programmingLanguage": ["React Native", "JavaScript", "Node.js"]
-      },
-      {
-        "@type": "SoftwareApplication",
-        "position": 3,
-        "name": "Note-Taking Web Application",
-        "description": "Web-based note-taking application with PHP, MySQL, and JavaScript",
-        "applicationCategory": "ProductivityApplication",
-        "operatingSystem": "Web Browser",
-        "programmingLanguage": ["PHP", "MySQL", "JavaScript"]
-      },
-      {
-        "@type": "SoftwareApplication",
-        "position": 4,
-        "name": "Hospital Management System",
-        "description": "Hospital management system built with Java, Spring Boot, and MySQL",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Web Browser",
-        "programmingLanguage": ["Java", "Spring Boot", "MySQL"]
-      },
-      {
-        "@type": "SoftwareApplication",
-        "position": 5,
-        "name": "Hand-Written Digital Classifier",
-        "description": "Machine learning project for classifying handwritten digits using Neural Networks and TensorFlow",
-        "applicationCategory": "MachineLearningApplication",
-        "operatingSystem": "Cross-Platform",
-        "programmingLanguage": ["Python"],
-        "about": "Neural Networks, TensorFlow, Machine Learning"
-      }
-    ]
-  }
+  <!-- Load structured data after LCP -->
+  <script>
+    // Deferred loading of structured data to improve LCP
+    (function() {
+      var script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.src = 'structured-data.json';
+      script.async = true;
+      document.head.appendChild(script);
+    })();
   </script>
 </head>
 
@@ -1211,7 +1092,6 @@
 
   <!-- Template Main JS Files -->
   <script src="assets/js/particles-config.js" defer></script>
-  <script src="assets/js/performance-monitor.js" defer></script>
   <script src="assets/js/progressive-enhancement.js" defer></script>
   <script src="assets/js/main.min.js" defer></script>
   <script src="assets/js/knowledge-base.min.js?v=20251023" type="module" defer></script>

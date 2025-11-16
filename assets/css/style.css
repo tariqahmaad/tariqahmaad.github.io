@@ -33,7 +33,7 @@ body::before {
   position: fixed;
   background: var(--bg-color) url("../img/bg.jpg") top right no-repeat;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: scroll;
   background-position: top right;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -225,12 +225,12 @@ a:hover {
 
 /* Responsive adjustments */
 body::before {
-  background-attachment: fixed;
+  background-attachment: scroll;
 }
 
 @media (max-width: 1024px) {
   body::before {
-    background-attachment: fixed;
+    background-attachment: scroll;
   }
 }
 
@@ -263,12 +263,12 @@ body::before {
     max-height: 50px !important;
   }
 /* iPad-specific fixes for background attachment */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
+@media only screen
+  and (min-device-width: 768px)
+  and (max-device-width: 1024px)
   and (-webkit-min-device-pixel-ratio: 1) {
     body::before {
-      background-attachment: fixed !important;
+      background-attachment: scroll !important;
       background-position: top right !important;
       background-size: cover !important;
       position: fixed !important;
@@ -282,7 +282,7 @@ body::before {
       -webkit-backface-visibility: hidden !important;
       will-change: transform !important;
     }
-    
+
     /* Force hardware acceleration on iPad */
     body {
       -webkit-transform: translate3d(0, 0, 0);
@@ -291,12 +291,12 @@ body::before {
 }
 
 /* iPad Pro fixes */
-@media only screen 
-  and (min-device-width: 1024px) 
-  and (max-device-width: 1366px) 
+@media only screen
+  and (min-device-width: 1024px)
+  and (max-device-width: 1366px)
   and (-webkit-min-device-pixel-ratio: 2) {
     body::before {
-      background-attachment: fixed !important;
+      background-attachment: scroll !important;
       background-position: top right !important;
       background-size: cover !important;
       position: fixed !important;
@@ -315,7 +315,7 @@ body::before {
 /* Alternative iPad fix using viewport units */
 @supports (-webkit-touch-callout: none) {
   body::before {
-    background-attachment: fixed;
+    background-attachment: scroll;
     position: fixed;
     top: 0;
     left: 0;

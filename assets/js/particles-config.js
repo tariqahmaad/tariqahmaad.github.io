@@ -3,17 +3,33 @@
  * Optimized for performance across different devices
  */
 
-// Wait for DOM and particlesJS to be available
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if particlesJS is available
-  if (typeof particlesJS === 'undefined') {
-    console.warn('particlesJS not loaded yet, retrying...');
-    setTimeout(initParticles, 100);
-    return;
-  }
+// Wait for both DOM and particlesJS to be available, but don't block LCP
+if (document.readyState === 'loading') {
+  // DOM is still loading, wait for it
+  document.addEventListener('DOMContentLoaded', function() {
+    deferParticleInit();
+  });
+} else {
+  // DOM is already ready, defer particle initialization
+  deferParticleInit();
+}
 
-  initParticles();
-});
+function deferParticleInit() {
+  // Defer particles initialization to after LCP
+  // Use requestIdleCallback if available, otherwise use setTimeout
+  if (typeof requestIdleCallback !== 'undefined') {
+    requestIdleCallback(function() {
+      initParticles();
+    }, { timeout: 2000 });
+  } else {
+    // Fallback: wait for particlesJS and then delay init
+    if (typeof particlesJS === 'undefined') {
+      setTimeout(deferParticleInit, 100);
+      return;
+    }
+    setTimeout(initParticles, 500);
+  }
+}
 
 function initParticles() {
   try {

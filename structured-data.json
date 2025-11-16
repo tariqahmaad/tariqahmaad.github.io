@@ -1,0 +1,125 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://tariqahmaad.github.io/#person",
+      "name": "Tariq Ahmad",
+      "url": "https://tariqahmaad.github.io/",
+      "image": "https://tariqahmaad.github.io/assets/img/me.jpg",
+      "sameAs": [
+        "https://x.com/arrick007",
+        "https://www.facebook.com/tariq.ahmaaad",
+        "https://www.instagram.com/0xtahmad/",
+        "https://www.linkedin.com/in/tariq-ahmad-a43320264",
+        "https://github.com/tariqahmaad"
+      ],
+      "jobTitle": "Computer Engineer",
+      "alumniOf": "Istanbul Aydin University",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Freelance"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Istanbul",
+        "addressCountry": "Turkey"
+      },
+      "knowsAbout": [
+        "Python",
+        "C++",
+        "C#",
+        "Java",
+        "JavaScript",
+        "PHP",
+        "Django",
+        "Spring Boot",
+        "React",
+        "Bootstrap",
+        "MySQL",
+        "MongoDB",
+        "PostgreSQL",
+        "SQLite",
+        "Git",
+        "Docker",
+        "CCNA",
+        "Windows",
+        "Linux",
+        "MacOS"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://tariqahmaad.github.io/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://tariqahmaad.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Projects",
+          "item": "https://tariqahmaad.github.io/#projects"
+        }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://tariqahmaad.github.io/#projects",
+      "name": "Tariq Ahmad Portfolio Projects",
+      "description": "Collection of software development projects by Tariq Ahmad",
+      "numberOfItems": 9,
+      "itemListElement": [
+        {
+          "@type": "SoftwareApplication",
+          "position": 1,
+          "name": "Quizlet - Interactive University Quiz Platform",
+          "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web Browser",
+          "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "position": 2,
+          "name": "BudgetWise - React Native Expense Tracker",
+          "description": "Mobile expense tracking app built with React Native, Node.js, and Firebase",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "iOS, Android",
+          "programmingLanguage": ["React Native", "JavaScript", "Node.js"]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "position": 3,
+          "name": "Note-Taking Web Application",
+          "description": "Web-based note-taking application with PHP, MySQL, and JavaScript",
+          "applicationCategory": "ProductivityApplication",
+          "operatingSystem": "Web Browser",
+          "programmingLanguage": ["PHP", "MySQL", "JavaScript"]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "position": 4,
+          "name": "Hospital Management System",
+          "description": "Hospital management system built with Java, Spring Boot, and MySQL",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web Browser",
+          "programmingLanguage": ["Java", "Spring Boot", "MySQL"]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "position": 5,
+          "name": "Hand-Written Digital Classifier",
+          "description": "Machine learning project for classifying handwritten digits using Neural Networks and TensorFlow",
+          "applicationCategory": "MachineLearningApplication",
+          "operatingSystem": "Cross-Platform",
+          "programmingLanguage": ["Python"],
+          "about": "Neural Networks, TensorFlow, Machine Learning"
+        }
+      ]
+    }
+  ]
+}

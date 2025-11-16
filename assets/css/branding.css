@@ -320,7 +320,7 @@ body {
 
   /* Keep subtitle readable on very small screens */
   .section-title p {
-    font-size: 22px !important;
+    font-size: 19px !important;
     margin: -15px 0 15px 0;
     line-height: 1.2;
   }
