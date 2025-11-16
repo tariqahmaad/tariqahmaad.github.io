@@ -458,14 +458,14 @@ body::before {
 
 .section-title p {
   margin: -20px 0 20px 0;
-  font-size: 42px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 600;
   text-transform: uppercase;
   font-family: "Poppins", sans-serif;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.85);
   animation: fadeInUp 0.6s ease forwards;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 3px;
 }
 
 /* Responsive improvements for About section */
@@ -476,8 +476,9 @@ body::before {
   }
   
   .section-title p {
-    font-size: 32px;
+    font-size: 14px;
     margin: -15px 0 15px 0;
+    letter-spacing: 2px;
   }
   
   .about-me .content h3 {
@@ -2493,4 +2494,42 @@ section .container {
 .animate-on-scroll.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Disable hover/click animations for stats on mobile and iPad */
+@media (max-width: 1023px) {
+  .count-card:hover {
+    transform: none;
+    box-shadow: var(--card-shadow);
+    background: var(--card-bg);
+    border-color: var(--card-border);
+  }
+
+  .count-card:hover:before {
+    transform: scaleX(0);
+  }
+
+  .count-card:hover .count-icon i {
+    transform: none;
+    color: var(--primary-color);
+  }
+
+  .count-card:hover h4,
+  .count-card:hover .purecounter,
+  .count-card:hover .count-detail p {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .count-card:hover .count-detail {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 15px;
+  }
+
+  /* Make count details always visible on mobile/iPad */
+  .count-detail {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 15px;
+  }
 }

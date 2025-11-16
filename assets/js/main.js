@@ -222,8 +222,23 @@
     }
   });
 
-  // Initialize Pure Counter
-  new PureCounter();
+  // Initialize Pure Counter (disabled on mobile and iPad)
+  const isMobileOrIpad = () => {
+    // Check if device is mobile or tablet (iPad)
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           window.innerWidth < 1024;
+  };
+
+  if (!isMobileOrIpad()) {
+    new PureCounter();
+  } else {
+    // Set static values for mobile and iPad
+    const counters = document.querySelectorAll('.purecounter');
+    counters.forEach(counter => {
+      const endValue = parseInt(counter.getAttribute('data-purecounter-end'));
+      counter.textContent = endValue;
+    });
+  }
 
   // Optimized typing effect for role text
   const roles = ["Cybersecurity Analyst", "Security Consultant", "Penetration Tester", "Security Engineer", "Incident Response Specialist", "Ethical Hacker", "Computer Engineer"];
