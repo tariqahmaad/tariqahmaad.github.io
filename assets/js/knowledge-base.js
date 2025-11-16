@@ -18,8 +18,7 @@ export const knowledgeBase = {
         location: "Istanbul, Turkey",
         email: "tariq_muzamil@live.com",
         phone: "+90 534 540 3345",
-        birthday: "10 June 2000",
-        degree: "Bachelor's (Completed)",
+        degree: "BSc Computer Engineering",
         university: "Istanbul Aydin University",
         cgpa: "3.36/4.0",
         graduationYear: "2021-2025",
@@ -218,6 +217,11 @@ export const knowledgeBase = {
 
     achievements: [
         {
+            name: "Oxford ELLT – Overall Level: 8",
+            issuer: "Oxford English Language Level Test",
+            date: "Aug 2025"
+        },
+        {
             name: "IELTS – Overall Band: 6.0",
             issuer: "IDP Education",
             date: "Feb 2025"
@@ -231,10 +235,10 @@ export const knowledgeBase = {
     ],
 
     stats: {
-        happyClients: 232,
-        projects: 38,
-        hoursOfSupport: 846,
-        awards: 12
+        projects: 9,
+        awards: 3,
+        certifications: 7,
+        experience: 5
     },
 
     personalInterests: [
