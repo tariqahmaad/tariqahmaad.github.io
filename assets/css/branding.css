@@ -1,17 +1,18 @@
-/* Branding System */
+/* ==========================================================================
+   BRANDING SYSTEM
+   Brand-specific styles extending the core style.css definitions
+   Note: Core CSS variables are defined in style.css
+   ========================================================================== */
+
 :root {
-  /* Color Palette */
-  --primary-brand: #0fa958; /* WCAG compliant green */
-  --secondary-brand: #6f42c1; /* Purple accent */
-  --dark-bg: #040404;
-  --light-text: #ffffff;
-  --dark-text: #121412;
+  /* RGB values for rgba() usage - complements style.css variables */
+  --primary-brand-rgb: 24, 210, 110;
   
-  /* Typography */
+  /* Typography shortcuts */
   --display-font: 'Raleway', sans-serif;
   --body-font: 'Open Sans', sans-serif;
   --code-font: 'Courier New', monospace;
-  
+    
   /* Spacing System */
   --space-xs: 0.5rem;
   --space-sm: 1rem;
@@ -19,22 +20,11 @@
   --space-lg: 3rem;
   --space-xl: 4rem;
   
-  /* Effects */
+  /* Brand-specific Effects */
   --glow-effect: 0 0 15px rgba(15, 169, 88, 0.5);
-  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Brand Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--display-font);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
-body {
-  font-family: var(--body-font);
-  line-height: 1.6;
-}
+/* NOTE: Base typography (h1-h6, body) is defined in style.css */
 
 /* Brand Colors */
 .brand-primary {
@@ -61,6 +51,7 @@ body {
 }
 
   /* Modern Button System */
+/* Modern Button System - Cyber Redesign */
 .btn-brand {
   display: inline-flex;
   align-items: center;
@@ -68,145 +59,142 @@ body {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: 11px 18px;
-  border-radius: 12px;
-  font-family: var(--display-font);
+  padding: 12px 24px;
+  border-radius: 4px; /* Sharper cyber look */
+  font-family: 'Space Grotesk', var(--display-font); /* Tech font preference */
   font-weight: 600;
-  font-size: 1.1rem;
-  letter-spacing: 0.05em;
-  color: var(--light-text);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  background: rgba(4, 4, 4, 0.6);
+  border: 1px solid rgba(24, 210, 110, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: 2;
-  
-  /* Glassmorphism effect */
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  
-  /* Outer glow */
-  box-shadow:
-    0 4px 20px rgba(24, 210, 110, 0.3),
-    inset 0 0 12px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(24, 210, 110, 0.1);
 }
 
-/* Enhanced edge glow effect */
+/* Tech Grid Background Effect */
 .btn-brand::before {
   content: '';
   position: absolute;
-  z-index: -1;
-  inset: 0;
-  border-radius: 12px;
-  padding: 2px;
-  background: linear-gradient(
-    45deg,
-    var(--primary-brand),
-    #6f42c1,
-    var(--primary-brand),
-    #6f42c1,
-    var(--primary-brand)
-  );
-  background-size: 300% 300%;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: border-glow 4s ease infinite;
-  filter: blur(6px);
-  opacity: 0.9;
-}
-
-@keyframes border-glow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Ripple effect */
-.btn-brand::after {
-  content: '';
-  position: absolute;
-  top: var(--y);
-  left: var(--x);
-  transform: translate(-50%, -50%) scale(0);
-  width: 200%;
-  padding-bottom: 200%;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(24, 210, 110, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 210, 110, 0.1) 1px, transparent 1px);
+  background-size: 10px 10px;
   opacity: 0;
-  transition: transform 0.6s, opacity 0.3s;
   z-index: -1;
+  transition: opacity 0.3s ease;
 }
 
-/* Hover states */
+/* Hover State - Use 'Hire Me' as primary example */
 .btn-brand:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 8px 25px rgba(24, 210, 110, 0.5),
-    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  background: rgba(24, 210, 110, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 
+    0 0 20px rgba(24, 210, 110, 0.4),
+    inset 0 0 10px rgba(24, 210, 110, 0.1);
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px rgba(24, 210, 110, 0.6);
+  transform: translateY(-2px);
 }
 
 .btn-brand:hover::before {
-  animation-duration: 1.5s;
+  opacity: 0.2;
 }
 
-/* Active/Click state */
+/* Active State */
 .btn-brand:active {
-  transform: translateY(2px) scale(0.98);
-  box-shadow:
-    0 2px 10px rgba(24, 210, 110, 0.4),
-    inset 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.1s ease;
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 0 10px rgba(24, 210, 110, 0.2);
 }
 
-.btn-brand:active::after {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  transition: transform 0s, opacity 0.1s;
-}
-
-/* Focus state */
-.btn-brand:focus-visible {
-  outline: 2px solid var(--primary-brand);
-  outline-offset: 3px;
-  box-shadow:
-    0 0 0 4px rgba(24, 210, 110, 0.3),
-    0 8px 25px rgba(24, 210, 110, 0.5);
-}
-
-/* Icon animation */
+/* Icon Animation */
 .btn-brand i {
   margin-right: 10px;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  font-size: 1.2em;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .btn-brand:hover i {
-  transform: scale(1.15) rotate(5deg);
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+  transform: scale(1.2) rotate(-10deg);
+  filter: drop-shadow(0 0 5px rgba(24, 210, 110, 0.8));
 }
 
-/* Border rotation animation */
-@keyframes rotate-border {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ==========================================================================
+   Secondary Button (Download CV)
+   ========================================================================== */
+.btn-brand.btn-cv {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  background: transparent;
+  box-shadow: none;
 }
 
+.btn-brand.btn-cv:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #fff;
+  color: #fff;
+  box-shadow: 
+    0 0 15px rgba(255, 255, 255, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 0.05);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.btn-brand.btn-cv i {
+  transition: transform 0.4s ease;
+}
+
+.btn-brand.btn-cv:hover i {
+  transform: translateY(3px); /* Slide down effect */
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+  animation: bounce-icon 1s infinite;
+}
+
+@keyframes bounce-icon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* Glitch Effect on Text Hover for Hire Me (Optional subtlety) */
+@keyframes glitch-text {
+  0% { transform: translate(0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(-1px, -1px); }
+  60% { transform: translate(1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+/* Corner Accents (Cyber Aesthetic) */
+.btn-brand::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--primary-color);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.btn-brand.btn-cv::after {
+  background: #fff;
+}
+
+.btn-brand:hover::after {
+  transform: scale(1.5);
+  filter: drop-shadow(0 0 2px var(--primary-color));
+}
 
 /* Social Media Buttons */
 .social-links a,
@@ -236,32 +224,46 @@ body {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .btn-brand {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    min-width: 120px;
-    border-radius: 12px;
-    font-weight: 600;
+    padding: 12px 20px;
+    font-size: 1rem;
+    min-width: 140px;
+    border-radius: 4px; /* Scaled down cyber look */
+    letter-spacing: 0.08em;
     
-    /* Enhanced mobile glow */
-    box-shadow:
-      0 6px 25px rgba(24, 210, 110, 0.4),
-      inset 0 0 15px rgba(255, 255, 255, 0.15);
+    /* Cyber mobile glow */
+    background: rgba(4, 4, 4, 0.85); /* Slightly darker for better contrast */
+    border: 1px solid rgba(24, 210, 110, 0.5);
+    box-shadow: 
+      0 0 15px rgba(24, 210, 110, 0.2),
+      inset 0 0 10px rgba(24, 210, 110, 0.1);
   }
 
-  
+  .btn-brand.btn-cv {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: transparent;
+    box-shadow: none;
+  }
   
   .btn-brand i {
-    margin-right: 10px;
-    transform: none;
+    margin-right: 8px;
     font-size: 1.1em;
   }
   
-  /* Enhanced hover state for mobile */
-  .btn-brand:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow:
-      0 10px 30px rgba(24, 210, 110, 0.6),
-      inset 0 0 25px rgba(255, 255, 255, 0.25);
+  /* Tap state for mobile instead of hover */
+  .btn-brand:active,
+  .btn-brand:focus {
+    transform: scale(0.96);
+    background: rgba(24, 210, 110, 0.15);
+    box-shadow: 
+      0 0 20px rgba(24, 210, 110, 0.5),
+      inset 0 0 15px rgba(24, 210, 110, 0.2);
+  }
+
+  .btn-brand.btn-cv:active,
+  .btn-brand.btn-cv:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   }
 
   /* Resume section title responsiveness */

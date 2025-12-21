@@ -67,9 +67,9 @@
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(24, 210, 110, 0.05) 0%,
+    rgba(var(--primary-brand-rgb), 0.05) 0%,
     transparent 50%,
-    rgba(24, 210, 110, 0.03) 100%
+    rgba(var(--primary-brand-rgb), 0.03) 100%
   );
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -88,7 +88,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(24, 210, 110, 0.6),
+    rgba(var(--primary-brand-rgb), 0.6),
     transparent
   );
   opacity: 0;
@@ -98,12 +98,12 @@
 /* Hover state improvements */
 .testimonials .testimonial-item:hover {
   background: linear-gradient(135deg, 
-    rgba(24, 210, 110, 0.12) 0%, 
-    rgba(24, 210, 110, 0.05) 100%);
-  border-color: rgba(24, 210, 110, 0.3);
+    rgba(var(--primary-brand-rgb), 0.12) 0%, 
+    rgba(var(--primary-brand-rgb), 0.05) 100%);
+  border-color: rgba(var(--primary-brand-rgb), 0.3);
   box-shadow: 
     0 12px 48px rgba(0, 0, 0, 0.4),
-    0 4px 16px rgba(24, 210, 110, 0.2),
+    0 4px 16px rgba(var(--primary-brand-rgb), 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-6px) scale(1.02);
 }
@@ -138,9 +138,9 @@
 }
 
 .testimonials .testimonial-img:hover {
-  border-color: rgba(24, 210, 110, 0.6);
+  border-color: rgba(var(--primary-brand-rgb), 0.6);
   transform: scale(1.1);
-  box-shadow: 0 12px 32px rgba(24, 210, 110, 0.3);
+  box-shadow: 0 12px 32px rgba(var(--primary-brand-rgb), 0.3);
 }
 
 /* Professional Name and Title */
@@ -152,7 +152,7 @@
 .testimonials .testimonial-info h3 {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-color);
   margin: 0 0 0.5rem 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.5px;
@@ -170,8 +170,8 @@
 }
 
 .testimonials .testimonial-item:hover .testimonial-info h3 {
-  color: #18d26e;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.4);
+  color: var(--primary-color);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
 }
 
 .testimonials .testimonial-item:hover .testimonial-info h4 {
@@ -200,15 +200,15 @@
 }
 
 .testimonials .testimonial-item:hover .testimonial-quote p {
-  color: #ffffff;
-  background: rgba(24, 210, 110, 0.08);
-  border-color: rgba(24, 210, 110, 0.2);
+  color: var(--text-color);
+  background: rgba(var(--primary-brand-rgb), 0.08);
+  border-color: rgba(var(--primary-brand-rgb), 0.2);
 }
 
 /* Quote Icons */
 .testimonials .quote-icon-left,
 .testimonials .quote-icon-right {
-  color: rgba(24, 210, 110, 0.5);
+  color: rgba(var(--primary-brand-rgb), 0.5);
   font-size: 1.2rem;
   font-weight: bold;
   transition: all 0.3s ease;
@@ -224,7 +224,7 @@
 
 .testimonials .testimonial-item:hover .quote-icon-left,
 .testimonials .testimonial-item:hover .quote-icon-right {
-  color: #18d26e;
+  color: var(--primary-color);
 }
 
 /* Enhanced Swiper Navigation */
@@ -243,9 +243,9 @@
 
 .testimonials .swiper-button-next:hover,
 .testimonials .swiper-button-prev:hover {
-  color: #18d26e;
-  background: rgba(24, 210, 110, 0.2);
-  border-color: rgba(24, 210, 110, 0.4);
+  color: var(--primary-color);
+  background: rgba(var(--primary-brand-rgb), 0.2);
+  border-color: rgba(var(--primary-brand-rgb), 0.4);
   transform: scale(1.1);
 }
 
@@ -270,9 +270,9 @@
 }
 
 .testimonials .swiper-pagination-bullet-active {
-  background: #18d26e;
+  background: var(--primary-color);
   transform: scale(1.2);
-  box-shadow: 0 0 20px rgba(24, 210, 110, 0.5);
+  box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.5);
 }
 
 /* Responsive Design - Professional Breakpoints */
@@ -403,12 +403,12 @@
 
 /* Accessibility Improvements */
 .testimonials .testimonial-item:focus-within {
-  outline: 2px solid rgba(24, 210, 110, 0.5);
+  outline: 2px solid rgba(var(--primary-brand-rgb), 0.5);
   outline-offset: 4px;
 }
 
 .testimonials .testimonial-item:focus-visible {
-  outline: 2px solid #18d26e;
+  outline: 2px solid var(--primary-color);
   outline-offset: 4px;
 }
 
@@ -417,7 +417,7 @@
   .testimonials .testimonial-item {
     background: white;
     color: black;
-    border: 1px solid #ccc;
+    border: 1px solid var(--medium-gray);
     box-shadow: none;
     backdrop-filter: none;
   }

@@ -61,7 +61,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, transparent, #18d26e, #35e888, #18d26e, transparent);
+  background: linear-gradient(90deg, transparent, var(--primary-color), var(--primary-color-hover), var(--primary-color), transparent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -72,10 +72,10 @@
 .skill-card.glass-projects:hover,
 .testimonial-item.glass-projects:hover,
 .icon-box.glass-projects:hover {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.15), rgba(24, 210, 110, 0.08));
-  border: 1px solid rgba(24, 210, 110, 0.4);
-  box-shadow: 0 20px 40px 0 rgba(24, 210, 110, 0.2),
-    0 0 80px 0 rgba(24, 210, 110, 0.1);
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.4);
+  box-shadow: 0 20px 40px 0 rgba(var(--primary-brand-rgb), 0.2),
+    0 0 80px 0 rgba(var(--primary-brand-rgb), 0.1);
   transform: translateY(-4px) scale(1.02);
 }
 
@@ -127,11 +127,11 @@
   justify-content: center;
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.2), rgba(24, 210, 110, 0.1)),
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(24, 210, 110, 0.3);
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 16px;
   margin: 0 auto 1.5rem;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -142,21 +142,21 @@
 .count-card.glass-projects:hover .count-icon,
 .skill-card.glass-projects:hover .skill-icon,
 .icon-box.glass-projects:hover .icon {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.3), rgba(24, 210, 110, 0.2)),
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
-  border: 1px solid rgba(24, 210, 110, 0.5);
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
   transform: scale(1.15);
-  box-shadow: 0 0 20px rgba(24, 210, 110, 0.4);
+  box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.4);
 }
 
 .count-card.glass-projects .count-icon i,
 .skill-card.glass-projects .skill-icon i,
 .icon-box.glass-projects .icon i {
   font-size: 1.8rem;
-  color: #18d26e;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.5);
+  color: var(--primary-color);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
   transition: all 0.3s ease;
-  filter: drop-shadow(0 0 10px rgba(24, 210, 110, 0.3));
+  filter: drop-shadow(0 0 10px rgba(var(--primary-brand-rgb), 0.3));
   position: relative;
   z-index: 2;
 }
@@ -164,26 +164,26 @@
 .count-card.glass-projects:hover .count-icon i,
 .skill-card.glass-projects:hover .skill-icon i,
 .icon-box.glass-projects:hover .icon i {
-  color: #35e888;
+  color: var(--primary-color-hover);
   transform: scale(1.1);
-  filter: drop-shadow(0 0 15px rgba(24, 210, 110, 0.6));
+  filter: drop-shadow(0 0 15px rgba(var(--primary-brand-rgb), 0.6));
 }
 
 /* Typography styling */
 .count-card.glass-projects .purecounter {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #18d26e;
+  color: var(--primary-color);
   margin-bottom: 15px;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.3);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.3);
   transition: all 0.4s ease;
   position: relative;
   z-index: 2;
 }
 
 .count-card.glass-projects:hover .purecounter {
-  color: #35e888;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.5);
+  color: var(--primary-color-hover);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
   transform: scale(1.05);
 }
 
@@ -203,8 +203,8 @@
 .count-card.glass-projects:hover h4,
 .skill-card.glass-projects:hover h4,
 .icon-box.glass-projects:hover h4 {
-  color: #18d26e;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.4);
+  color: var(--primary-color);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
   transform: translateY(-2px);
 }
 
@@ -215,7 +215,7 @@
 }
 
 .icon-box.glass-projects:hover h4 a {
-  color: #18d26e;
+  color: var(--primary-color);
   /* Ensures the link color matches the h4 color on hover */
 }
 
@@ -251,14 +251,14 @@
 
 .skill-card.glass-projects .tech-tag,
 .icon-box.glass-projects .tech-tag {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.15), rgba(24, 210, 110, 0.08));
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(24, 210, 110, 0.3);
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 12px;
   padding: 0.3rem 0.8rem;
   font-size: 0.75rem;
-  color: #18d26e;
+  color: var(--primary-color);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -267,11 +267,11 @@
 
 .skill-card.glass-projects:hover .tech-tag,
 .icon-box.glass-projects:hover .tech-tag {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.25), rgba(24, 210, 110, 0.15));
-  border: 1px solid rgba(24, 210, 110, 0.5);
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.25), rgba(var(--primary-brand-rgb), 0.15));
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(24, 210, 110, 0.2);
-  color: #35e888;
+  box-shadow: 0 4px 12px rgba(var(--primary-brand-rgb), 0.2);
+  color: var(--primary-color-hover);
 }
 
 /* Project actions for icon boxes */
@@ -284,13 +284,13 @@
 }
 
 .icon-box.glass-projects .action-btn {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.2), rgba(24, 210, 110, 0.1));
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(24, 210, 110, 0.3);
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 20px;
   padding: 0.6rem 1.2rem;
-  color: #18d26e;
+  color: var(--primary-color);
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
@@ -303,11 +303,11 @@
 }
 
 .icon-box.glass-projects .action-btn:hover {
-  background: linear-gradient(135deg, rgba(24, 210, 110, 0.3), rgba(24, 210, 110, 0.2));
-  border: 1px solid rgba(24, 210, 110, 0.5);
+  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2));
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(24, 210, 110, 0.2);
-  color: #35e888;
+  box-shadow: 0 6px 20px rgba(var(--primary-brand-rgb), 0.2);
+  color: var(--primary-color-hover);
 }
 
 /* Testimonial specific styling */
@@ -343,16 +343,16 @@
   height: 80px;
   border-radius: 50%;
   margin: 0 auto 20px;
-  border: 3px solid rgba(24, 210, 110, 0.3);
+  border: 3px solid rgba(var(--primary-brand-rgb), 0.3);
   transition: all 0.4s ease;
   position: relative;
   z-index: 2;
 }
 
 .testimonial-item.glass-projects:hover .testimonial-img {
-  border-color: rgba(24, 210, 110, 0.8);
+  border-color: rgba(var(--primary-brand-rgb), 0.8);
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(24, 210, 110, 0.3);
+  box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.3);
 }
 
 .testimonial-item.glass-projects h3 {
@@ -377,8 +377,8 @@
 }
 
 .testimonial-item.glass-projects:hover h3 {
-  color: #18d26e;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.4);
+  color: var(--primary-color);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
   transform: translateY(-2px);
 }
 
@@ -389,15 +389,15 @@
 
 .testimonial-item.glass-projects .quote-icon-left,
 .testimonial-item.glass-projects .quote-icon-right {
-  color: rgba(24, 210, 110, 0.3);
+  color: rgba(var(--primary-brand-rgb), 0.3);
   font-size: 1.5rem;
   transition: all 0.3s ease;
 }
 
 .testimonial-item.glass-projects:hover .quote-icon-left,
 .testimonial-item.glass-projects:hover .quote-icon-right {
-  color: rgba(24, 210, 110, 0.8);
-  text-shadow: 0 0 10px rgba(24, 210, 110, 0.4);
+  color: rgba(var(--primary-brand-rgb), 0.8);
+  text-shadow: 0 0 10px rgba(var(--primary-brand-rgb), 0.4);
 }
 
 /* ==========================================================================
@@ -542,7 +542,6 @@
 @media (max-width: 768px) {
 
   /* Disable expensive effects on mobile to prevent scrolling lag */
-  .glass-btn,
   .count-card.glass-projects,
   .skill-card.glass-projects,
   .testimonial-item.glass-projects,
@@ -557,7 +556,6 @@
   }
 
   /* Remove costly transforms and hover effects on mobile */
-  .glass-btn:hover,
   .count-card.glass-projects:hover,
   .skill-card.glass-projects:hover,
   .testimonial-item.glass-projects:hover,
@@ -565,8 +563,8 @@
   .glass-social a:hover {
     transform: none !important;
     box-shadow: none !important;
-    background: linear-gradient(135deg, rgba(24, 210, 111, 0.17), rgba(24, 210, 111, 0.052)) !important;
-    border: 1px solid rgba(24, 210, 110, 0.4) !important;
+    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.17), rgba(var(--primary-brand-rgb), 0.052)) !important;
+    border: 1px solid rgba(var(--primary-brand-rgb), 0.4) !important;
   }
 
   /* Remove pseudo-elements and light reflection on mobile */

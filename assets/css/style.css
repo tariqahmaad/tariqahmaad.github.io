@@ -4,6 +4,11 @@
 :root {
   --primary-color: #18d26e;
   --primary-color-hover: #35e888;
+  --primary-brand-rgb: 24, 210, 110; /* RGB for rgba() usage */
+  --secondary-color: #6f42c1;
+  --tertiary-color: #3494E6;
+  --error-color: #ed3c0d;
+  --light-gray: #eee;
   --bg-color: #040404;
   --text-color: #fff;
   --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04)),
@@ -664,7 +669,7 @@ body::before {
   height: 3px;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, var(--primary-color), #6f42c1);
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
   transform: scaleX(0);
   transform-origin: bottom right;
   transition: transform 0.5s ease-out;
@@ -927,13 +932,13 @@ body::before {
   #header.header-top .btn-hire {
     padding: 5px 10px;
     font-size: 11px;
-    background: linear-gradient(45deg, #18d26e, #0f9d53);
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-color-hover));
     color: #fff;
   }
 
   #header.header-top .btn-hire:hover {
     background: transparent;
-    color: #18d26e;
+    color: var(--primary-color);
   }
 }
 
@@ -1518,6 +1523,8 @@ body::before {
 
 .navbar-mobile {
   animation: menuOverlay 0.3s forwards;
+}
+
 /* Performance-optimized glass highlight */
 .navbar-mobile::before {
   content: '';
@@ -1530,7 +1537,6 @@ body::before {
   opacity: 0.6;
   z-index: 1;
   will-change: opacity;
-}
 }
 /* Mobile performance optimization */
 @media (max-width: 768px) {
@@ -1555,7 +1561,7 @@ section {
   top: 140px;
   bottom: 100%;
   opacity: 0;
-  transition: ease-in-out 0.4s;
+  transition: ease-in-out 0.2s;
   z-index: 2;
 }
 
@@ -1729,7 +1735,7 @@ section .container {
   height: 3px;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, var(--primary-color), #6f42c1);
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
   transform: scaleX(0);
   transform-origin: bottom right;
   transition: transform 0.5s ease-out;
@@ -1818,7 +1824,7 @@ section .container {
 
 /* Enhanced title for counts section */
 .counts .section-title p {
-  background: linear-gradient(to right, var(--primary-color), #3494E6);
+  background: linear-gradient(to right, var(--primary-color), var(--tertiary-color));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1864,7 +1870,7 @@ section .container {
   height: 3px;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, var(--primary-color), #6f42c1);
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
   transform: scaleX(0);
   transform-origin: bottom right;
   transition: transform 0.5s ease-out;
@@ -2154,19 +2160,7 @@ section .container {
   margin-bottom: 30px;
 }
 
-.btn-cv {
-  display: inline-flex;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.btn-cv:hover {
-}
-
-.btn-cv i {
-  margin-right: 6px;  /* Smaller margin */
-  font-size: 1em;  /* Smaller icon */
-}
+/* Button styling is now handled by .btn-brand in branding.css */
 
 /* Hire Me Button Styles */
 .hire-me-btn {
@@ -2320,7 +2314,7 @@ section .container {
 .contact .php-email-form .error-message {
   display: none;
   background: var(--card-bg);
-  background: #ed3c0d;
+  background: var(--error-color);
   text-align: left;
   padding: 15px;
   font-weight: 600;
@@ -2354,7 +2348,7 @@ section .container {
   height: 24px;
   margin: 0 10px -6px 0;
   border: 3px solid var(--primary-color);
-  border-top-color: #eee;
+  border-top-color: var(--light-gray);
   animation: animate-loading 1s linear infinite;
 }
 

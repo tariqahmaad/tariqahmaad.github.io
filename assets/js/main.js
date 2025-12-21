@@ -116,10 +116,21 @@
       }
 
       if (this.hash == '#header') {
-        header.classList.remove('header-top')
         sections.forEach((item) => {
           item.classList.remove('section-show')
         })
+
+        // Wait for section fade out animation to complete
+        setTimeout(function () {
+          header.classList.remove('header-top')
+        }, 200);
+
+        // Smooth scroll to top
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
         return;
       }
 
@@ -130,7 +141,7 @@
             item.classList.remove('section-show')
           })
           section.classList.add('section-show')
-        }, 350);
+        }, 200);
       } else {
         sections.forEach((item) => {
           item.classList.remove('section-show')
@@ -139,6 +150,43 @@
       }
 
       scrollto(this.hash)
+    }
+  }, true)
+
+  /**
+   * Handle clicks on "Tariq Ahmad" name and logo to return home smoothly
+   */
+  on('click', '#header h1 a, #header a.mr-auto', function (e) {
+    // Only if we are currently looking at a section (header is in top mode)
+    if (select('#header').classList.contains('header-top')) {
+      e.preventDefault();
+
+      let header = select('#header');
+      let sections = select('section', true);
+      let navlinks = select('#navbar .nav-link', true);
+
+      // Update navbar active state
+      navlinks.forEach((item) => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') == '#header') {
+          item.classList.add('active');
+        }
+      });
+
+      // Hide all sections
+      sections.forEach((item) => {
+        item.classList.remove('section-show');
+      });
+
+      // Wait for section fade out, then expand header and scroll top
+      setTimeout(function () {
+        header.classList.remove('header-top');
+      }, 200);
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     }
   }, true)
 
@@ -226,7 +274,7 @@
   const isMobileOrIpad = () => {
     // Check if device is mobile or tablet (iPad)
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-           window.innerWidth < 1024;
+      window.innerWidth < 1024;
   };
 
   if (!isMobileOrIpad()) {
@@ -463,7 +511,7 @@
         let currentIndex = 0;
         roleSpan.textContent = roles[currentIndex];
         roleSpan.setAttribute('aria-live', 'polite');
-        
+
         setInterval(() => {
           currentIndex = (currentIndex + 1) % roles.length;
           roleSpan.textContent = roles[currentIndex];
@@ -472,7 +520,7 @@
         // Animated version
         roleSpan.textContent = roles[0];
         roleSpan.classList.add('completed');
-        
+
         setTimeout(() => {
           roleSpan.classList.add('cursor', 'typing');
           roleSpan.textContent = "";
