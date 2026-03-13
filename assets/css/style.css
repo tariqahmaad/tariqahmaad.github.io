@@ -2518,6 +2518,10 @@ section .container {
   .contact .php-email-form button[type=submit].btn-brand {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
+    width: auto;
+    white-space: nowrap;
+    padding: 14px 18px;
+    font-size: 0.85rem;
   }
 }
 
