@@ -1,6 +1,6 @@
 /* ==========================================================================
    PROJECT TILES CUSTOM STYLES
-   Custom styling for project tiles to ensure consistent height and button positioning
+   Custom styling for project tiles — uses glassmorphism design system variables
    ========================================================================== */
 
 /* Project tiles container */
@@ -15,16 +15,15 @@
   margin-bottom: 0.5rem;
 }
 
-/* Project tile base styling */
+/* ── Project tile base — Level 2 glass (mid-depth cards) ── */
 .project-tile {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.15));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: var(--glass-bg-primary);
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
+  border: var(--glass-border);
+  border-radius: var(--glass-radius-lg);
+  box-shadow: var(--glass-shadow-md), var(--glass-shadow-inset);
+  transition: var(--glass-transition);
   position: relative;
   overflow: hidden;
   padding: 1.5rem;
@@ -35,70 +34,75 @@
   width: 100%;
 }
 
-/* Before pseudo-element for top highlight */
+/* Noise texture overlay */
 .project-tile::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
+  inset: 0;
+  background-image: var(--glass-noise);
+  background-size: 128px 128px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: overlay;
 }
 
-/* After pseudo-element for bottom accent line */
+/* Bottom accent bar */
 .project-tile::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--primary-color), var(--primary-color-hover), var(--primary-color), transparent);
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: var(--glass-edge-glow-bottom);
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-origin: center;
+  transition: transform var(--glass-transition-slow), opacity 0.4s ease;
+  opacity: 0;
+  z-index: 1;
 }
 
-/* Hover effects */
+/* ── Hover ── */
 .project-tile:hover {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.4);
-  box-shadow: 0 20px 40px 0 rgba(var(--primary-brand-rgb), 0.2),
-    0 0 80px 0 rgba(var(--primary-brand-rgb), 0.1);
-  transform: translateY(-4px) scale(1.02);
+  background: var(--glass-bg-hover);
+  border: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
+              var(--glass-shadow-inset);
+  transform: translateY(-3px) scale(1.005);
 }
 
 .project-tile:hover::after {
   transform: scaleX(1);
-}
-
-.project-tile:hover::before {
   opacity: 1;
 }
 
-/* Light reflection effect */
+/* ── Light reflection sweep ── */
 .project-tile .light-reflection {
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: rotate(-45deg) translateX(-100%);
-  transition: transform 0.8s ease;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 60%
+  );
+  transform: rotate(-45deg) translateX(-120%);
+  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 1;
   pointer-events: none;
 }
 
 .project-tile:hover .light-reflection {
-  transform: rotate(-45deg) translateX(100%);
+  transform: rotate(-45deg) translateX(120%);
 }
 
-/* Icon styling */
+/* ── Icon (Level 3 blur — smallest glass element) ── */
 .project-tile .icon {
   position: relative;
   display: inline-flex;
@@ -108,12 +112,12 @@
   height: 70px;
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 16px;
   margin: 0 auto 1rem;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: var(--glass-transition);
   z-index: 2;
   overflow: hidden;
 }
@@ -122,7 +126,7 @@
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  transform: scale(1.15);
+  transform: scale(1.08);
   box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.4);
 }
 
@@ -130,7 +134,7 @@
   font-size: 1.8rem;
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
   filter: drop-shadow(0 0 10px rgba(var(--primary-brand-rgb), 0.3));
   position: relative;
   z-index: 2;
@@ -138,18 +142,18 @@
 
 .project-tile:hover .icon i {
   color: var(--primary-color-hover);
-  transform: scale(1.1);
+  transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(var(--primary-brand-rgb), 0.6));
 }
 
-/* Typography styling */
+/* ── Typography ── */
 .project-tile h4 {
   font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
   margin-bottom: 0.75rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
   text-align: center;
@@ -158,13 +162,13 @@
 .project-tile:hover h4 {
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .project-tile h4 a {
   color: inherit;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
 }
 
 .project-tile:hover h4 a {
@@ -177,7 +181,7 @@
   line-height: 1.6;
   margin: 0 0 1rem 0;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
   flex-grow: 1;
@@ -187,10 +191,9 @@
 .project-tile:hover p {
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  transform: translateY(-1px);
 }
 
-/* Tech tags styling */
+/* ── Tech Tags (Level 3 blur — smallest elements) ── */
 .project-tile .tech-tags {
   display: flex;
   flex-wrap: wrap;
@@ -203,15 +206,15 @@
 
 .project-tile .tech-tag {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 12px;
   padding: 0.25rem 0.65rem;
   font-size: 0.72rem;
   color: var(--primary-color);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
   white-space: nowrap;
   font-weight: 500;
 }
@@ -223,7 +226,7 @@
   color: #fff;
 }
 
-/* Project actions - buttons at bottom */
+/* ── Action Buttons (Level 3 blur) ── */
 .project-actions {
   display: flex;
   gap: 12px;
@@ -237,8 +240,8 @@
 
 .action-btn {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
   padding: 10px 20px;
@@ -246,7 +249,7 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: var(--glass-transition-fast);
   position: relative;
   overflow: hidden;
   display: inline-flex;
@@ -259,7 +262,6 @@
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.4);
   box-shadow: 0 8px 25px 0 rgba(var(--primary-brand-rgb), 0.3);
-  transform: translateY(-2px);
   color: var(--primary-color);
 }
 
@@ -267,7 +269,7 @@
   font-size: 1rem;
 }
 
-/* Responsive design */
+/* ── Responsive Design ── */
 @media (max-width: 768px) {
   .project-tile {
     padding: 1.2rem;
@@ -313,7 +315,7 @@
   }
 
   .project-tile:hover {
-    transform: translateY(-2px) scale(1.01);
+    transform: translateY(-1px);
   }
 
   .project-tile .tech-tags {
@@ -326,13 +328,13 @@
   }
 }
 
-/* Mobile performance optimizations */
+/* ── Mobile Performance Optimizations (<768px) ── */
 @media (max-width: 768px) {
   .project-tile {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    background: linear-gradient(135deg, rgb(9 121 28 / 11%), rgb(30 180 159 / 12%));
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: none !important;
     transition: none !important;
   }
@@ -340,8 +342,8 @@
   .project-tile:hover {
     transform: none !important;
     box-shadow: none !important;
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.323), rgba(var(--primary-brand-rgb), 0.052)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.25) !important;
+    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.05)) !important;
+    border: 1px solid rgba(var(--primary-brand-rgb), 0.35) !important;
   }
 
   .project-tile::before,
@@ -379,6 +381,29 @@
     background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08)) !important;
     border: 1px solid rgba(var(--primary-brand-rgb), 0.3) !important;
     color: var(--primary-color) !important;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .project-tile,
+  .project-tile .icon,
+  .project-tile .tech-tag,
+  .action-btn,
+  .project-tile .light-reflection,
+  .project-tile h4,
+  .project-tile p,
+  .project-tile .icon i {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .project-tile:hover,
+  .project-tile:hover .icon,
+  .action-btn:hover {
+    transform: none !important;
   }
 }
 
@@ -426,7 +451,6 @@
 
 .project-link-btn:hover {
   background-color: var(--primary-color-hover);
-  transform: translateY(-2px);
   color: #000;
 }
 

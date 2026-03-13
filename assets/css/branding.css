@@ -28,25 +28,25 @@
 
 /* Brand Colors */
 .brand-primary {
-  color: var(--primary-brand);
+  color: var(--primary-color);
 }
 
 .brand-secondary {
-  color: var(--secondary-brand);
+  color: var(--secondary-color);
 }
 
 .bg-brand-primary {
-  background-color: var(--primary-brand);
+  background-color: var(--primary-color);
 }
 
 /* Icon System */
 .brand-icon {
-  fill: var(--primary-brand);
+  fill: var(--primary-color);
   transition: var(--transition);
 }
 
 .brand-icon:hover {
-  fill: var(--secondary-brand);
+  fill: var(--secondary-color);
   filter: var(--glow-effect);
 }
 
@@ -103,7 +103,7 @@
     inset 0 0 10px rgba(24, 210, 110, 0.1);
   letter-spacing: 0.1em;
   text-shadow: 0 0 8px rgba(24, 210, 110, 0.6);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .btn-brand:hover::before {
@@ -207,8 +207,7 @@
 
 .social-links a:hover,
 .mobile-social-links a:hover {
-  transform: translateY(-5px) scale(1.1) !important;
-  box-shadow: 0 8px 15px rgba(24, 210, 110, 0.4) !important;
+  transform: translateY(-2px) scale(1.05) !important;
 }
 
 /* Spin animation for social icons on desktop */
@@ -388,5 +387,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .btn-brand,
+  .btn-brand:hover,
+  .btn-brand:active {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
   }
 }

@@ -1,38 +1,139 @@
 /* ==========================================================================
-   GLASSMORPHISM DESIGN SYSTEM - OPTIMIZED
-   Modern glass effect utilities for portfolio site
+   GLASSMORPHISM DESIGN SYSTEM - ENHANCED
+   Professional glass effect utilities with depth hierarchy and noise texture
    ========================================================================== */
 
-/* Core Glassmorphism Variables */
+/* ── Glass Design Tokens ── */
 :root {
-  /* Glass effects */
-  --glass-blur: blur(8px);
-  --glass-blur-strong: blur(12px);
+  /* Blur Depth Levels — lower blur = closer to viewer = sharper */
+  --glass-blur-sm: blur(4px);       /* Level 3: Tags, buttons, social links */
+  --glass-blur-md: blur(8px);       /* Level 2: Cards (count, skill, icon-box) */
+  --glass-blur-lg: blur(12px);      /* Level 1: Large panels (testimonials) */
+  --glass-blur-bg: blur(16px);      /* Level 0: Section containers (deepest) */
 
-  /* Glass transitions */
-  --glass-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* Background Layers */
+  --glass-bg-primary: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  --glass-bg-hover: linear-gradient(
+    135deg,
+    rgba(24, 210, 110, 0.12) 0%,
+    rgba(24, 210, 110, 0.05) 50%,
+    rgba(24, 210, 110, 0.08) 100%
+  );
+
+  /* Borders */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-border-hover: 1px solid rgba(24, 210, 110, 0.35);
+  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* Shadow System — depth hierarchy */
+  --glass-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --glass-shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.35);
+  --glass-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                        inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+  --glass-shadow-hover: 0 16px 48px rgba(24, 210, 110, 0.12),
+                         0 4px 16px rgba(0, 0, 0, 0.3);
+  --glass-shadow-glow: 0 0 40px rgba(24, 210, 110, 0.08);
+
+  /* Social Link Shadows — green-tinted */
+  --glass-shadow-social: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --glass-shadow-social-hover: 0 8px 24px rgba(24, 210, 110, 0.18),
+                                0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Transitions */
+  --glass-transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --glass-transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --glass-transition-slow: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* Noise Texture — inline SVG for frosted glass realism */
+  --glass-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+
+  /* Radii */
+  --glass-radius-lg: 20px;
+  --glass-radius-md: 16px;
+  --glass-radius-sm: 12px;
+
+  /* Edge Glow Gradients */
+  --glass-edge-glow-bottom: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(24, 210, 110, 0.3) 20%,
+    rgba(24, 210, 110, 0.7) 50%,
+    rgba(24, 210, 110, 0.3) 80%,
+    transparent 100%
+  );
 }
 
 /* ==========================================================================
-   GLASS PROJECTS (Main tiles - count cards, skill cards, testimonials, icon boxes)
+   GLASS PROJECTS — Base Class
+   Applied to: count-card, skill-card, testimonial-item, icon-box
    ========================================================================== */
 
-.count-card.glass-projects,
-.skill-card.glass-projects,
-.testimonial-item.glass-projects,
-.icon-box.glass-projects {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+.glass-projects {
+  background: var(--glass-bg-primary);
+  border: var(--glass-border);
+  border-radius: var(--glass-radius-lg);
+  box-shadow: var(--glass-shadow-md), var(--glass-shadow-inset);
+  transition: var(--glass-transition);
   position: relative;
   overflow: hidden;
   padding: 1.5rem;
   cursor: pointer;
 }
+
+/* Noise texture overlay */
+.glass-projects::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--glass-noise);
+  background-size: 128px 128px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: overlay;
+}
+
+/* Bottom accent bar */
+.glass-projects::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: var(--glass-edge-glow-bottom);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--glass-transition-slow), opacity 0.4s ease;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* ── Depth Overrides by Card Type ── */
+
+/* Level 2: Mid-depth cards */
+.count-card.glass-projects,
+.skill-card.glass-projects,
+.icon-box.glass-projects {
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
+}
+
+/* Level 1: Large panels (testimonials) */
+.testimonial-item.glass-projects {
+  backdrop-filter: var(--glass-blur-lg);
+  -webkit-backdrop-filter: var(--glass-blur-lg);
+  box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
+  padding: 2rem;
+}
+
+/* ── Layout Overrides ── */
 
 .skill-card.glass-projects {
   display: flex;
@@ -48,90 +149,69 @@
   align-items: center;
 }
 
-/* Before pseudo-element for top highlight */
-.count-card.glass-projects::before,
-.skill-card.glass-projects::before,
-.testimonial-item.glass-projects::before,
-.icon-box.glass-projects::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
+.testimonial-item.glass-projects {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
 }
 
-/* After pseudo-element for bottom accent line */
-.count-card.glass-projects::after,
-.skill-card.glass-projects::after,
-.testimonial-item.glass-projects::after,
-.icon-box.glass-projects::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--primary-color), var(--primary-color-hover), var(--primary-color), transparent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
+/* ── Hover States ── */
 
-/* Hover effects for all tiles */
 .count-card.glass-projects:hover,
 .skill-card.glass-projects:hover,
-.testimonial-item.glass-projects:hover,
 .icon-box.glass-projects:hover {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.4);
-  box-shadow: 0 20px 40px 0 rgba(var(--primary-brand-rgb), 0.2),
-    0 0 80px 0 rgba(var(--primary-brand-rgb), 0.1);
-  transform: translateY(-4px) scale(1.02);
+  background: var(--glass-bg-hover);
+  border: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
+              var(--glass-shadow-inset);
+  transform: translateY(-3px) scale(1.005);
 }
 
-.count-card.glass-projects:hover::after,
-.skill-card.glass-projects:hover::after,
-.testimonial-item.glass-projects:hover::after,
-.icon-box.glass-projects:hover::after {
+.testimonial-item.glass-projects:hover {
+  background: var(--glass-bg-hover);
+  border: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
+              var(--glass-shadow-inset);
+  transform: translateY(-4px) scale(1.008);
+}
+
+/* Reveal bottom accent on hover */
+.glass-projects:hover::after {
   transform: scaleX(1);
-}
-
-.count-card.glass-projects:hover::before,
-.skill-card.glass-projects:hover::before,
-.testimonial-item.glass-projects:hover::before,
-.icon-box.glass-projects:hover::before {
   opacity: 1;
 }
 
-/* Light reflection effect */
-.count-card.glass-projects .light-reflection,
-.skill-card.glass-projects .light-reflection,
-.testimonial-item.glass-projects .light-reflection,
-.icon-box.glass-projects .light-reflection {
+/* ── Light Reflection Sweep ── */
+
+.glass-projects .light-reflection {
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: rotate(-45deg) translateX(-100%);
-  transition: transform 0.8s ease;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 60%
+  );
+  transform: rotate(-45deg) translateX(-120%);
+  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 1;
   pointer-events: none;
 }
 
-.count-card.glass-projects:hover .light-reflection,
-.skill-card.glass-projects:hover .light-reflection,
-.testimonial-item.glass-projects:hover .light-reflection,
-.icon-box.glass-projects:hover .light-reflection {
-  transform: rotate(-45deg) translateX(100%);
+.glass-projects:hover .light-reflection {
+  transform: rotate(-45deg) translateX(120%);
 }
 
-/* Icon styling for count and skill cards */
+/* ── Icon Containers (Level 3 blur — smallest glass elements within cards) ── */
+
 .count-card.glass-projects .count-icon,
 .skill-card.glass-projects .skill-icon,
 .icon-box.glass-projects .icon {
@@ -143,12 +223,12 @@
   height: 70px;
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 16px;
   margin: 0 auto 1rem;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: var(--glass-transition);
   z-index: 2;
   overflow: hidden;
 }
@@ -159,7 +239,7 @@
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  transform: scale(1.15);
+  transform: scale(1.08);
   box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.4);
 }
 
@@ -169,7 +249,7 @@
   font-size: 1.8rem;
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
   filter: drop-shadow(0 0 10px rgba(var(--primary-brand-rgb), 0.3));
   position: relative;
   z-index: 2;
@@ -179,18 +259,19 @@
 .skill-card.glass-projects:hover .skill-icon i,
 .icon-box.glass-projects:hover .icon i {
   color: var(--primary-color-hover);
-  transform: scale(1.1);
+  transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(var(--primary-brand-rgb), 0.6));
 }
 
-/* Typography styling */
+/* ── Typography ── */
+
 .count-card.glass-projects .purecounter {
   font-size: 2.5rem;
   font-weight: 800;
   color: var(--primary-color);
   margin-bottom: 15px;
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.3);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
@@ -209,7 +290,7 @@
   color: #fff;
   margin-bottom: 0.75rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
@@ -219,18 +300,17 @@
 .icon-box.glass-projects:hover h4 {
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .icon-box.glass-projects h4 a {
   color: inherit;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
 }
 
 .icon-box.glass-projects:hover h4 a {
   color: var(--primary-color);
-  /* Ensures the link color matches the h4 color on hover */
 }
 
 .count-card.glass-projects .count-detail p,
@@ -240,7 +320,7 @@
   line-height: 1.6;
   margin: 0;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
@@ -249,10 +329,10 @@
 .icon-box.glass-projects:hover p {
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  transform: translateY(-1px);
 }
 
-/* Tech tags styling */
+/* ── Tech Tags (Level 3 blur — smallest elements) ── */
+
 .skill-card.glass-projects .skill-tags,
 .icon-box.glass-projects .tech-tags {
   display: flex;
@@ -266,15 +346,15 @@
 .skill-card.glass-projects .tech-tag,
 .icon-box.glass-projects .tech-tag {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 12px;
   padding: 0.25rem 0.65rem;
   font-size: 0.7rem;
   color: var(--primary-color);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
   white-space: nowrap;
   font-weight: 500;
 }
@@ -283,12 +363,12 @@
 .icon-box.glass-projects:hover .tech-tag {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.25), rgba(var(--primary-brand-rgb), 0.15));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(var(--primary-brand-rgb), 0.2);
   color: var(--primary-color-hover);
 }
 
-/* Project actions for icon boxes */
+/* ── Action Buttons (Level 3 blur) ── */
+
 .icon-box.glass-projects .project-actions {
   display: flex;
   gap: 0.8rem;
@@ -299,8 +379,8 @@
 
 .icon-box.glass-projects .action-btn {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 20px;
   padding: 0.6rem 1.2rem;
@@ -308,7 +388,7 @@
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -319,20 +399,11 @@
 .icon-box.glass-projects .action-btn:hover {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(var(--primary-brand-rgb), 0.2);
   color: var(--primary-color-hover);
 }
 
-/* Testimonial specific styling */
-.testimonial-item.glass-projects {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
-}
+/* ── Testimonial-Specific Styling ── */
 
 .testimonial-item.glass-projects p {
   font-style: italic;
@@ -343,13 +414,12 @@
   position: relative;
   z-index: 2;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
 }
 
 .testimonial-item.glass-projects:hover p {
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  transform: translateY(-1px);
 }
 
 .testimonial-item.glass-projects .testimonial-img {
@@ -358,14 +428,14 @@
   border-radius: 50%;
   margin: 0 auto 15px;
   border: 3px solid rgba(var(--primary-brand-rgb), 0.3);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
 
 .testimonial-item.glass-projects:hover .testimonial-img {
   border-color: rgba(var(--primary-brand-rgb), 0.8);
-  transform: scale(1.05);
+  transform: scale(1.03);
   box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.3);
 }
 
@@ -375,7 +445,7 @@
   color: #fff;
   margin-bottom: 5px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
@@ -385,7 +455,7 @@
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s ease;
+  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
@@ -393,25 +463,45 @@
 .testimonial-item.glass-projects:hover h3 {
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
-  transform: translateY(-2px);
 }
 
 .testimonial-item.glass-projects:hover h4 {
   color: rgba(255, 255, 255, 0.9);
-  transform: translateY(-1px);
 }
 
 .testimonial-item.glass-projects .quote-icon-left,
 .testimonial-item.glass-projects .quote-icon-right {
   color: rgba(var(--primary-brand-rgb), 0.3);
   font-size: 1.5rem;
-  transition: all 0.3s ease;
+  transition: var(--glass-transition-fast);
 }
 
 .testimonial-item.glass-projects:hover .quote-icon-left,
 .testimonial-item.glass-projects:hover .quote-icon-right {
   color: rgba(var(--primary-brand-rgb), 0.8);
   text-shadow: 0 0 10px rgba(var(--primary-brand-rgb), 0.4);
+}
+
+/* ==========================================================================
+   GLASS BUTTON (fixes dead .glass-btn class used in HTML)
+   ========================================================================== */
+
+.glass-btn {
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  box-shadow:
+    0 0 10px rgba(24, 210, 110, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.glass-btn:hover {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 20px rgba(24, 210, 110, 0.3),
+    0 8px 24px rgba(24, 210, 110, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* ==========================================================================
@@ -423,27 +513,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
   line-height: 1;
   border-radius: 50%;
   width: 44px;
   height: 44px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  transition: var(--glass-transition);
+  box-shadow: var(--glass-shadow-social);
+  transition: var(--glass-transition-fast);
   position: relative;
   overflow: hidden;
 }
 
 .glass-social a:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 35px 0 rgba(31, 38, 135, 0.4);
-  transform: translateY(-2px) scale(1.05);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(24, 210, 110, 0.15), rgba(24, 210, 110, 0.08));
+  border: 1px solid rgba(24, 210, 110, 0.3);
+  box-shadow: var(--glass-shadow-social-hover);
+  transform: translateY(-1px) scale(1.04);
+  color: var(--primary-color);
 }
 
 /* Header social links */
@@ -473,9 +563,9 @@
 
 /* Contact section social links */
 .contact .info-box .contact-social-links.glass-social {
-  margin: 10px 0 0 0 !important; /* Reset margin */
+  margin: 10px 0 0 0 !important;
   display: flex;
-  justify-content: flex-start !important; /* Align to the left */
+  justify-content: flex-start !important;
   gap: 12px;
 }
 
@@ -489,48 +579,43 @@
 .glass-social a.twitter:hover {
   background: linear-gradient(135deg, rgba(29, 161, 242, 0.2), rgba(29, 161, 242, 0.1));
   border: 1px solid rgba(29, 161, 242, 0.3);
-  box-shadow: 0 15px 35px 0 rgba(29, 161, 242, 0.2);
+  box-shadow: 0 8px 24px rgba(29, 161, 242, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .glass-social a.facebook:hover {
   background: linear-gradient(135deg, rgba(24, 119, 242, 0.2), rgba(24, 119, 242, 0.1));
   border: 1px solid rgba(24, 119, 242, 0.3);
-  box-shadow: 0 15px 35px 0 rgba(24, 119, 242, 0.2);
+  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .glass-social a.instagram:hover {
   background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(225, 48, 108, 0.1));
   border: 1px solid rgba(225, 48, 108, 0.3);
-  box-shadow: 0 15px 35px 0 rgba(225, 48, 108, 0.2);
+  box-shadow: 0 8px 24px rgba(225, 48, 108, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .glass-social a.linkedin:hover {
   background: linear-gradient(135deg, rgba(0, 119, 181, 0.2), rgba(0, 119, 181, 0.1));
   border: 1px solid rgba(0, 119, 181, 0.3);
-  box-shadow: 0 15px 35px 0 rgba(0, 119, 181, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 119, 181, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .glass-social a.github:hover {
   background: linear-gradient(135deg, rgba(51, 51, 51, 0.3), rgba(51, 51, 51, 0.2));
   border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 15px 35px 0 rgba(51, 51, 51, 0.3);
+  box-shadow: 0 8px 24px rgba(51, 51, 51, 0.25), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-
+/* ==========================================================================
+   SMALL SCREEN ADJUSTMENTS (576px)
+   ========================================================================== */
 @media (max-width: 576px) {
-
-  .count-card.glass-projects,
-  .skill-card.glass-projects,
-  .testimonial-item.glass-projects,
-  .icon-box.glass-projects {
+  .glass-projects {
     padding: 1.2rem;
   }
 
-  .count-card.glass-projects:hover,
-  .skill-card.glass-projects:hover,
-  .testimonial-item.glass-projects:hover,
-  .icon-box.glass-projects:hover {
-    transform: translateY(-2px) scale(1.01);
+  .glass-projects:hover {
+    transform: translateY(-1px);
   }
 
   .skill-card.glass-projects .skill-tags,
@@ -551,118 +636,95 @@
 }
 
 /* ==========================================================================
-  MOBILE PERFORMANCE OPTIMIZATIONS
+   MOBILE PERFORMANCE OPTIMIZATIONS (<768px)
    ========================================================================== */
 @media (max-width: 768px) {
-
   /* Disable expensive effects on mobile to prevent scrolling lag */
-  .count-card.glass-projects,
-  .skill-card.glass-projects,
-  .testimonial-item.glass-projects,
-  .icon-box.glass-projects,
-  .glass-social a {
+  .glass-projects,
+  .glass-social a,
+  .glass-btn {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    background: linear-gradient(135deg, rgba(0, 255, 55, 0.044), rgba(255, 255, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: none !important;
     transition: none !important;
   }
 
   /* Remove costly transforms and hover effects on mobile */
-  .count-card.glass-projects:hover,
-  .skill-card.glass-projects:hover,
-  .testimonial-item.glass-projects:hover,
-  .icon-box.glass-projects:hover,
+  .glass-projects:hover,
   .glass-social a:hover {
     transform: none !important;
     box-shadow: none !important;
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.17), rgba(var(--primary-brand-rgb), 0.052)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.4) !important;
+    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.05)) !important;
+    border: 1px solid rgba(var(--primary-brand-rgb), 0.35) !important;
   }
 
   /* Remove pseudo-elements and light reflection on mobile */
-  .count-card.glass-projects::before,
-  .skill-card.glass-projects::before,
-  .testimonial-item.glass-projects::before,
-  .icon-box.glass-projects::before,
-  .count-card.glass-projects::after,
-  .skill-card.glass-projects::after,
-  .testimonial-item.glass-projects::after,
-  .icon-box.glass-projects::after,
-  .count-card.glass-projects .light-reflection,
-  .skill-card.glass-projects .light-reflection,
-  .testimonial-item.glass-projects .light-reflection,
-  .icon-box.glass-projects .light-reflection {
+  .glass-projects::before,
+  .glass-projects::after,
+  .glass-projects .light-reflection {
     display: none !important;
   }
 
   /* Simplify icon and tag styling on mobile */
-  .count-card.glass-projects .count-icon,
-  .skill-card.glass-projects .skill-icon,
-  .icon-box.glass-projects .icon,
-  .skill-card.glass-projects .tech-tag,
-  .icon-box.glass-projects .tech-tag,
-  .icon-box.glass-projects .action-btn {
+  .glass-projects .count-icon,
+  .glass-projects .skill-icon,
+  .glass-projects .icon,
+  .glass-projects .tech-tag,
+  .glass-projects .action-btn {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
     transition: none !important;
   }
 
-  .count-card.glass-projects:hover .count-icon,
-  .skill-card.glass-projects:hover .skill-icon,
-  .icon-box.glass-projects:hover .icon {
+  .glass-projects:hover .count-icon,
+  .glass-projects:hover .skill-icon,
+  .glass-projects:hover .icon {
     transform: none !important;
     box-shadow: none !important;
   }
 
-   .count-card.glass-projects,
-  .skill-card.glass-projects,
-  .testimonial-item.glass-projects,
-  .icon-box.glass-projects {
+  .glass-projects {
     padding: 1.5rem;
   }
 
-  .count-card.glass-projects .count-icon,
-  .skill-card.glass-projects .skill-icon,
-  .icon-box.glass-projects .icon {
+  .glass-projects .count-icon,
+  .glass-projects .skill-icon,
+  .glass-projects .icon {
     width: 60px;
     height: 60px;
     margin-bottom: 0.75rem;
   }
 
-  .count-card.glass-projects .count-icon i,
-  .skill-card.glass-projects .skill-icon i,
-  .icon-box.glass-projects .icon i {
+  .glass-projects .count-icon i,
+  .glass-projects .skill-icon i,
+  .glass-projects .icon i {
     font-size: 1.5rem;
   }
 
-  .count-card.glass-projects h4,
-  .skill-card.glass-projects h4,
-  .icon-box.glass-projects h4 {
+  .glass-projects h4 {
     font-size: 1.1rem;
   }
 
-  .count-card.glass-projects .purecounter {
+  .glass-projects .purecounter {
     font-size: 2rem;
   }
 
-  .skill-card.glass-projects .tech-tag,
-  .icon-box.glass-projects .tech-tag {
+  .glass-projects .tech-tag {
     font-size: 0.7rem;
     padding: 0.2rem 0.6rem;
   }
 
-  .glass-social a {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
+  /* Glass button — simplified for mobile */
+  .glass-btn {
+    box-shadow: 0 0 10px rgba(24, 210, 110, 0.15) !important;
+    text-shadow: none !important;
   }
 
-
   .contact .info-box .contact-social-links.glass-social {
-    margin: 5px 0 0 0 !important; /* Reset margin */
-    justify-content: flex-start !important; /* Align to the left */
+    margin: 5px 0 0 0 !important;
+    justify-content: flex-start !important;
     gap: 8px;
   }
 
@@ -672,17 +734,81 @@
     font-size: 16px;
   }
 
-  
   #header .social-links.glass-social {
-  margin-top: 0px !important;
-  display: flex;
-  gap: 8px;
+    margin-top: 0px !important;
+    display: flex;
+    gap: 8px;
   }
 
   #header .social-links.glass-social a {
     width: 38px;
     height: 38px;
     font-size: 16px;
+  }
 }
 
+/* ==========================================================================
+   TABLET OPTIMIZATION (769px - 1024px)
+   ========================================================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .glass-projects {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .testimonials .glass-projects {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ==========================================================================
+   TOUCH DEVICE OPTIMIZATION
+   ========================================================================== */
+@media (hover: none) and (pointer: coarse) {
+  .glass-projects,
+  .glass-social a {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: none !important;
+  }
+
+  .glass-projects::before,
+  .glass-projects::after,
+  .glass-projects .light-reflection {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .glass-projects,
+  .glass-projects .count-icon,
+  .glass-projects .skill-icon,
+  .glass-projects .icon,
+  .glass-projects .tech-tag,
+  .glass-projects .action-btn,
+  .glass-projects .light-reflection,
+  .glass-projects .purecounter,
+  .glass-projects h4,
+  .glass-projects p,
+  .glass-projects .testimonial-img,
+  .glass-projects h3,
+  .glass-projects h4,
+  .glass-projects .quote-icon-left,
+  .glass-projects .quote-icon-right,
+  .glass-social a,
+  .glass-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .glass-projects:hover,
+  .glass-social a:hover {
+    transform: none !important;
+  }
 }
