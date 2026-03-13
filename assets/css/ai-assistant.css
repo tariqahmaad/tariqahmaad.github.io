@@ -834,6 +834,11 @@
     position: fixed;
     width: 100%;
   }
+
+  /* Hide chatbot when viewing a section (not landing page) */
+  .ai-assistant.section-hidden {
+    display: none !important;
+  }
 }
 
 /* ── Responsive: Small phones ── */

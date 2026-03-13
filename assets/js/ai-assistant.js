@@ -892,12 +892,19 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.elements.chatFab.classList.remove('hidden');
         this.elements.chatFab.classList.add('visible');
 
+        // Hide chatbot on mobile when in sections (not landing page)
+        this.setupMobileSectionVisibility();
+
         // Mark initialization as complete
         this.isInitialized = true;
 
         // Auto-show notification badge after a delay if FAB hasn't been clicked
         setTimeout(() => {
             if (!this.hasFabBeenClicked) {
+                const isMobile = window.innerWidth < 768;
+                const inSection = document.getElementById('header')?.classList.contains('header-top');
+                // Skip notification on mobile if user is in a section
+                if (isMobile && inSection) return;
                 this.showNotification();
             }
         }, 5000);
@@ -1149,13 +1156,13 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         this.elements.chatFab.setAttribute('aria-expanded', 'false');
         this.elements.chatWidget.setAttribute('aria-modal', 'false');
-        this.unlockBodyScroll();
 
         this.elements.chatWidget.classList.add(animationClass);
 
         this.waitForTransition(this.elements.chatWidget).then(() => {
             this.elements.chatWidget.style.display = 'none';
             this.elements.chatWidget.classList.remove(animationClass);
+            this.unlockBodyScroll();
             this.showFab();
             if (!setMinimizedNow) {
                 this.isMinimized = true;
@@ -2659,7 +2666,7 @@ His projects demonstrate both technical proficiency and practical application of
      * Handle personal inquiries
      */
     handlePersonalInquiry() {
-        return `That's a thoughtful question! As Tariq's AI assistant, I'm focused on sharing his professional journey. His work in Industry 4.0 and full-stack development is impressive — his Airport Management System and BudgetWise mobile app are great examples. What aspect of his work interests you most?`;
+        return `That's a thoughtful question! As Tariq's AI assistant, I'm focused on sharing his professional journey. His work in Industry 4.0 and full-stack development is impressive — his CV Builder and BudgetWise mobile app are great examples. What aspect of his work interests you most?`;
     }
 
     /**
@@ -3432,10 +3439,50 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
+     * On mobile, hide chatbot when navigating away from landing page.
+     * Uses MutationObserver to watch for header-top class on #header.
+     * - header-top present  → user is in a section → hide chatbot
+     * - header-top absent   → user is on landing page → show chatbot
+     */
+    setupMobileSectionVisibility() {
+        const header = document.getElementById('header');
+        const assistantEl = this.elements.assistant;
+        if (!header || !assistantEl) return;
+
+        const updateVisibility = () => {
+            if (window.innerWidth >= 768) {
+                // Always visible on desktop
+                assistantEl.classList.remove('section-hidden');
+                return;
+            }
+            if (header.classList.contains('header-top')) {
+                // In a section → close chat if open, then hide
+                if (this.elements.chatWidget.style.display === 'flex') {
+                    this.hideWidget('closing', false);
+                }
+                assistantEl.classList.add('section-hidden');
+            } else {
+                // On landing page → show
+                assistantEl.classList.remove('section-hidden');
+            }
+        };
+
+        // Observe class changes on #header
+        this.sectionObserver = new MutationObserver(() => {
+            updateVisibility();
+        });
+        this.sectionObserver.observe(header, { attributes: true, attributeFilter: ['class'] });
+
+        // Set initial state (handles page load with hash)
+        updateVisibility();
+    }
+
+    /**
      * Lock body scroll when chat is open on mobile
      * Saves and restores scroll position to prevent page jump
      */
     lockBodyScroll() {
+        if (window.innerWidth >= 768) return;
         this.savedScrollY = window.scrollY;
         document.body.classList.add('chat-open');
         document.body.style.top = `-${this.savedScrollY}px`;
@@ -3445,9 +3492,14 @@ His projects demonstrate both technical proficiency and practical application of
      * Unlock body scroll when chat is closed on mobile
      */
     unlockBodyScroll() {
+        if (window.innerWidth >= 768) return;
+        const scrollY = this.savedScrollY || 0;
         document.body.classList.remove('chat-open');
         document.body.style.top = '';
-        window.scrollTo(0, this.savedScrollY || 0);
+        // Use requestAnimationFrame to ensure scrollTo runs after browser reflow
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollY);
+        });
     }
 
     /**

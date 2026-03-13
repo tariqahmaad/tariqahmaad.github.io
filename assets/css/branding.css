@@ -120,6 +120,9 @@
 .btn-brand i {
   margin-right: 10px;
   font-size: 1.2em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
   transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 

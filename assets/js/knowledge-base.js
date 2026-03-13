@@ -192,15 +192,16 @@ export const knowledgeBase = {
             ]
         },
         {
-            name: "Airport Management System",
-            technologies: ["Python", "Django", "MySQL", "HTML/CSS"],
-            description: "Developed a web-based Airport Management System app with HTML, CSS, JS, Python, Django (Framework), and MySQL (Database), offering secure user authentication, role-specific functions, and a responsive interface.",
+            name: "CV Builder",
+            technologies: ["Next.js", "TypeScript", "React", "Firebase", "Tailwind CSS"],
+            description: "A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.",
             details: [
                 "Role: Full-Stack Developer.",
-                "Challenge: Integrating Django with MySQL for complex airport operations and role-based access.",
-                "Outcome: Delivered a comprehensive system with flight, passenger, and staff management capabilities."
+                "Challenge: Building a real-time dual-pane editor with live preview, PDF generation, and conflict resolution for offline/cloud sync.",
+                "Outcome: Delivered a production-ready application with guest mode, dark mode, auto-save, and multiple resume templates."
             ],
-            github: "https://github.com/tariqahmaad/vercel-project"
+            github: "https://github.com/tariqahmaad/CV-Builder",
+            liveDemo: "https://ta-cv.vercel.app/"
         }
     ],
 
