@@ -182,7 +182,7 @@ class AIAssistant {
                     'hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening',
                     'howdy', 'hola', 'bonjour', 'ciao', 'aloha', 'hi there', 'hey there', 'yo', 'sup',
                     'what\'s up', 'how are you', 'how do you do', 'nice to meet you', 'pleased to meet you',
-                    'good day', 'welcome', 'hey there', 'hiya', 'g\'day', 'howdy partner'
+                    'good day', 'welcome', 'hiya', 'g\'day'
                 ],
                 handler: (kb, message) => {
                     this.conversationMemory.currentTopic = 'introduction';
@@ -986,7 +986,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
     init() {
         this.createAssistantUI();
         this.attachEventListeners();
-        this.showWelcomeMessage();
 
         // Set initial state based on viewport size
         const isMobileViewport = window.innerWidth < 768;
@@ -1217,23 +1216,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.waitForTransition(this.elements.chatWidget).then(() => {
             this.elements.chatWidget.classList.remove('opening');
             this.focusInput();
-        });
-    }
-
-    /**
-     * Hide the chat widget with smooth animation
-     */
-    hideChat() {
-        this.elements.chatWidget.classList.add('closing');
-        this.isMinimized = true;
-
-        // Wait for animation to complete before showing FAB
-        this.waitForTransition(this.elements.chatWidget).then(() => {
-            this.elements.chatWidget.style.display = 'none';
-            this.elements.chatWidget.classList.remove('closing');
-            // Show FAB with animation - remove hidden class and add visible class
-            this.elements.chatFab.classList.remove('hidden');
-            this.elements.chatFab.classList.add('visible');
         });
     }
 
@@ -1622,13 +1604,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
     }
 
     /**
-     * Show welcome message
-     */
-    showWelcomeMessage() {
-        // Welcome message is already in HTML
-    }
-
-    /**
      * Add a notification
      */
     addNotification() {
@@ -1781,67 +1756,15 @@ He's continuously learning and adapting to stay at the forefront of technologica
         const relevantSkills = this.getRelevantSkills(kb, tech);
 
         // Build comprehensive response with knowledge base data
-        const techResponses = {
-            'python': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'java': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'javascript': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'react': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'django': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'mysql': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'mongodb': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'docker': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'git': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            },
-            'ai': {
-                professional: this.buildProfessionalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                enthusiastic: this.buildEnthusiasticTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills),
-                technical: this.buildTechnicalTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills)
-            }
-        };
-
+        const knownTechs = ['python', 'java', 'javascript', 'react', 'django', 'mysql', 'mongodb', 'docker', 'git', 'ai'];
         const userStyle = this.determineUserResponseStyle();
-        const responseSet = techResponses[tech];
+        const builderMethod = `${userStyle}TechResponse`;
 
-        if (responseSet && responseSet[userStyle]) {
-            return responseSet[userStyle];
+        if (knownTechs.includes(tech) && typeof this[builderMethod] === 'function') {
+            return this[builderMethod](kb, tech, relevantProjects, relevantExperience, relevantSkills);
         }
 
-        return techResponses[tech]?.professional || this.buildGenericTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills);
+        return this.buildGenericTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills);
     }
 
     /**
@@ -2699,17 +2622,14 @@ His projects demonstrate both technical proficiency and practical application of
             'porject': 'project',
             'porjects': 'projects',
             'experiance': 'experience',
-            'experiance': 'experience',
             'educaton': 'education',
             'universiy': 'university',
             'contct': 'contact',
             'contat': 'contact',
             'avaliable': 'available',
-            'freelance': 'freelance',
             'freelncer': 'freelancer',
             'programing': 'programming',
             'developement': 'development',
-            'framwork': 'framework',
             'framwork': 'framework',
             'data base': 'database',
             'data bases': 'databases',
@@ -2719,7 +2639,6 @@ His projects demonstrate both technical proficiency and practical application of
             'reactjs': 'react',
             'react js': 'react',
             'springboot': 'spring boot',
-            'spring boot': 'spring boot',
             'git hub': 'github',
             'linkdin': 'linkedin',
             'twiter': 'twitter',
@@ -3402,21 +3321,6 @@ His projects demonstrate both technical proficiency and practical application of
 
         // Normalize score
         return Math.min(score / patternCount, 1);
-    }
-
-    /**
-     * Check if message matches any of the given patterns
-     */
-    matchesPattern(message, patterns) {
-        return patterns.some(pattern => message.includes(pattern.toLowerCase()));
-    }
-
-    /**
-     * Extract technology name from message
-     */
-    extractTechnology(message) {
-        const technologies = ['python', 'java', 'javascript', 'react', 'django', 'spring boot', 'mysql', 'mongodb', 'docker', 'git'];
-        return technologies.find(tech => message.toLowerCase().includes(tech)) || 'technology';
     }
 
     /**

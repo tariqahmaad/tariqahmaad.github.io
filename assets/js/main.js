@@ -45,6 +45,27 @@
   }
 
   /**
+   * Navigate back to the home/header view.
+   * Hides all sections, expands the header, and scrolls to top.
+   */
+  const navigateHome = () => {
+    let sections = select('section', true);
+    sections.forEach((item) => {
+      item.classList.remove('section-show')
+    })
+
+    // Wait for section fade out animation to complete
+    setTimeout(function () {
+      select('#header').classList.remove('header-top')
+    }, 200);
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  /**
    * Mobile nav toggle
    */
   on('click', '.mobile-nav-toggle', function (e) {
@@ -73,7 +94,6 @@
     if (navbar.classList.contains('navbar-mobile')) {
       const clickedInsideNavbar = navbar.contains(e.target);
       const clickedToggle = toggle.contains(e.target);
-      const clickedNavLink = e.target.closest('.nav-link');
       const clickedSocialLink = e.target.closest('.mobile-social-links a');
 
       // Close if: outside navbar AND not on toggle
@@ -116,21 +136,7 @@
       }
 
       if (this.hash == '#header') {
-        sections.forEach((item) => {
-          item.classList.remove('section-show')
-        })
-
-        // Wait for section fade out animation to complete
-        setTimeout(function () {
-          header.classList.remove('header-top')
-        }, 200);
-
-        // Smooth scroll to top
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-
+        navigateHome();
         return;
       }
 
@@ -161,8 +167,6 @@
     if (select('#header').classList.contains('header-top')) {
       e.preventDefault();
 
-      let header = select('#header');
-      let sections = select('section', true);
       let navlinks = select('#navbar .nav-link', true);
 
       // Update navbar active state
@@ -173,20 +177,7 @@
         }
       });
 
-      // Hide all sections
-      sections.forEach((item) => {
-        item.classList.remove('section-show');
-      });
-
-      // Wait for section fade out, then expand header and scroll top
-      setTimeout(function () {
-        header.classList.remove('header-top');
-      }, 200);
-
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      navigateHome();
     }
   }, true)
 
@@ -220,14 +211,7 @@
     }
   });
 
-  // Initialize common components on page load
-  window.addEventListener('load', () => {
-    // Components initialized on load
-  });
-
-  /**
-   * Initialize components
-   */
+  // Initialize common components
   // Testimonials slider
   new Swiper('.testimonials-slider', {
     speed: 600,
@@ -243,10 +227,6 @@
       clickable: true
     },
     breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 15
-      },
       576: {
         slidesPerView: 1,
         spaceBetween: 15
@@ -271,13 +251,12 @@
   });
 
   // Initialize Pure Counter (disabled on mobile and iPad)
-  const isMobileOrIpad = () => {
-    // Check if device is mobile or tablet (iPad)
+  const isMobileOrTablet = () => {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       window.innerWidth < 1024;
   };
 
-  if (!isMobileOrIpad()) {
+  if (!isMobileOrTablet()) {
     new PureCounter();
   } else {
     // Set static values for mobile and iPad
@@ -463,7 +442,6 @@
 
             if (Math.random() > (0.3 + intensity * 0.6)) {
               // Use the character from our tracking array
-              const flickerClass = matrixChars[position].isFlickering ? ' flicker' : '';
               matrixHTML += formatChar(matrixChars[position].char);
             } else {
               matrixHTML += '<span style="opacity: 0.2"> </span>';
@@ -512,10 +490,19 @@
         roleSpan.textContent = roles[currentIndex];
         roleSpan.setAttribute('aria-live', 'polite');
 
-        setInterval(() => {
+        const roleInterval = setInterval(() => {
           currentIndex = (currentIndex + 1) % roles.length;
           roleSpan.textContent = roles[currentIndex];
         }, 3000);
+
+        // Cleanup interval if element is removed
+        const observer = new MutationObserver(() => {
+          if (!document.getElementById('role')) {
+            clearInterval(roleInterval);
+            observer.disconnect();
+          }
+        });
+        observer.observe(roleSpan.parentNode, { childList: true });
       } else {
         // Animated version
         roleSpan.textContent = roles[0];
@@ -528,29 +515,19 @@
         }, 1500);
       }
     }
-  });
 
-  // Scroll animation
-  function handleScrollAnimations() {
+    // Scroll animations
     const elements = document.querySelectorAll('.animate-on-scroll');
-
-    const observer = new IntersectionObserver((entries) => {
+    const scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, {
-      threshold: 0.1
-    });
+    }, { threshold: 0.1 });
 
     elements.forEach(element => {
-      observer.observe(element);
+      scrollObserver.observe(element);
     });
-  }
-
-  // Initialize scroll animations
-  document.addEventListener('DOMContentLoaded', () => {
-    handleScrollAnimations();
   });
 })();

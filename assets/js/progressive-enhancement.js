@@ -276,8 +276,3 @@ class ProgressiveEnhancement {
 
 // Initialize progressive enhancement
 const progressiveEnhancement = new ProgressiveEnhancement();
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ProgressiveEnhancement;
-}

@@ -39,10 +39,6 @@ body::before {
   background: var(--bg-color) url("../img/bg.jpg") top right no-repeat;
   background-size: cover;
   background-attachment: scroll;
-  background-position: top right;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   left: 0;
   right: 0;
   top: 0;
@@ -229,10 +225,6 @@ a:hover {
 }
 
 /* Responsive adjustments */
-body::before {
-  background-attachment: scroll;
-}
-
 @media (max-width: 1024px) {
   body::before {
     background-attachment: scroll;
@@ -969,7 +961,6 @@ body::before {
   }
   
   #header .navbar {
-    /* margin-top: 10px; */
   }
 }
 
@@ -1278,7 +1269,6 @@ body::before {
   left: 0;
   background-color: var(--primary-color);
   visibility: hidden;
-  width: 0px;
   transition: all 0.3s ease-in-out 0s;
 }
 
@@ -1297,7 +1287,7 @@ body::before {
 }
 
 /**
-* Mobile Navigation 
+* Mobile Navigation
 */
 .mobile-nav-toggle {
   color: #fff;
@@ -1305,22 +1295,11 @@ body::before {
   cursor: pointer;
   display: none;
   line-height: 0;
-  transition: 0.5s;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
   position: fixed;
   right: 15px;
-  top: 15px;
-  z-index: 9999;
-}
-
-/* Mobile nav toggle positioning */
-.mobile-nav-toggle {
   top: 16px;
-  right: 15px;
-}
-
-/* Hamburger to X animation - optimized for mobile */
-.mobile-nav-toggle {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+  z-index: 9999;
   transform: translateZ(0);
   will-change: transform, color;
 }
@@ -1377,7 +1356,6 @@ body::before {
   margin-top: 0;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   will-change: transform, opacity;
   -webkit-font-smoothing: antialiased;
@@ -1755,7 +1733,6 @@ section .container {
   font-size: 2.5rem;
   color: var(--primary-color);
   transition: all 0.3s ease;
-  /* Remove background and padding properties */
 }
 
 .count-card:hover .count-icon i {
@@ -2043,7 +2020,6 @@ section .container {
   margin: 0 20px 0 20px;
   padding: 25px 25px 70px 25px;
   background: var(--card-bg);
-  position: relative;
   border-radius: 15px;
   position: relative;
   z-index: 1;
@@ -2155,7 +2131,7 @@ section .container {
 /* Resume Download Button Styles */
 .download-cv-btn {
   display: flex;
-  justify-content: flex-start;  /* Align to the left */
+  justify-content: flex-start;
   margin-top: 10px;
   margin-bottom: 30px;
 }
@@ -2277,7 +2253,6 @@ section .container {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   line-height: 1;
-  /* margin-right: 8px; */ /* Removed to fix alignment */
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -2292,11 +2267,11 @@ section .container {
   grid-column: 2;
   grid-row: 2;
   display: flex;
-  justify-content: flex-start; /* Align icons to the left */
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
   margin-top: 5px;
-  padding: 0; /* Remove any default padding */
+  padding: 0;
 }
 
 .contact .info-box:hover {
@@ -2313,7 +2288,6 @@ section .container {
 
 .contact .php-email-form .error-message {
   display: none;
-  background: var(--card-bg);
   background: var(--error-color);
   text-align: left;
   padding: 15px;
