@@ -11,10 +11,8 @@ class AIAssistant {
         this.isTyping = false;
         this.messageHistory = [];
         this.lastUserMessage = '';
-        this.conversationContext = [];
         this.hasFabBeenClicked = false;
-        this.notificationCount = 0;
-        this.hasNotifications = false;
+        this.notificationVisible = false;
         this.lastTopic = null;
         this.intentHandlers = this.initializeIntentHandlers();
         this.conversationMemory = {
@@ -45,11 +43,10 @@ class AIAssistant {
         this.userProfile = {
             visitCount: 0,
             interests: new Set(),
-            technicalLevel: 'intermediate',
+            technicalLevel: 0.5,
             communicationStyle: 'professional',
             lastVisit: null,
-            totalInteractions: 0,
-            preferredTopics: []
+            totalInteractions: 0
         };
 
         // Response variation system
@@ -60,117 +57,18 @@ class AIAssistant {
         // Initialize knowledge base with portfolio data
         this.knowledgeBase = knowledgeBase;
 
-        // Check if assistant should be disabled on mobile for non-home sections
-        this.isDisabled = this.shouldDisableAssistant();
-        if (this.isDisabled) {
-            return;
-        }
-
         // Set initial state based on viewport size before any other operations
-        const isSmallPhone = window.matchMedia('(max-width: 479px)').matches;
         this.isMinimized = true; // Start minimized by default
 
         // Initialize the assistant
         this.init();
 
-        // Set up scroll listener for small phones to hide/show assistant based on section
-        if (isSmallPhone) {
-            this.setupSectionWatcher();
-        }
-
         // Set up resize listener to handle viewport changes
         this.setupResizeListener();
 
-    }
+        // Set up visual viewport listener for keyboard handling on mobile
+        this.setupVisualViewport();
 
-    shouldDisableAssistant() {
-        // Only disable on small phones (< 480px), enable on tablets
-        const isSmallPhone = window.matchMedia('(max-width: 479px)').matches;
-        if (!isSmallPhone) {
-            return false;
-        }
-
-        // Check if we're in the home/header section on small phones
-        const currentSection = this.getCurrentSection();
-        return currentSection !== 'header' && currentSection !== 'home';
-    }
-
-    getCurrentSection() {
-        // Check URL hash first
-        const hash = window.location.hash.replace('#', '');
-        if (hash) {
-            return hash;
-        }
-
-        // If no hash, check which section is currently visible
-        const sections = ['header', 'about', 'resume', 'services', 'contact'];
-        const scrollPosition = window.scrollY + 100; // Add offset for header
-
-        for (const sectionId of sections) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.offsetHeight;
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                    return sectionId;
-                }
-            }
-        }
-
-        // Default to header if nothing matches
-        return 'header';
-    }
-
-    setupSectionWatcher() {
-        let lastSection = 'header';
-
-        const checkSection = () => {
-            // Skip section checking during initialization to prevent conflicts
-            if (!this.isInitialized) {
-                return;
-            }
-
-            const currentSection = this.getCurrentSection();
-
-            // Only update if section actually changed
-            if (currentSection !== lastSection) {
-                lastSection = currentSection;
-                // Only hide on mobile devices (not tablets or laptops)
-                const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
-                const shouldHide = isMobileViewport && currentSection !== 'header' && currentSection !== 'home';
-
-                if (this.elements && this.elements.assistant) {
-                    if (shouldHide) {
-                        this.elements.assistant.classList.add('hidden');
-                        // Also close the chat if it's open
-                        if (!this.isMinimized) {
-                            this.closeChat();
-                        }
-                    } else {
-                        this.elements.assistant.classList.remove('hidden');
-                    }
-                }
-            }
-        };
-
-        // Use requestAnimationFrame for smoother performance
-        let ticking = false;
-        const optimizedCheck = () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    checkSection();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        window.addEventListener('scroll', optimizedCheck, { passive: true });
-        window.addEventListener('hashchange', checkSection);
-
-        // Don't run immediate check during initialization
-        // This will be handled after initialization is complete
     }
 
     initializeIntentHandlers() {
@@ -307,6 +205,7 @@ ${contextualAddition}`;
                 ],
                 handler: (kb, message) => {
                     this.conversationMemory.currentTopic = 'projects';
+                    this.lastTopic = { type: 'projects' };
                     this.updateUserInteraction('projects');
                     this.userProfile.interests.add('projects');
 
@@ -389,11 +288,7 @@ ${contextualAddition}`;
 📧 **Email:** ${kb.personal.email}
 📱 **Phone:** ${kb.personal.phone}
 📍 **Location:** ${kb.personal.location}
-💼 **LinkedIn:** [Connect with Tariq](${kb.personal.linkedin})
-💻 **GitHub:** [View Code](${kb.personal.github})
-🐦 **Twitter:** [Follow Tariq](${kb.personal.twitter})
-📘 **Facebook:** [Connect with Tariq](${kb.personal.facebook})
-📷 **Instagram:** [Follow Tariq](${kb.personal.instagram})
+${this.getSocialLinks()}
 
 **Freelance Status:** ${kb.personal.freelance} ✅
 
@@ -411,9 +306,9 @@ He's actively seeking new opportunities and open to discussing projects!`;
                 handler: (kb) => {
                     return `Let me tell you about Tariq Ahmad:
 
-👨‍💻 **Computer Engineer** from ${kb.personal.location}
-🎓 Graduate from ${kb.personal.university}
-🏢 Currently working as a **${kb.experience[0].title}** at ${kb.experience[0].company}
+**Computer Engineer** from ${kb.personal.location}
+Graduate from ${kb.personal.university}
+Currently working as a **${kb.experience[0].title}** at ${kb.experience[0].company}
 
 **Professional Focus:**
 • Full-stack development (Python, Java, JavaScript)
@@ -424,14 +319,13 @@ He's actively seeking new opportunities and open to discussing projects!`;
 **Personal Interests:** ${kb.personalInterests.join(', ')}
 
 **Key Stats:**
-• ${kb.stats.happyClients}+ Happy Clients
 • ${kb.stats.projects} Projects Completed
-• ${kb.stats.hoursOfSupport}+ Hours of Support
 • ${kb.stats.awards} Awards
 • ${kb.certifications.length} Professional Certifications
 • ${kb.achievements.length} Academic Achievements
+• ${kb.experience.length} Work Experiences
 
-He's passionate about technology and always eager to take on new challenges!`;
+${kb.personal.bio}`;
                 }
             },
             {
@@ -446,7 +340,7 @@ He's passionate about technology and always eager to take on new challenges!`;
                     return `Great news! Tariq is currently available for new opportunities:
 
 ✅ **Freelance Status:** ${kb.personal.freelance}
-🎯 **Looking for:** Full-time positions, freelance projects, and collaborations
+🎯 **Looking for:** ${kb.personal.availabilityDetails}
 💼 **Specialties:**
 • Full-stack web development
 • Mobile app development
@@ -657,11 +551,7 @@ He's particularly interested in innovative projects and opportunities to apply h
                     this.conversationMemory.currentTopic = 'social';
                     return `Tariq maintains an active online presence:
 
-🔗 **LinkedIn:** [Professional Network](${kb.personal.linkedin})
-💻 **GitHub:** [Code Portfolio](${kb.personal.github})
-🐦 **Twitter:** [Tech Updates](${kb.personal.twitter})
-📘 **Facebook:** [Personal Profile](${kb.personal.facebook})
-📷 **Instagram:** [Tech & Lifestyle](${kb.personal.instagram})
+${this.getSocialLinks()}
 
 You can find his latest projects, thoughts on technology, and professional updates across these platforms!`;
                 }
@@ -675,11 +565,7 @@ You can find his latest projects, thoughts on technology, and professional updat
                     'what\'s his age', 'his age', 'what age', 'date of birth', 'when was he born'
                 ],
                 handler: (kb, message) => {
-                    const birthYear = new Date(kb.personal.birthday).getFullYear();
-                    const currentYear = new Date().getFullYear();
-                    const age = currentYear - birthYear;
-
-                    return `Tariq was born on ${kb.personal.birthday}, making him ${age} years old. He's a young and dynamic ${kb.personal.title} with a passion for technology and innovation. His fresh perspective combined with his academic background makes him particularly adept at modern development practices and emerging technologies.`;
+                    return `I don't have Tariq's date of birth to share, but I can tell you he's a dynamic ${kb.personal.title} based in ${kb.personal.location}. He graduated from ${kb.personal.university} and has been actively building his career in full-stack development and research since 2023. His passion for technology and innovation makes him particularly adept at modern development practices and emerging technologies.`;
                 }
             },
 
@@ -697,6 +583,25 @@ You can find his latest projects, thoughts on technology, and professional updat
 🎮 **${kb.personalInterests.join(', ')}**
 
 These interests help him maintain a balanced lifestyle and bring creativity to his technical work. His passion for soccer reflects his teamwork skills, while reading keeps him intellectually engaged with new ideas and perspectives.`;
+                }
+            },
+
+            // Spoken Languages
+            {
+                name: 'languages',
+                patterns: [
+                    'language', 'languages', 'speak', 'spoken', 'fluent', 'english', 'arabic', 'turkish',
+                    'lingo', 'multilingual', 'bilingual', 'what language', 'how many languages'
+                ],
+                handler: (kb) => {
+                    this.conversationMemory.currentTopic = 'personal';
+                    this.updateUserInteraction('general');
+                    const spokenLanguages = kb.personal.spokenLanguages;
+                    return `Tariq is multilingual and speaks ${spokenLanguages.length} languages:
+
+**${spokenLanguages.join(', ')}**
+
+His diverse language skills are a valuable asset in the global tech industry, enabling him to collaborate effectively with international teams and work on projects across different regions.`;
                 }
             },
 
@@ -793,11 +698,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
                     `Let me tell you about one of Tariq's most exciting projects! 🎯 This is where his creativity really shines!`,
                     `Project time! 🚀 I love sharing these stories because they show how Tariq turns ideas into reality!`,
                     `Ah, projects! 💡 This is where the magic happens! Tariq's ability to solve real-world problems is incredible!`
-                ],
-                technical: [
-                    `Regarding Tariq's project portfolio, here are the technical implementations and outcomes.`,
-                    `Let me provide details about Tariq's project work, including technologies used and achievements.`,
-                    `Here's information about Tariq's project experience and technical contributions.`
                 ]
             },
             humor: {
@@ -987,36 +887,36 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.createAssistantUI();
         this.attachEventListeners();
 
-        // Set initial state based on viewport size
-        const isMobileViewport = window.innerWidth < 768;
-
-        if (isMobileViewport) {
-            // On mobile, start with FAB visible and chat hidden
-            this.elements.chatWidget.style.display = 'none';
-            this.elements.chatFab.classList.remove('hidden');
-            this.elements.chatFab.classList.add('visible');
-        } else {
-            // On desktop/laptop, show the FAB by default
-            this.elements.chatWidget.style.display = 'none';
-            this.elements.chatFab.classList.remove('hidden');
-            this.elements.chatFab.classList.add('visible');
-        }
+        // Set initial state: FAB visible and chat hidden
+        this.elements.chatWidget.style.display = 'none';
+        this.elements.chatFab.classList.remove('hidden');
+        this.elements.chatFab.classList.add('visible');
 
         // Mark initialization as complete
         this.isInitialized = true;
 
-        // Run initial section check after initialization is complete
-        if (window.innerWidth < 768) {
-            this.runInitialSectionCheck();
-        }
-
         // Auto-show notification badge after a delay if FAB hasn't been clicked
         setTimeout(() => {
             if (!this.hasFabBeenClicked) {
-                this.addNotification();
                 this.showNotification();
             }
         }, 5000);
+    }
+
+    /**
+     * Create the assistant UI elements
+     */
+    /**
+     * Get welcome message HTML (shared between create and restart)
+     */
+    getWelcomeMessageHTML() {
+        return `
+            <div class="welcome-message">
+              <i class="ri-message-3-line ai-icon"></i>
+              <h3>Professional AI Assistant</h3>
+              <p>Hello! I can tell you about Tariq's skills, experience, projects, and more. Just ask or select a quick question below!</p>
+            </div>
+        `;
     }
 
     /**
@@ -1026,45 +926,41 @@ He's continuously learning and adapting to stay at the forefront of technologica
         const assistantHTML = `
       <div class="ai-assistant" id="aiAssistant">
         <!-- Floating Action Button -->
-        <button class="chat-fab" id="chatFab">
+        <button class="chat-fab" id="chatFab" aria-label="Open chat assistant" aria-expanded="false" aria-controls="chatWidget">
           <i class="ri-message-3-line"></i>
-          <div class="notification-badge" id="notificationBadge">1</div>
+          <div class="notification-badge" id="notificationBadge" role="status" aria-label="1 new notification">1</div>
         </button>
-        
+
         <!-- Main Chat Widget -->
-        <div class="chat-widget" id="chatWidget">
+        <div class="chat-widget" id="chatWidget" role="dialog" aria-label="Chat assistant" aria-modal="false">
           <!-- Header -->
-          <div class="chat-header" id="chatHeader">
+          <div class="chat-header" id="chatHeader" role="banner">
             <div class="assistant-info">
               <div class="assistant-avatar">
                 <i class="ri-message-3-line"></i>
               </div>
               <div class="assistant-details">
                 <h4>Professional Assistant</h4>
-                <span><div class="status-dot"></div>Available 24/7</span>
+                <span><div class="status-dot" aria-hidden="true"></div>Available 24/7</span>
               </div>
             </div>
             <div class="chat-controls">
-              <button class="control-btn" id="minimizeBtn" title="Minimize">
+              <button class="control-btn" id="minimizeBtn" aria-label="Minimize chat">
                 <i class="ri-subtract-line"></i>
               </button>
-              <button class="control-btn" id="restartBtn" title="Restart Chat">
+              <button class="control-btn" id="restartBtn" aria-label="Restart conversation">
                 <i class="ri-refresh-line"></i>
               </button>
             </div>
           </div>
-          
+
           <!-- Messages Area -->
-          <div class="chat-messages" id="chatMessages">
-            <div class="welcome-message">
-              <i class="ri-message-3-line ai-icon"></i>
-              <h3>Professional AI Assistant</h3>
-              <p>Hello! I can tell you about Tariq's skills, experience, projects, and more. Just ask or select a quick question below!</p>
-            </div>
+          <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
+            ${this.getWelcomeMessageHTML()}
           </div>
-          
+
           <!-- Quick Actions -->
-          <div class="quick-actions" id="quickActions">
+          <div class="quick-actions" id="quickActions" role="toolbar" aria-label="Quick question shortcuts">
             <div class="quick-actions-title">Quick questions:</div>
             <div class="quick-actions-list">
               <button class="quick-action" data-message="Skills">Skills</button>
@@ -1074,9 +970,9 @@ He's continuously learning and adapting to stay at the forefront of technologica
               <button class="quick-action" data-message="Contact">Contact</button>
             </div>
           </div>
-          
+
           <!-- Typing Indicator -->
-          <div class="typing-indicator" id="typingIndicator">
+          <div class="typing-indicator" id="typingIndicator" aria-hidden="true">
             <div class="assistant-info">
               <div class="assistant-avatar">
                 <i class="ri-message-3-line"></i>
@@ -1088,13 +984,15 @@ He's continuously learning and adapting to stay at the forefront of technologica
               </div>
             </div>
           </div>
-          
+
           <!-- Input Area -->
           <div class="chat-input">
             <div class="input-container">
-              <input type="text" class="message-input" id="messageInput" 
-                     placeholder="Ask me anything about Tariq..." maxlength="500">
-              <button class="send-btn" id="sendBtn">
+              <input type="text" class="message-input" id="messageInput"
+                     placeholder="Ask me anything about Tariq..." maxlength="500"
+                     enterkeyhint="send"
+                     aria-label="Type your message" autocomplete="off">
+              <button class="send-btn" id="sendBtn" aria-label="Send message" disabled>
                 <i class="ri-send-plane-fill"></i>
               </button>
             </div>
@@ -1188,13 +1086,12 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Show the chat widget with smooth animation
      */
     showChat() {
-        // Mark that FAB has been clicked and hide notification
-        this.hasFabBeenClicked = true;
-        this.hideNotification();
+        // Update ARIA state
+        this.elements.chatFab.setAttribute('aria-expanded', 'true');
+        this.elements.chatWidget.setAttribute('aria-modal', 'true');
 
-        // Hide FAB with animation - remove visible class and add hidden class
-        this.elements.chatFab.classList.remove('visible');
-        this.elements.chatFab.classList.add('hidden');
+        this.hideFab();
+        this.lockBodyScroll();
 
         // Show chat widget with animation
         this.elements.chatWidget.style.display = 'flex';
@@ -1206,11 +1103,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.elements.chatWidget.classList.remove('minimized', 'closing');
         this.elements.chatWidget.classList.add('opening');
         this.isMinimized = false;
-
-        // Add mobile-specific adjustments
-        if (window.innerWidth < 768) {
-            this.adjustForMobile();
-        }
 
         // Focus input after animation completes
         this.waitForTransition(this.elements.chatWidget).then(() => {
@@ -1235,31 +1127,56 @@ He's continuously learning and adapting to stay at the forefront of technologica
      */
     minimizeChat() {
         this.isMinimized = true;
-        this.elements.chatWidget.classList.add('minimized');
-
-        // Wait for animation to complete before showing FAB
-        this.waitForTransition(this.elements.chatWidget).then(() => {
-            this.elements.chatWidget.style.display = 'none';
-            // Show FAB with animation - remove hidden class and add visible class
-            this.elements.chatFab.classList.remove('hidden');
-            this.elements.chatFab.classList.add('visible');
-        });
+        this.hideWidget('minimized', true);
     }
 
     /**
      * Close the chat widget completely with smooth animation
      */
     closeChat() {
-        this.elements.chatWidget.classList.add('closing');
+        this.hideWidget('closing', false);
+    }
+
+    /**
+     * Hide the chat widget with animation and show FAB after
+     * @param {string} animationClass - CSS class for the hide animation ('minimized' or 'closing')
+     * @param {boolean} setMinimizedNow - Whether to set isMinimized immediately
+     */
+    hideWidget(animationClass, setMinimizedNow) {
+        if (setMinimizedNow) {
+            this.isMinimized = true;
+        }
+
+        this.elements.chatFab.setAttribute('aria-expanded', 'false');
+        this.elements.chatWidget.setAttribute('aria-modal', 'false');
+        this.unlockBodyScroll();
+
+        this.elements.chatWidget.classList.add(animationClass);
 
         this.waitForTransition(this.elements.chatWidget).then(() => {
             this.elements.chatWidget.style.display = 'none';
-            this.elements.chatWidget.classList.remove('closing');
-            // Show FAB with animation - remove hidden class and add visible class
-            this.elements.chatFab.classList.remove('hidden');
-            this.elements.chatFab.classList.add('visible');
-            this.isMinimized = true;
+            this.elements.chatWidget.classList.remove(animationClass);
+            this.showFab();
+            if (!setMinimizedNow) {
+                this.isMinimized = true;
+            }
         });
+    }
+
+    /**
+     * Show the FAB with animation
+     */
+    showFab() {
+        this.elements.chatFab.classList.remove('hidden');
+        this.elements.chatFab.classList.add('visible');
+    }
+
+    /**
+     * Hide the FAB with animation
+     */
+    hideFab() {
+        this.elements.chatFab.classList.remove('visible');
+        this.elements.chatFab.classList.add('hidden');
     }
 
     /**
@@ -1269,9 +1186,38 @@ He's continuously learning and adapting to stay at the forefront of technologica
         // Reset conversation state
         this.messageHistory = [];
         this.lastUserMessage = '';
-        this.conversationContext = [];
         this.isTyping = false;
         this.lastTopic = null;
+
+        // Reset conversation memory
+        this.conversationMemory = {
+            currentTopic: null,
+            mentionedEntities: new Set(),
+            userPreferences: {},
+            questionHistory: []
+        };
+
+        // Reset personality to initial state
+        this.personality = {
+            traits: { enthusiastic: 0.8, professional: 0.9, humor: 0.6, empathy: 0.7, techSavvy: 0.9 },
+            currentMood: 'professional',
+            userInteractionStyle: 'neutral',
+            conversationDepth: 0,
+            engagementLevel: 0
+        };
+
+        // Reset user profile (preserve visit count and interests for returning visitor)
+        const savedVisitCount = this.userProfile.visitCount;
+        const savedInterests = this.userProfile.interests;
+        const savedLastVisit = this.userProfile.lastVisit;
+        this.userProfile = {
+            visitCount: savedVisitCount,
+            interests: savedInterests,
+            technicalLevel: 0.5,
+            communicationStyle: 'professional',
+            lastVisit: savedLastVisit,
+            totalInteractions: 0
+        };
 
         // Clear input field
         this.elements.messageInput.value = '';
@@ -1279,13 +1225,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.autoResizeInput();
 
         // Clear messages and restore welcome message
-        this.elements.chatMessages.innerHTML = `
-            <div class="welcome-message">
-                <i class="ri-message-3-line ai-icon"></i>
-                <h3>Professional AI Assistant</h3>
-                <p>Hello! I can tell you about Tariq's skills, experience, projects, and more. Just ask or select a quick question below!</p>
-            </div>
-        `;
+        this.elements.chatMessages.innerHTML = this.getWelcomeMessageHTML();
 
         // Show quick actions again
         this.elements.quickActions.style.display = 'block';
@@ -1304,22 +1244,24 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Focus the input field with optimized performance
      */
     focusInput() {
-        requestAnimationFrame(() => {
-            const input = this.elements.messageInput;
-            if (!input) return;
+        const input = this.elements.messageInput;
+        if (!input) return;
 
-            try {
-                input.focus({ preventScroll: true });
-            } catch (error) {
+        if (window.innerWidth < 768) {
+            // On mobile, use a delayed focus to reliably trigger the keyboard
+            // visualViewport API handles keyboard positioning
+            setTimeout(() => {
                 input.focus();
-            }
-
-            if (window.innerWidth < 768) {
-                requestAnimationFrame(() => {
-                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                });
-            }
-        });
+            }, 350);
+        } else {
+            requestAnimationFrame(() => {
+                try {
+                    input.focus({ preventScroll: true });
+                } catch (error) {
+                    input.focus();
+                }
+            });
+        }
     }
 
     /**
@@ -1341,11 +1283,45 @@ He's continuously learning and adapting to stay at the forefront of technologica
     }
 
     /**
+     * Handle repeated messages gracefully
+     */
+    handleRepeatedMessage() {
+        const topicBasedResponses = {
+            skills: "I've already shared Tariq's technical skills! Would you like to know more about a specific technology he works with?",
+            experience: "I've covered Tariq's work experience already. Want to dive deeper into a specific role or company?",
+            projects: "I've shown you Tariq's projects! Would you like details about a specific one, or shall we explore his skills instead?",
+            education: "I've shared his educational background. Interested in his certifications or work experience?",
+            contact: "I've already provided Tariq's contact information. Feel free to reach out to him directly!",
+        };
+
+        const topic = this.conversationMemory.currentTopic;
+        if (topic && topicBasedResponses[topic]) {
+            return topicBasedResponses[topic];
+        }
+
+        const responses = [
+            "I think I've already answered that! Is there something else about Tariq's work you'd like to explore?",
+            "Great minds think alike! But let's move on — ask me about his skills, projects, or experience!",
+            "I just covered that! Feel free to ask about something different — I know a lot about Tariq's professional journey!"
+        ];
+        return this.getRandomResponse(responses);
+    }
+
+    /**
      * Send a message
      */
     async sendMessage() {
         const message = this.elements.messageInput.value.trim();
         if (!message || this.isTyping) return;
+
+        // Detect repeated messages
+        if (this.lastUserMessage && message.toLowerCase() === this.lastUserMessage.toLowerCase()) {
+            this.elements.messageInput.value = '';
+            this.elements.sendBtn.disabled = true;
+            this.autoResizeInput();
+            this.addMessage('assistant', this.handleRepeatedMessage());
+            return;
+        }
 
         // Clear input and disable send button
         this.elements.messageInput.value = '';
@@ -1465,50 +1441,42 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         const welcomeMessage = this.elements.chatMessages.querySelector('.welcome-message');
         if (welcomeMessage) {
-            requestAnimationFrame(() => {
-                welcomeMessage.remove();
-            });
+            welcomeMessage.remove();
         }
 
-        // Use requestAnimationFrame for smoother DOM insertion
-        requestAnimationFrame(() => {
-            this.elements.chatMessages.appendChild(fragment);
-            this.scrollToBottom();
-        });
+        // Insert fragment immediately
+        this.elements.chatMessages.appendChild(fragment);
+        this.scrollToBottom();
 
         // Split text into words to make the streaming feel more natural
         const words = text.split(' ');
         let currentContent = '';
         let wordIndex = 0;
 
-        // Use a more efficient streaming approach with requestAnimationFrame
-        const streamWord = () => {
-            if (wordIndex < words.length) {
-                currentContent += words[wordIndex] + ' ';
-                wordIndex++;
+        return new Promise((resolve) => {
+            const streamWord = () => {
+                if (wordIndex < words.length) {
+                    currentContent += words[wordIndex] + ' ';
+                    wordIndex++;
 
-                // Update content in requestAnimationFrame for smoother rendering
-                requestAnimationFrame(() => {
                     contentElement.innerHTML = this.parseMarkdown(currentContent);
                     this.scrollToBottom();
-                });
 
-                // Vary the delay to simulate a more human-like typing speed
-                const delay = Math.random() * 50 + 20; // delay between 20ms and 70ms
-                setTimeout(streamWord, delay);
-            } else {
-                // Final update to ensure everything is correct
-                requestAnimationFrame(() => {
+                    // Vary the delay to simulate a more human-like typing speed
+                    const delay = Math.random() * 50 + 20;
+                    setTimeout(streamWord, delay);
+                } else {
+                    // Final update to ensure everything is correct
                     contentElement.innerHTML = this.parseMarkdown(text);
                     this.scrollToBottom();
-                });
+                    this.messageHistory.push({ sender: 'assistant', content: text, time });
+                    resolve();
+                }
+            };
 
-                this.messageHistory.push({ sender: 'assistant', content: text, time });
-            }
-        };
-
-        // Start streaming
-        streamWord();
+            // Start streaming
+            streamWord();
+        });
     }
 
     /**
@@ -1517,14 +1485,14 @@ He's continuously learning and adapting to stay at the forefront of technologica
     parseMarkdown(content) {
         let html = content;
 
+        // Parse inline code `code` first (before bold/italic to avoid conflicts)
+        html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+
         // Parse bold text **text**
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-        // Parse italic text *text*
-        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-        // Parse inline code `code`
-        html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+        // Parse italic text *text* (skip if already part of strong tags)
+        html = html.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
 
         // Parse links [text](url)
         html = html.replace(/\[([^\]]*)\]\(([^)]*)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
@@ -1604,42 +1572,13 @@ He's continuously learning and adapting to stay at the forefront of technologica
     }
 
     /**
-     * Add a notification
-     */
-    addNotification() {
-        this.notificationCount++;
-        this.hasNotifications = true;
-        this.updateNotificationBadge();
-    }
-
-    /**
-     * Clear all notifications
-     */
-    clearNotifications() {
-        this.notificationCount = 0;
-        this.hasNotifications = false;
-        this.updateNotificationBadge();
-    }
-
-    /**
-     * Update notification badge content
-     */
-    updateNotificationBadge() {
-        if (this.elements.notificationBadge) {
-            this.elements.notificationBadge.textContent = this.notificationCount > 0 ?
-                (this.notificationCount > 99 ? '99+' : this.notificationCount.toString()) : '';
-        }
-    }
-
-    /**
      * Show notification badge with smooth animation
      */
     showNotification() {
-        if (!this.hasFabBeenClicked && this.hasNotifications && this.elements.notificationBadge) {
-            // Remove hidden class if present
+        if (!this.hasFabBeenClicked && this.elements.notificationBadge) {
             this.elements.notificationBadge.classList.remove('hidden');
-            // Add visible class to trigger animation
             this.elements.notificationBadge.classList.add('visible');
+            this.notificationVisible = true;
         }
     }
 
@@ -1648,13 +1587,9 @@ He's continuously learning and adapting to stay at the forefront of technologica
      */
     hideNotification() {
         if (this.elements.notificationBadge) {
-            // Add hidden class to trigger hide animation
             this.elements.notificationBadge.classList.add('hidden');
-            // Remove visible class
             this.elements.notificationBadge.classList.remove('visible');
-
-            // Clear notifications when badge is hidden
-            this.clearNotifications();
+            this.notificationVisible = false;
         }
     }
 
@@ -1725,9 +1660,22 @@ He's continuously learning and adapting to stay at the forefront of technologica
      */
     extractProject(message) {
         const lowerMessage = message.toLowerCase();
+
+        // First try matching by project name (more specific)
+        const byName = this.knowledgeBase.projects.find(project =>
+            lowerMessage.includes(project.name.toLowerCase())
+        );
+        if (byName) return byName;
+
+        // Then try matching by a unique combination — only if at least 2 technologies are mentioned
+        // to avoid false positives from common tech names like HTML/CSS/JavaScript
         return this.knowledgeBase.projects.find(project =>
-            lowerMessage.includes(project.name.toLowerCase()) ||
-            project.technologies.some(tech => lowerMessage.includes(tech.toLowerCase()))
+            project.technologies.filter(tech => {
+                const lowerTech = tech.toLowerCase();
+                // Skip very common tech terms to reduce false positives
+                if (['html', 'css', 'javascript', 'mysql', 'rest api'].includes(lowerTech)) return false;
+                return lowerMessage.includes(lowerTech);
+            }).length >= 2
         );
     }
 
@@ -1841,38 +1789,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
     }
 
     /**
-     * Build technical technology response with knowledge base data
-     */
-    buildTechnicalTechResponse(kb, tech, projects, experience, skills) {
-        let response = `Tariq's ${tech} expertise spans multiple areas:`;
-
-        if (skills.length > 0) {
-            response += `\n\n**Core Skills:**\n${skills.slice(0, 4).map(skill => `• ${skill}`).join('\n')}`;
-        }
-
-        if (projects.length > 0) {
-            response += `\n\n**Project Implementations:**\n`;
-            projects.slice(0, 3).forEach(project => {
-                response += `• ${project.name}: ${project.technologies.join(', ')}\n`;
-            });
-        }
-
-        if (experience.length > 0) {
-            response += `\n\n**Professional Applications:**\n`;
-            experience.slice(0, 2).forEach(exp => {
-                response += `• ${exp.title} at ${exp.company}: Applied ${tech} for ${exp.responsibilities.slice(0, 2).join(', ')}\n`;
-            });
-        }
-
-        response += `\n\n**Technical Highlights:**\n`;
-        response += `• Modern ${tech} development practices and patterns\n`;
-        response += `• Integration with complementary technologies\n`;
-        response += `• Performance optimization and security considerations`;
-
-        return response;
-    }
-
-    /**
      * Build generic technology response with knowledge base data
      */
     buildGenericTechResponse(kb, tech, projects, experience, skills) {
@@ -1931,8 +1847,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
 His full-stack development skills with Python/Django and Java/Spring Boot are absolutely remarkable! 🎯 He can build entire applications from scratch - frontend, backend, database, everything! It's like watching a master craftsman at work!`;
     }
-
-
     /**
      * Get professional skills response
      */
@@ -2031,8 +1945,6 @@ ${this.getExperienceImpact(experience)}`;
 
         if (userStyle === 'enthusiastic') {
             return `This role was absolutely transformative for Tariq! He developed incredible expertise in ${experience.responsibilities.slice(0, 2).join(' and ').toLowerCase()}, and the experience shaped his approach to technology and innovation! 🌟`;
-        } else if (userStyle === 'technical') {
-            return `This position provided Tariq with valuable technical exposure to ${experience.responsibilities.slice(0, 2).join(' and ').toLowerCase()}, contributing to his comprehensive understanding of software engineering principles and research methodologies.`;
         } else {
             return `This role allowed Tariq to develop expertise in ${experience.responsibilities.slice(0, 2).join(' and ').toLowerCase()}. The experience contributed significantly to his professional growth and technical capabilities.`;
         }
@@ -2092,8 +2004,6 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
 
         if (userStyle === 'enthusiastic') {
             return `This project is absolutely brilliant! It showcases Tariq's ability to turn complex requirements into elegant solutions. The way he combines ${project.technologies.slice(0, 2).join(' and ')} is seriously impressive! ✨`;
-        } else if (userStyle === 'technical') {
-            return `This project demonstrates solid engineering principles with ${project.technologies.slice(0, 2).join(' and ')}. The implementation showcases attention to scalability, maintainability, and modern development practices.`;
         } else {
             return `This project reflects Tariq's commitment to quality and innovation. His use of ${project.technologies.slice(0, 2).join(' and ')} demonstrates his versatility and technical competence.`;
         }
@@ -2113,8 +2023,6 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
             const userStyle = this.determineUserResponseStyle();
             if (userStyle === 'enthusiastic') {
                 return `🤔 While Tariq hasn't worked on any projects specifically using ${tech} yet, he's absolutely familiar with the technology and super eager to apply it in future projects! His learning agility is remarkable! Would you like to see his work in related technologies?`;
-            } else if (userStyle === 'technical') {
-                return `Tariq hasn't implemented projects specifically using ${tech}, but he maintains familiarity with the technology stack and is prepared to apply it when project requirements align. Would you like to explore his work in related technologies?`;
             } else {
                 return `Tariq hasn't worked on any projects specifically using ${tech}, but he's familiar with the technology and eager to apply it in future projects. Would you like to see his work in related technologies?`;
             }
@@ -2160,8 +2068,6 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
 
         if (userStyle === 'enthusiastic') {
             return `Tariq's work with ${tech} is absolutely impressive! He's created ${projects.length} amazing projects that showcase his versatility and technical prowess. Each project demonstrates his ability to solve real-world problems with elegant solutions! ✨`;
-        } else if (userStyle === 'technical') {
-            return `These ${projects.length} projects demonstrate Tariq's proficiency with ${tech}, showcasing his understanding of best practices, architectural patterns, and effective implementation strategies.`;
         } else {
             return `These ${projects.length} projects highlight Tariq's experience with ${tech} and his ability to deliver practical solutions using this technology.`;
         }
@@ -2184,8 +2090,6 @@ ${previousRoles}
 
 **What's amazing:** Each role has built upon the previous one, creating a perfect blend of technical expertise, research skills, and practical problem-solving abilities! His journey from network fundamentals to advanced research is absolutely remarkable! 🌟`;
     }
-
-
     /**
      * Get professional experience response
      */
@@ -2219,8 +2123,6 @@ ${projectList}
 
 **What's incredible:** Each project solves real-world problems with elegant solutions! Tariq doesn't just code - he creates applications that make a genuine difference! His attention to detail and user experience is absolutely remarkable! ✨`;
     }
-
-
     /**
      * Get professional projects response
      */
@@ -2250,9 +2152,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         const lowerMessage = message.toLowerCase();
 
         if (lowerMessage.includes('tariq') && (lowerMessage.includes('is') || lowerMessage.includes('are'))) {
-            const birthYear = new Date(kb.personal.birthday).getFullYear();
-            const age = new Date().getFullYear() - birthYear;
-            return `Tariq Ahmad is a talented ${kb.personal.title} based in ${kb.personal.location}. He's a ${age}-year-old graduate from ${kb.personal.university} with a passion for full-stack development and research in Industry 4.0 technologies. Currently working as a ${kb.experience[0].title}, he's known for his expertise in Python/Django, Java/Spring Boot, and modern web technologies.`;
+            return `Tariq Ahmad is a talented ${kb.personal.title} based in ${kb.personal.location}. He's a graduate from ${kb.personal.university} with a passion for full-stack development and research in Industry 4.0 technologies. Currently working as a ${kb.experience[0].title}, he's known for his expertise in Python/Django, Java/Spring Boot, and modern web technologies.`;
         }
 
         if (lowerMessage.includes('work') || lowerMessage.includes('company')) {
@@ -2275,7 +2175,7 @@ Each project demonstrates practical application of technical skills, problem-sol
     handleWhatQuestion(kb, message) {
         const lowerMessage = message.toLowerCase();
 
-        if (lowerMessage.includes('do') && lowerMessage.includes('do')) {
+        if (lowerMessage.includes('do') && lowerMessage.includes('work')) {
             return `Tariq specializes in full-stack web development, research in Industry 4.0 technologies, and software engineering. He builds web applications using Python/Django, Java/Spring Boot, and React. He's also experienced in mobile app development, database design, and system architecture.`;
         }
 
@@ -2337,9 +2237,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         }
 
         if (lowerMessage.includes('born') || lowerMessage.includes('birthday')) {
-            const birthYear = new Date(kb.personal.birthday).getFullYear();
-            const age = new Date().getFullYear() - birthYear;
-            return `Tariq was born on ${kb.personal.birthday}, making him ${age} years old. He's a young professional bringing fresh perspectives to software development and research.`;
+            return `I don't have Tariq's date of birth to share, but he's a driven Computer Engineer based in ${kb.personal.location}. He graduated from ${kb.personal.university} and brings fresh perspectives to software development and research.`;
         }
 
         if (lowerMessage.includes('available') || lowerMessage.includes('free')) {
@@ -2375,9 +2273,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         }
 
         if (lowerMessage.includes('old') || lowerMessage.includes('age')) {
-            const birthYear = new Date(kb.personal.birthday).getFullYear();
-            const age = new Date().getFullYear() - birthYear;
-            return `Tariq is ${age} years old, born on ${kb.personal.birthday}. His youth brings fresh perspectives and enthusiasm to technology, combined with solid academic training and practical experience.`;
+            return `Tariq is a Computer Engineer from ${kb.personal.location} who graduated from ${kb.personal.university}. His youth brings fresh perspectives and enthusiasm to technology, combined with solid academic training and practical experience.`;
         }
 
         return "Tariq approaches his work with dedication and continuous learning. He combines academic knowledge with practical experience, focusing on quality solutions and user-centric design. He's built his expertise through hands-on projects and professional roles.";
@@ -2553,9 +2449,9 @@ His projects demonstrate both technical proficiency and practical application of
         if (this.fuzzyMatch(correctedMessage, greetingPatterns, 0.8)) {
             this.personality.currentMood = 'enthusiastic';
             const enthusiasticGreetings = [
-                "🚀 Oh, hello there! I'm absolutely excited to connect with you! Ready to explore Tariq's amazing tech world?",
-                "⚡ Hey! Great to meet you! I'm buzzing with excitement to share Tariq's incredible journey with you!",
-                "✨ Hi there! I'm delighted you stopped by! Tariq's work is absolutely fascinating, and I'm your guide to discovering it!"
+                "Hello there! I'm excited to help you explore Tariq's tech world. What would you like to know about?",
+                "Hey! Great to connect with you! I can share details about Tariq's skills, projects, and professional journey. What interests you?",
+                "Hi! Welcome! Tariq's portfolio has a lot to offer — from full-stack development to AI research. Where should we start?"
             ];
             return this.getRandomResponse(enthusiasticGreetings) + "\n\nWhat aspect of Tariq's professional expertise interests you most?";
         }
@@ -2740,9 +2636,9 @@ His projects demonstrate both technical proficiency and practical application of
      */
     handleGratitudeResponse() {
         const gratitudeResponses = [
-            "😊 You're so welcome! I'm absolutely thrilled I could help you discover Tariq's amazing work! He's genuinely passionate about technology, and it shows in everything he creates. Feel free to ask me anything else - I love sharing his journey!",
-            "🌟 My pleasure! I'm delighted I could assist you in learning about Tariq! His dedication to technology and innovation is truly inspiring. If you have more questions or want to dive deeper into any topic, I'm always here and excited to help!",
-            "✨ Absolutely wonderful! I'm so glad I could help you explore Tariq's professional world! He's building some incredible things in tech, and I love being able to share his story. Don't hesitate to ask if you want to know more!"
+            "You're welcome! I'm glad I could help you learn about Tariq's work. Feel free to ask if you'd like to explore anything else!",
+            "My pleasure! Tariq's dedication to technology and innovation is genuinely inspiring. If you have more questions, I'm always here to help!",
+            "Glad I could assist! Tariq is building some impressive things in tech. Don't hesitate to ask if you want to know more!"
         ];
         return this.getRandomResponse(gratitudeResponses);
     }
@@ -2752,9 +2648,9 @@ His projects demonstrate both technical proficiency and practical application of
      */
     handleWellbeingResponse() {
         const moodResponses = [
-            "⚡ I'm absolutely fantastic! Thanks for asking! I'm always excited when people want to learn about Tariq's incredible work in technology. His projects and skills never fail to amaze me! What would you like to explore first?",
-            "🚀 I'm doing wonderfully! I'm buzzing with excitement to share Tariq's tech journey with you! His full-stack development skills and research work are absolutely remarkable. Ready to dive in?",
-            "✨ I'm absolutely delighted! I love connecting with people who are interested in technology and innovation! Tariq's work in AI, web development, and research is seriously impressive. What catches your interest?"
+            "I'm doing great, thanks for asking! I'm always excited to share Tariq's work in technology. What would you like to explore?",
+            "I'm doing well! I enjoy connecting with people who are interested in Tariq's professional journey. What catches your interest?",
+            "Fantastic, thanks! I'm here whenever you'd like to learn more about Tariq's skills, projects, or experience."
         ];
         return this.getRandomResponse(moodResponses);
     }
@@ -2763,16 +2659,25 @@ His projects demonstrate both technical proficiency and practical application of
      * Handle personal inquiries
      */
     handlePersonalInquiry() {
-        return `🤖 That's such a thoughtful question! As Tariq's AI assistant, I'm absolutely fascinated by his work in Industry 4.0 and full-stack development! His Airport Management System and BudgetWise mobile app are particularly impressive - the way he combines technical excellence with practical solutions is brilliant!\n\nBut I'm most excited about sharing his journey with curious minds like yours! What aspect of his work interests you most?`;
+        return `That's a thoughtful question! As Tariq's AI assistant, I'm focused on sharing his professional journey. His work in Industry 4.0 and full-stack development is impressive — his Airport Management System and BudgetWise mobile app are great examples. What aspect of his work interests you most?`;
+    }
+
+    /**
+     * Handle out-of-scope questions gracefully
+     */
+    handleOutOfScopeQuestion() {
+        const responses = [
+            "I'm specifically designed to share information about Tariq Ahmad's professional background — his skills, projects, experience, and education. For anything else, I'd recommend a general-purpose assistant!",
+            "That's outside my area of expertise! I'm Tariq's portfolio assistant, so I can help with questions about his career, technical skills, projects, or how to contact him. What would you like to know?",
+            "I appreciate the curiosity, but I can only help with questions about Tariq Ahmad's professional portfolio. Feel free to ask about his skills, work experience, projects, education, or availability!"
+        ];
+        return this.getRandomResponse(responses);
     }
 
     /**
      * Generate contextual fallback responses with knowledge base hints
      */
     generateContextualFallback(kb, message) {
-        const userStyle = this.determineUserResponseStyle();
-        let helpfulResponses;
-
         // Try to extract any partial intent from the message
         const partialIntent = this.extractPartialIntent(message);
 
@@ -2780,25 +2685,18 @@ His projects demonstrate both technical proficiency and practical application of
             return this.handlePartialIntent(kb, partialIntent, message);
         }
 
-        if (userStyle === 'enthusiastic') {
-            helpfulResponses = [
-                "🚀 Oh, I'm absolutely excited to help you discover Tariq's world! His tech journey is seriously impressive, and I've got so many fascinating details to share! What sparks your curiosity the most?",
-                "⚡ I'm absolutely thrilled to be your guide! Tariq's work in technology is nothing short of amazing! From full-stack development to cutting-edge research, there's so much to explore! Where should we start?",
-                "✨ I'm absolutely delighted to connect with you! Tariq's professional journey is filled with incredible achievements and innovative projects! I'm excited to share everything - what interests you most?"
-            ];
-        } else if (userStyle === 'technical') {
-            helpfulResponses = [
-                "I can provide comprehensive technical insights about Tariq's expertise. His proficiency spans Python/Django, Java/Spring Boot, React, and database technologies. Would you like detailed information about his technical skills, project implementations, or architectural approaches?",
-                "From a technical perspective, Tariq's portfolio demonstrates strong engineering capabilities across multiple domains. I can share details about his system design patterns, development methodologies, or specific technology implementations. What technical aspects interest you?",
-                "I can offer detailed technical analysis of Tariq's work, including his full-stack development experience, research implementations, and technology stack choices. His projects showcase solid software engineering principles and modern development practices. What technical areas would you like to explore?"
-            ];
-        } else {
-            helpfulResponses = [
-                "I'd be delighted to help you learn more about Tariq Ahmad! I'm his AI assistant and can provide detailed information about his skills, experience, projects, and background. What specific aspect interests you?",
-                "I'm here to share insights about Tariq's professional journey. Whether you're interested in his technical expertise, project portfolio, or career achievements, I can provide comprehensive information. What would you like to explore?",
-                "Tariq is a skilled Computer Engineer with expertise in full-stack development and research. I can tell you about his programming skills, professional experience, notable projects, or how to get in touch. What would you like to know?"
-            ];
+        // Detect clearly out-of-scope questions
+        const outOfScopePatterns = ['weather', 'football', 'news', 'politics', 'recipe', 'movie', 'song', 'game', 'food', 'restaurant', 'stock', 'crypto', 'bitcoin', 'joke', 'trump', 'biden', 'election', 'war', 'sport score'];
+        const lowerMsg = message.toLowerCase();
+        if (outOfScopePatterns.some(p => lowerMsg.includes(p))) {
+            return this.handleOutOfScopeQuestion();
         }
+
+        const helpfulResponses = [
+            "I'd be happy to help you learn more about Tariq! I can share details about his skills, work experience, projects, education, or how to get in touch. What would you like to know?",
+            "I'm here to share insights about Tariq's professional journey. You can ask about his technical expertise, project portfolio, career background, or certifications. What interests you?",
+            "Tariq is a Computer Engineer with expertise in full-stack development and research. I can tell you about his programming skills, professional experience, notable projects, or contact information. What would you like to explore?"
+        ];
 
         const baseResponse = this.getRandomResponse(helpfulResponses);
         const personalityEnhanced = this.addPersonalityToResponse(baseResponse, 'fallback');
@@ -2954,7 +2852,6 @@ His projects demonstrate both technical proficiency and practical application of
 
         // Update conversation context with more sophisticated analysis
         const normalizedMessage = message.toLowerCase();
-        this.updateConversationContext(normalizedMessage);
 
         // Update conversation memory with rich metadata
         this.updateConversationMemory(normalizedMessage, message);
@@ -2989,29 +2886,6 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
-     * Update conversation context with sophisticated analysis
-     */
-    updateConversationContext(message) {
-        this.conversationContext.push(message);
-        if (this.conversationContext.length > 10) {
-            this.conversationContext = this.conversationContext.slice(-10);
-        }
-
-        // Analyze conversation patterns
-        if (this.conversationContext.length > 2) {
-            const recentMessages = this.conversationContext.slice(-3);
-            const questionRatio = recentMessages.filter(msg =>
-                msg.includes('?') || msg.includes('what') || msg.includes('how') || msg.includes('why')
-            ).length / recentMessages.length;
-
-            // Adjust personality based on conversation patterns
-            if (questionRatio > 0.7) {
-                this.personality.currentMood = 'helpful';
-            }
-        }
-    }
-
-    /**
      * Update conversation memory with rich metadata
      */
     updateConversationMemory(normalizedMessage, originalMessage) {
@@ -3019,9 +2893,7 @@ His projects demonstrate both technical proficiency and practical application of
             message: normalizedMessage,
             originalMessage: originalMessage,
             timestamp: new Date(),
-            entities: this.extractEntities(originalMessage),
-            sentiment: this.analyzeSentiment(originalMessage),
-            complexity: this.analyzeComplexity(originalMessage)
+            entities: this.extractEntities(originalMessage)
         });
 
         if (this.conversationMemory.questionHistory.length > 5) {
@@ -3033,13 +2905,8 @@ His projects demonstrate both technical proficiency and practical application of
      * Analyze user interaction patterns
      */
     analyzeUserInteraction(message) {
-        // Update interaction metrics
-        this.userProfile.totalInteractions++;
-        this.personality.conversationDepth++;
-
-        // Analyze message characteristics
+        // Analyze message characteristics (counting is done in updateUserInteraction)
         const messageLength = message.length;
-        const hasQuestion = message.includes('?');
         const hasTechnicalTerms = this.extractTechnology(message) !== 'technology';
 
         // Adjust user profile based on interaction
@@ -3054,14 +2921,6 @@ His projects demonstrate both technical proficiency and practical application of
             this.userProfile.communicationStyle = 'detailed';
         } else if (messageLength < 20) {
             this.userProfile.communicationStyle = 'concise';
-        }
-
-        // Update engagement level
-        if (this.personality.conversationDepth > 3) {
-            this.personality.engagementLevel = Math.min(
-                this.personality.engagementLevel + 0.1,
-                1.0
-            );
         }
     }
 
@@ -3174,35 +3033,6 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
-     * Analyze sentiment of message (simplified version)
-     */
-    analyzeSentiment(message) {
-        const positiveWords = ['good', 'great', 'excellent', 'amazing', 'impressive', 'fantastic', 'love', 'like', 'wonderful'];
-        const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'dislike', 'poor', 'worst', 'horrible'];
-
-        const lowerMessage = message.toLowerCase();
-        const positiveCount = positiveWords.filter(word => lowerMessage.includes(word)).length;
-        const negativeCount = negativeWords.filter(word => lowerMessage.includes(word)).length;
-
-        if (positiveCount > negativeCount) return 'positive';
-        if (negativeCount > positiveCount) return 'negative';
-        return 'neutral';
-    }
-
-    /**
-     * Analyze complexity of message
-     */
-    analyzeComplexity(message) {
-        const wordCount = message.split(/\s+/).length;
-        const sentenceCount = message.split(/[.!?]+/).length;
-        const avgWordsPerSentence = wordCount / Math.max(sentenceCount, 1);
-
-        if (avgWordsPerSentence > 15) return 'complex';
-        if (avgWordsPerSentence > 8) return 'moderate';
-        return 'simple';
-    }
-
-    /**
      * Update conversation memory with response context
      */
     updateConversationMemoryResponse(response, intent) {
@@ -3233,7 +3063,7 @@ His projects demonstrate both technical proficiency and practical application of
             const score = this.calculateIntentScore(correctedMessage, intent);
 
             // Prioritize certain intents based on priority property
-            const priorityBonus = intent.priority || 1;
+            const priorityBonus = typeof intent.priority === 'number' ? intent.priority : 1;
             const finalScore = score * priorityBonus;
 
             if (finalScore > bestScore && finalScore > 0.3) { // Minimum threshold
@@ -3331,6 +3161,18 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
+     * Get formatted social links block
+     */
+    getSocialLinks() {
+        const kb = this.knowledgeBase;
+        return `💼 **LinkedIn:** [Connect with Tariq](${kb.personal.linkedin})
+💻 **GitHub:** [View Code](${kb.personal.github})
+🐦 **Twitter:** [Follow Tariq](${kb.personal.twitter})
+📘 **Facebook:** [Connect with Tariq](${kb.personal.facebook})
+📷 **Instagram:** [Follow Tariq](${kb.personal.instagram})`;
+    }
+
+    /**
      * Get emoji for role based on title
      */
     getRoleEmoji(title) {
@@ -3393,24 +3235,10 @@ His projects demonstrate both technical proficiency and practical application of
      */
     adjustForMobile() {
         const isMobile = window.innerWidth < 768;
-        const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1024;
 
         if (isMobile) {
-            // Adjust chat widget height based on viewport
-            const viewportHeight = window.innerHeight;
-            const maxHeight = Math.min(viewportHeight * 0.8, 600);
-            this.elements.chatWidget.style.maxHeight = `${maxHeight}px`;
-
-            // Adjust position for better mobile experience
-            this.elements.chatWidget.style.bottom = '1rem';
-
             // Add touch-friendly interactions
             this.addTouchInteractions();
-        } else if (isTablet) {
-            // Tablet-specific adjustments
-            const viewportHeight = window.innerHeight;
-            const maxHeight = Math.min(viewportHeight * 0.7, 500);
-            this.elements.chatWidget.style.maxHeight = `${maxHeight}px`;
         }
     }
 
@@ -3581,30 +3409,21 @@ His projects demonstrate both technical proficiency and practical application of
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 // Only handle resize after initialization is complete
-                if (!this.isInitialized) {
+                if (!this.isInitialized || !this.elements) {
                     return;
                 }
 
-                const isSmallPhone = window.innerWidth < 480;
-                const isIPad = window.innerWidth >= 768 && window.innerWidth <= 1024;
-                const isLargePhone = window.innerWidth >= 480 && window.innerWidth < 768;
+                const isPhone = window.innerWidth < 768;
 
-                // Update FAB position: ONLY center on small phones (< 480px)
-                if (isSmallPhone) {
+                // Update FAB position: center on phones, fixed right on tablet/desktop
+                if (isPhone) {
                     this.elements.chatFab.style.left = '50%';
                     this.elements.chatFab.style.right = 'auto';
                     this.elements.chatFab.style.transform = 'translateX(-50%)';
-                }
-                // iPad and large phones use fixed right position (like desktop)
-                else if (isIPad || isLargePhone || window.innerWidth > 1024) {
+                } else {
                     this.elements.chatFab.style.left = 'auto';
                     this.elements.chatFab.style.right = '1.5rem';
                     this.elements.chatFab.style.transform = 'translateX(0)';
-                }
-
-                // Adjust chat widget for new viewport size if it's open
-                if (!this.isMinimized && this.elements.chatWidget.style.display === 'flex') {
-                    this.adjustForMobile();
                 }
             }, 100);
         };
@@ -3613,22 +3432,69 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
-     * Run initial section check after initialization is complete
+     * Lock body scroll when chat is open on mobile
+     * Saves and restores scroll position to prevent page jump
      */
-    runInitialSectionCheck() {
-        // Use a small delay to ensure all elements are properly rendered
-        setTimeout(() => {
-            const currentSection = this.getCurrentSection();
-            const shouldHide = currentSection !== 'header' && currentSection !== 'home';
+    lockBodyScroll() {
+        this.savedScrollY = window.scrollY;
+        document.body.classList.add('chat-open');
+        document.body.style.top = `-${this.savedScrollY}px`;
+    }
 
-            if (this.elements && this.elements.assistant) {
-                if (shouldHide) {
-                    this.elements.assistant.classList.add('hidden');
-                } else {
-                    this.elements.assistant.classList.remove('hidden');
+    /**
+     * Unlock body scroll when chat is closed on mobile
+     */
+    unlockBodyScroll() {
+        document.body.classList.remove('chat-open');
+        document.body.style.top = '';
+        window.scrollTo(0, this.savedScrollY || 0);
+    }
+
+    /**
+     * Handle mobile keyboard using Visual Viewport API
+     * Fixes input being pushed behind keyboard on iOS/Android
+     */
+    setupVisualViewport() {
+        if (!window.visualViewport) return;
+
+        // Store the full viewport height (without keyboard) for comparison
+        this.fullViewportHeight = window.innerHeight;
+
+        // Update stored height on orientation change / resize
+        window.addEventListener('resize', () => {
+            this.fullViewportHeight = window.innerHeight;
+        }, { passive: true });
+
+        window.visualViewport.addEventListener('resize', () => {
+            const chatWidget = this.elements ? this.elements.chatWidget : null;
+            if (!chatWidget || chatWidget.style.display !== 'flex') return;
+
+            const isPhone = window.innerWidth < 768;
+            if (!isPhone) return;
+
+            const vv = window.visualViewport;
+
+            // Keyboard is open if visual viewport is significantly smaller than layout viewport
+            const keyboardOpen = vv.height < window.innerHeight * 0.8;
+
+            if (keyboardOpen) {
+                // Keyboard open — reposition widget to fit the visible area
+                // Use top + height instead of bottom so it follows the visual viewport on iOS
+                chatWidget.style.top = `${vv.offsetTop}px`;
+                chatWidget.style.bottom = 'auto';
+                chatWidget.style.height = `${vv.height}px`;
+                // Scroll messages to bottom so latest messages stay visible
+                const messages = this.elements.chatMessages;
+                if (messages) {
+                    messages.scrollTop = messages.scrollHeight;
                 }
+            } else {
+                // Keyboard closed — restore CSS-controlled positioning
+                chatWidget.style.top = '';
+                chatWidget.style.bottom = '';
+                chatWidget.style.height = '';
             }
-        }, 100);
+        });
     }
 
 }

@@ -1,7 +1,7 @@
 /**
  * AI Assistant Knowledge Base
  * This file contains all the portfolio data for the AI assistant.
- * Version: 20251023
+ * Version: 20260313
  */
 
 export const knowledgeBase = {
@@ -20,7 +20,10 @@ export const knowledgeBase = {
         twitter: "https://x.com/arrick007",
         facebook: "https://www.facebook.com/tariq.ahmaaad",
         instagram: "https://www.instagram.com/0xtahmad/",
-        freelance: "Available"
+        freelance: "Available",
+        spokenLanguages: ["English", "Dari", "Pashto", "Hindi"],
+        bio: "A Computer Engineering graduate from Istanbul Aydin University with a passion for full-stack development, machine learning, and building impactful software solutions.",
+        availabilityDetails: "Open to full-time positions, freelance projects, and collaboration opportunities in software engineering."
     },
 
     skills: {
@@ -90,6 +93,7 @@ export const knowledgeBase = {
         {
             title: "Network Technician",
             company: "Tawhid Almas Logistics Company",
+            location: "Istanbul, Turkey",
             duration: "July 2023 – Sept 2023",
             responsibilities: [
                 "Installed and troubleshot networks",
@@ -139,33 +143,63 @@ export const knowledgeBase = {
             name: "Note-Taking Web Applications",
             technologies: ["PHP", "MySQL", "JavaScript", "Authentication"],
             description: "Developed a web-based note-taking app with PHP, MySQL, and front-end technologies, offering secure user authentication, role-specific functions, and a responsive, cross-browser interface.",
+            details: [
+                "Role: Full-Stack Developer.",
+                "Challenge: Implementing secure authentication and role-based access control with PHP.",
+                "Outcome: Delivered a fully functional note-taking platform with user management and a clean responsive UI."
+            ],
             github: "https://github.com/tariqahmaad/Note-Taking-Web-Application"
         },
         {
             name: "Hospital Management System",
             technologies: ["Java", "Spring Boot", "MySQL", "REST API"],
             description: "Created a Java Spring Boot-based Hospital Management System to streamline hospital functions, featuring patient, doctor, and appointment management with RESTful APIs and MySQL.",
+            details: [
+                "Role: Backend Developer.",
+                "Challenge: Designing a robust RESTful API architecture for managing complex hospital data relationships.",
+                "Outcome: Built a comprehensive system with patient, doctor, and appointment management modules."
+            ],
             github: "https://github.com/tariqahmaad/Hospital-Management-System"
         },
         {
             name: "Hand-Written Digital Classifier using Neural Networking",
             technologies: ["Python", "Neural Networks", "Deep Learning", "TensorFlow"],
-            description: "Developed a Hand-Written Digit Classifier with Neural Networks in a Deep Learning project, demonstrating proficiency in image recognition and machine learning techniques."
+            description: "Developed a Hand-Written Digit Classifier with Neural Networks in a Deep Learning project, demonstrating proficiency in image recognition and machine learning techniques.",
+            details: [
+                "Role: ML Engineer.",
+                "Challenge: Training an accurate neural network model for digit classification on the MNIST dataset.",
+                "Outcome: Achieved high classification accuracy, demonstrating strong understanding of deep learning concepts."
+            ]
         },
         {
             name: "Hotel Management System",
             technologies: ["C#", ".NET", "MySQL", "CRUD"],
-            description: "Developed a C# Hotel Management System in Microsoft Visual Studio, featuring CRUD operations for customer and room management, integrated with MySQL for secure data handling."
+            description: "Developed a C# Hotel Management System in Microsoft Visual Studio, featuring CRUD operations for customer and room management, integrated with MySQL for secure data handling.",
+            details: [
+                "Role: Desktop Application Developer.",
+                "Challenge: Building a reliable CRUD system with proper data validation and MySQL integration.",
+                "Outcome: Delivered a functional hotel management tool with an intuitive Windows Forms interface."
+            ]
         },
         {
             name: "Banking Management System",
             technologies: ["Java", "Swing", "GUI", "Security"],
-            description: "Created a Java-based Banking Management System with a user-friendly interface for account management, including features like deposit, withdrawal, and account details."
+            description: "Created a Java-based Banking Management System with a user-friendly interface for account management, including features like deposit, withdrawal, and account details.",
+            details: [
+                "Role: Java Developer.",
+                "Challenge: Implementing secure transaction logic and account management within a Swing GUI.",
+                "Outcome: Built a complete banking simulation with deposit, withdrawal, and balance tracking features."
+            ]
         },
         {
             name: "Airport Management System",
             technologies: ["Python", "Django", "MySQL", "HTML/CSS"],
             description: "Developed a web-based Airport Management System app with HTML, CSS, JS, Python, Django (Framework), and MySQL (Database), offering secure user authentication, role-specific functions, and a responsive interface.",
+            details: [
+                "Role: Full-Stack Developer.",
+                "Challenge: Integrating Django with MySQL for complex airport operations and role-based access.",
+                "Outcome: Delivered a comprehensive system with flight, passenger, and staff management capabilities."
+            ],
             github: "https://github.com/tariqahmaad/vercel-project"
         }
     ],
