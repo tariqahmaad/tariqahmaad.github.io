@@ -216,6 +216,8 @@
   new Swiper('.testimonials-slider', {
     speed: 600,
     loop: true,
+    autoHeight: false,
+    spaceBetween: 16,
     autoplay: {
       delay: 5000,
       disableOnInteraction: false
@@ -228,24 +230,19 @@
     },
     breakpoints: {
       576: {
-        slidesPerView: 1,
-        spaceBetween: 15
+        slidesPerView: 1
       },
       768: {
-        slidesPerView: 2,
-        spaceBetween: 20
+        slidesPerView: 2
       },
       992: {
-        slidesPerView: 2,
-        spaceBetween: 25
+        slidesPerView: 2
       },
       1200: {
-        slidesPerView: 3,
-        spaceBetween: 30
+        slidesPerView: 3
       },
       1400: {
-        slidesPerView: 3,
-        spaceBetween: 35
+        slidesPerView: 3
       }
     }
   });

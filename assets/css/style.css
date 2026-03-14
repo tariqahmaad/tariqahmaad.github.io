@@ -509,28 +509,15 @@ a:hover {
   
   .testimonials .testimonial-item p {
     font-size: 14px;
-    padding: 20px;
-    margin: 0 15px;
+    padding: 0;
+    margin: 0;
   }
 }
 
 /* Fix email overflow in about section for 1000px to 1400px range */
 @media (min-width: 1000px) and (max-width: 1400px) {
-  .about-me .content ul li {
-    font-size: 14px;
-  }
-
-  .about-me .content ul strong {
-    min-width: 100px;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-
-  .about-me .content ul li .value {
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .about-info-card .about-info-value {
+    font-size: 0.9rem;
   }
 }
 
@@ -541,25 +528,6 @@ a:hover {
 
   .about-me .content h3 {
     font-size: 24px;
-  }
-
-  .about-me .content ul li {
-    font-size: 14px;
-    padding: 12px 15px;
-    flex-wrap: nowrap;
-  }
-
-  .about-me .content ul strong {
-    min-width: 95px;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-
-  .about-me .content ul li .value {
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .count-card .purecounter {
@@ -580,51 +548,11 @@ a:hover {
   }
 }
 
-/* Transition range between small and very small screens */
-@media (max-width: 479px) and (min-width: 431px) {
-  .about-me .content ul li {
-    font-size: 13px;
-    padding: 12px 15px;
-  }
-
-  .about-me .content ul strong {
-    min-width: 95px;
-    font-size: 13px;
-    flex-shrink: 0;
-  }
-
-  .about-me .content ul li .value {
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
 /* Fix wrapping for very small screens */
 @media (max-width: 430px) {
-  .about-me .content ul li {
-    font-size: 13px;
-    word-break: break-word;
-    padding: 12px 15px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
-
-  .about-me .content ul strong {
-    min-width: 90px;
-    font-size: 13px;
-    flex-shrink: 0;
-    display: inline-block;
-  }
-
-  .about-me .content ul li .value {
-    font-size: 13px;
-    display: inline-block;
-    max-width: 100%;
-    word-break: break-word;
-    overflow-wrap: break-word;
+  .about-info-card .about-info-value {
     white-space: normal;
+    word-break: break-word;
   }
 }
 
@@ -857,7 +785,7 @@ a:hover {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 #header.header-top h1 {
@@ -895,7 +823,6 @@ a:hover {
     align-items: center;
     margin-right: 20px;
     position: relative;
-    transform: scale(1);
     pointer-events: auto;
   }
 
@@ -916,24 +843,6 @@ a:hover {
   #header.header-top h1 {
     margin-right: auto;
   }
-
-  /* Style the button in the header-top mode */
-  #header.header-top .btn-brand {
-    padding: 8px 18px;
-    font-size: 0.85rem;
-  }
-
-  #header.header-top .btn-hire {
-    padding: 5px 10px;
-    font-size: 11px;
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-color-hover));
-    color: #fff;
-  }
-
-  #header.header-top .btn-hire:hover {
-    background: transparent;
-    color: var(--primary-color);
-  }
 }
 
 /* Ensure hire-me-btn is always visible on mobile */
@@ -945,24 +854,15 @@ a:hover {
     width: 100%;
     z-index: 1;
   }
-  
-  #header .btn-hire {
-    padding: 6px 15px;
-    font-size: 12px;
-    box-shadow: 0 4px 12px rgba(24, 210, 110, 0.3);
-  }
-  
+
   /* Hide the hire-me-btn when header is in top position on mobile */
   #header.header-top .hire-me-btn {
     display: none !important;
   }
-  
+
   /* Adjust spacing for proper positioning */
   #header h2 {
     margin-bottom: 5px;
-  }
-  
-  #header .navbar {
   }
 }
 
@@ -999,11 +899,6 @@ a:hover {
 @media (max-width: 375px) {
   #header .hire-me-btn {
     margin: 10px auto 15px;
-  }
-
-  #header .btn-hire {
-    padding: 5px 12px;
-    font-size: 11px;
   }
 
   /* Extra small screen navbar adjustments */
@@ -1199,7 +1094,7 @@ a:hover {
 
   /* Adjust container to fit compressed nav */
   #header.header-top .container {
-    gap: 0px;
+    gap: 0;
   }
 
   /* Reduce padding in nav items */
@@ -1246,12 +1141,6 @@ a:hover {
   /* Container spacing for tablet */
   #header.header-top .container {
     gap: 8px;
-  }
-
-  /* Optimize button size for tablet */
-  #header.header-top .btn-hire {
-    padding: 4px 8px;
-    font-size: 10px;
   }
 }
 
@@ -1592,44 +1481,6 @@ section .container {
   text-align: justify;
 }
 
-.about-me .content ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 30px;
-}
-
-.about-me .content ul li {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.about-me .content ul li .value {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-}
-
-.about-me .content ul strong {
-  margin-right: 10px;
-  color: #fff;
-  font-weight: 600;
-  min-width: 120px;
-  flex-shrink: 0;
-}
-
-.about-me .content ul i {
-  font-size: 18px;
-  margin-right: 8px;
-  color: var(--primary-color);
-  line-height: 0;
-}
-
 .about-me .content p:last-child {
   margin-bottom: 0;
 }
@@ -1650,25 +1501,6 @@ section .container {
 
 .about-me img:hover {
   transform: scale(1.02);
-}
-
-.about-me .content ul li {
-  background: var(--card-bg);
-  padding: 15px 20px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  transition: all 0.3s ease;
-  border: var(--card-border);
-  box-shadow: var(--card-shadow);
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
-}
-
-.about-me .content ul li:hover {
-  background: var(--card-hover-bg);
-  transform: translateX(5px) translateY(-2px);
-  box-shadow: var(--card-hover-shadow);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /*--------------------------------------------------------------
@@ -1966,8 +1798,8 @@ section .container {
 
 .testimonials .testimonial-item {
   box-sizing: content-box;
-  min-height: 420px;
-  padding-top: 25px;
+  min-height: auto;
+  padding-top: 0;
 }
 
 .testimonials .testimonial-item .testimonial-img {
@@ -1986,78 +1818,75 @@ section .container {
 }
 
 .testimonials .testimonial-item h3 {
-  font-size: 22px;
+  font-size: 1rem;
   font-weight: 700;
-  margin: 0 0 8px 0;
-  color: #fff;
+  margin: 0 0 0.2rem 0;
+  color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .testimonials .testimonial-item h4 {
-  font-size: 16px;
-  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-style: italic;
+  letter-spacing: 0.3px;
 }
 
 .testimonials .testimonial-item .quote-icon-left,
 .testimonials .testimonial-item .quote-icon-right {
-  color: var(--primary-color);
-  font-size: 30px;
+  color: rgba(var(--primary-brand-rgb), 0.25);
+  font-size: 1.2rem;
   font-weight: 600;
-  opacity: 0.7;
+  opacity: 1;
   transition: all 0.3s ease;
 }
 
 .testimonials .testimonial-item .quote-icon-left {
-  display: inline-block;
-  left: -5px;
-  position: relative;
+  margin-right: 0.4rem;
+  vertical-align: -0.15em;
 }
 
 .testimonials .testimonial-item .quote-icon-right {
-  display: inline-block;
-  right: -5px;
-  position: relative;
-  top: 10px;
+  margin-left: 0.4rem;
+  vertical-align: -0.15em;
 }
 
 .testimonials .testimonial-item p {
   font-style: italic;
-  margin: 0 20px 0 20px;
-  padding: 20px 20px;
-  background: var(--card-bg);
-  border-radius: 15px;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border-radius: 0;
   position: relative;
   z-index: 1;
   font-size: 16px;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.9);
-  border: var(--card-border);
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   transition: all 0.3s ease;
 }
 
 .testimonials .testimonial-item:hover p {
-  background: var(--card-hover-bg);
-  color: #000;
+  background: none;
+  color: rgba(255, 255, 255, 0.97);
   transition: all 0.3s ease;
-  box-shadow: var(--card-hover-shadow);
+  box-shadow: none;
 }
 
 .testimonials .testimonial-item:hover .quote-icon-left,
 .testimonials .testimonial-item:hover .quote-icon-right {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(var(--primary-brand-rgb), 0.5);
   opacity: 1;
 }
 
 .testimonials .testimonial-item:hover h3 {
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(24, 210, 110, 0.4);
+  color: var(--primary-color);
+  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.3);
 }
 
 .testimonials .swiper-pagination {
@@ -2145,59 +1974,25 @@ section .container {
   margin-bottom: 30px;
 }
 
-/* Button styling is now handled by .btn-brand in branding.css */
-
-/* Hire Me Button Styles */
+/* ==========================================================================
+   Hire Me Button — Layout wrapper
+   Design lives in branding.css (.btn-hire)
+   ========================================================================== */
 .hire-me-btn {
   margin-top: 10px;
   margin-bottom: 20px;
-  text-align: left;
+  text-align: center;
   position: relative;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* For medium screens and above, add specific positioning */
 @media (min-width: 577px) {
   .hire-me-btn {
-    margin-left: 0;
-    padding-left: 0;
+    text-align: left;
     margin-top: 15px;
-    text-align: left;
   }
-
-  .btn-hire {
-    margin-left: 0;
-    padding: 8px 20px;
-    font-size: 14px;
-  }
-
-  /* In case h2 has any specific text alignment */
-  #header h2 {
-    text-align: left;
-  }
-}
-
-/* Keep the mobile styling (centered) for phone screens */
-@media (max-width: 576px) {
-  .hire-me-btn {
-    text-align: center;
-  }
-}
-
-.btn-hire {
-  display: inline-flex;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.btn-hire:hover {
-}
-
-.btn-hire i {
-  margin-right: 8px;
-  font-size: 1.1em;
 }
 
 /*--------------------------------------------------------------
@@ -2589,7 +2384,6 @@ section .container {
 }
 
 /* Smooth transitions for all interactive elements */
-.btn-hire,
 .btn-cv,
 .navbar a {
   transition: all 0.3s ease;
@@ -2652,7 +2446,7 @@ section .container {
   .card-base,
   .count-card,
   .skill-card,
-  .about-me .content ul li,
+  .about-info-card,
   .testimonials .testimonial-item p,
   .section .container,
   .contact .info-box,
@@ -2669,7 +2463,7 @@ section .container {
   .card-base:hover,
   .count-card:hover,
   .skill-card:hover,
-  .about-me .content ul li:hover,
+  .about-info-card:hover,
   .contact .info-box:hover {
     transform: none !important;
   }

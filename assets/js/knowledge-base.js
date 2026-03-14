@@ -284,27 +284,27 @@ export const knowledgeBase = {
         {
             author: "Alparslan Horasan",
             position: "Assistant Professor",
-            text: "Your ability to tackle complex problems with innovative solutions is truly impressive. Your passion for technology shines through in your work, making you an invaluable asset to any team."
+            text: "Tariq stood out in our department for the range of his technical work. During his time at the Industrial 4.0 Research Center, he handled systematic literature reviews and mixed methods data analysis with a level of rigor I normally expect from graduate students. His graduation project further demonstrated solid engineering fundamentals — he is someone who does not shy away from unfamiliar problems."
         },
         {
             author: "Selçuk Şener",
             position: "Senior Software Developer",
-            text: "I am consistently amazed by your dedication and teamwork. You have a knack for bringing people together and fostering a collaborative environment that leads to incredible results."
+            text: "I worked with Tariq during his frontend development internship, where he picked up Angular quickly and delivered clean, well-structured components on schedule. He also placed second in the university coding competition organized by Caretta, which confirmed he can perform under pressure. His GitHub shows a consistent pattern of building full-stack projects end to end, not just following tutorials."
         },
         {
             author: "Roa'a Ali",
             position: "Assistant Professor",
-            text: "Your coding skills are exceptional. You have a deep understanding of computer engineering principles, and your ability to write efficient, clean code is commendable."
+            text: "What I appreciated about Tariq was his willingness to go beyond the assignment. In coursework, he explored topics in depth rather than just meeting requirements. His Hospital Management System, built with Spring Boot and MySQL, showed he could design a proper REST API architecture on his own. The fact that he speaks four languages and still maintains strong technical communication in English says a lot about his adaptability."
         },
         {
             author: "Wasim Raed",
             position: "Senior Professor",
-            text: "Your creativity in approaching engineering challenges is outstanding. You have a unique way of thinking outside the box, which leads to innovative and effective solutions."
+            text: "Tariq's trajectory over the course of his degree was noticeable. He came in with strong fundamentals and steadily expanded into areas like machine learning and cloud-deployed applications, completing Stanford's ML certification sequence alongside his regular coursework. The handwritten digit classifier he built with TensorFlow showed genuine understanding of neural network concepts, not just library calls. He has the discipline to keep learning long after the classroom ends."
         },
         {
             author: "Zafer Aslan",
             position: "Vice Dean",
-            text: "Your passion for continuous learning and staying updated with the latest technological trends is admirable. It's rare to see someone so dedicated to personal and professional growth."
+            text: "Tariq's sustained involvement with the Industrial 4.0 Research Center — across three separate internship roles over nearly two years — speaks for itself. He contributed to literature reviews, experimental design, and technical presentations, and returned each time with more responsibility. That kind of reliability and growth is not common among undergraduate students."
         }
     ]
 };

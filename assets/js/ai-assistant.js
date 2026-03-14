@@ -514,7 +514,7 @@ He's particularly interested in innovative projects and opportunities to apply h
                         response += `**${testimonial.author}** - ${testimonial.position}\n`;
                         response += `"${testimonial.text}"\n\n`;
                     });
-                    response += "These testimonials reflect his dedication to quality work and collaborative approach.";
+                    response += "These are from professors and colleagues who have worked directly with Tariq at Istanbul Aydin University and in industry roles.";
                     return response;
                 }
             },
@@ -2170,7 +2170,7 @@ Each project demonstrates practical application of technical skills, problem-sol
 
         if (lowerMessage.includes('recommend') || lowerMessage.includes('supervisor') || lowerMessage.includes('professor')) {
             const testimonials = kb.testimonials.slice(0, 3).map(t => `${t.author} (${t.position})`).join(', ');
-            return `Several professors and colleagues have provided testimonials for Tariq. ${testimonials} are among those who have praised his work and dedication.`;
+            return `Several professors and colleagues have provided professional references for Tariq. ${testimonials} are among those who have worked with him directly.`;
         }
 
         return "Tariq Ahmad is a Computer Engineer and full-stack developer specializing in Python, Java, and JavaScript technologies. He's passionate about creating innovative solutions and has experience in research, software development, and system design.";

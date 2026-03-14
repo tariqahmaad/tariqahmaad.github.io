@@ -120,7 +120,8 @@
 /* Level 2: Mid-depth cards */
 .count-card.glass-projects,
 .skill-card.glass-projects,
-.icon-box.glass-projects {
+.icon-box.glass-projects,
+.about-info-card.glass-projects {
   backdrop-filter: var(--glass-blur-md);
   -webkit-backdrop-filter: var(--glass-blur-md);
 }
@@ -130,7 +131,9 @@
   backdrop-filter: var(--glass-blur-lg);
   -webkit-backdrop-filter: var(--glass-blur-lg);
   box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
-  padding: 2rem;
+  padding: 1.8rem 2rem 1.6rem;
+  height: 380px;
+  cursor: default;
 }
 
 /* ── Layout Overrides ── */
@@ -155,14 +158,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+  height: 380px;
+}
+
+.about-info-card.glass-projects {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  cursor: default;
 }
 
 /* ── Hover States ── */
 
 .count-card.glass-projects:hover,
 .skill-card.glass-projects:hover,
-.icon-box.glass-projects:hover {
+.icon-box.glass-projects:hover,
+.about-info-card.glass-projects:hover {
   background: var(--glass-bg-hover);
   border: var(--glass-border-hover);
   box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
@@ -214,7 +227,8 @@
 
 .count-card.glass-projects .count-icon,
 .skill-card.glass-projects .skill-icon,
-.icon-box.glass-projects .icon {
+.icon-box.glass-projects .icon,
+.about-info-card.glass-projects .about-info-icon {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -235,7 +249,8 @@
 
 .count-card.glass-projects:hover .count-icon,
 .skill-card.glass-projects:hover .skill-icon,
-.icon-box.glass-projects:hover .icon {
+.icon-box.glass-projects:hover .icon,
+.about-info-card.glass-projects:hover .about-info-icon {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
@@ -245,7 +260,8 @@
 
 .count-card.glass-projects .count-icon i,
 .skill-card.glass-projects .skill-icon i,
-.icon-box.glass-projects .icon i {
+.icon-box.glass-projects .icon i,
+.about-info-card.glass-projects .about-info-icon i {
   font-size: 1.8rem;
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
@@ -257,10 +273,146 @@
 
 .count-card.glass-projects:hover .count-icon i,
 .skill-card.glass-projects:hover .skill-icon i,
-.icon-box.glass-projects:hover .icon i {
+.icon-box.glass-projects:hover .icon i,
+.about-info-card.glass-projects:hover .about-info-icon i {
   color: var(--primary-color-hover);
   transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(var(--primary-brand-rgb), 0.6));
+}
+
+/* Compact icon size for about-info cards */
+.about-info-card.glass-projects .about-info-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.about-info-card.glass-projects .about-info-icon i {
+  font-size: 1.3rem;
+}
+
+/* ── About Info Card: Horizontal Glass Hover ── */
+
+/* Left accent bar — overrides the bottom accent via ::after */
+.about-info-card.glass-projects::after {
+  bottom: auto;
+  left: 0;
+  right: auto;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  height: auto;
+  transform: scaleY(0);
+  transform-origin: center;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(24, 210, 110, 0.4) 20%,
+    rgba(24, 210, 110, 0.8) 50%,
+    rgba(24, 210, 110, 0.4) 80%,
+    transparent 100%
+  );
+}
+.about-info-card.glass-projects:hover::after {
+  transform: scaleY(1);
+}
+
+/* Horizontal light sweep — overrides the diagonal default */
+.about-info-card.glass-projects .light-reflection {
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 70%,
+    transparent 100%
+  );
+  transform: none;
+  transition: left 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.about-info-card.glass-projects:hover .light-reflection {
+  left: 120%;
+  transform: none;
+}
+
+/* Hover: horizontal shift instead of vertical lift */
+.about-info-card.glass-projects:hover {
+  background: linear-gradient(
+    110deg,
+    rgba(24, 210, 110, 0.14) 0%,
+    rgba(24, 210, 110, 0.06) 40%,
+    rgba(24, 210, 110, 0.09) 100%
+  );
+  border: 1px solid rgba(24, 210, 110, 0.4);
+  box-shadow:
+    -4px 0 20px rgba(24, 210, 110, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+  transform: translateX(3px) translateY(-2px);
+}
+
+/* Enhanced icon glow on hover */
+.about-info-card.glass-projects:hover .about-info-icon {
+  background: linear-gradient(135deg,
+    rgba(var(--primary-brand-rgb), 0.35),
+    rgba(var(--primary-brand-rgb), 0.22)),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25));
+  border: 1px solid rgba(var(--primary-brand-rgb), 0.6);
+  box-shadow: 0 0 24px rgba(var(--primary-brand-rgb), 0.45);
+}
+
+/* ── About Info Card Typography ── */
+
+.about-info-card.glass-projects .about-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+.about-info-card.glass-projects .about-info-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: var(--glass-transition-fast);
+}
+.about-info-card.glass-projects:hover .about-info-label {
+  color: rgba(var(--primary-brand-rgb), 0.85);
+}
+.about-info-card.glass-projects .about-info-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  transition: var(--glass-transition-fast);
+}
+.about-info-card.glass-projects:hover .about-info-value {
+  color: var(--primary-color-hover);
+  text-shadow: 0 1px 8px rgba(var(--primary-brand-rgb), 0.4);
+  transform: translateX(2px);
+}
+
+/* ── About Info Grid Layout ── */
+
+.about-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 10px;
+}
+@media (max-width: 480px) {
+  .about-info-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Typography ── */
@@ -489,19 +641,11 @@
 .glass-btn {
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
-  box-shadow:
-    0 0 10px rgba(24, 210, 110, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .glass-btn:hover {
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  box-shadow:
-    0 0 20px rgba(24, 210, 110, 0.3),
-    0 8px 24px rgba(24, 210, 110, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* ==========================================================================
@@ -671,6 +815,7 @@
   .glass-projects .count-icon,
   .glass-projects .skill-icon,
   .glass-projects .icon,
+  .glass-projects .about-info-icon,
   .glass-projects .tech-tag,
   .glass-projects .action-btn {
     -webkit-backdrop-filter: none !important;
@@ -680,7 +825,8 @@
 
   .glass-projects:hover .count-icon,
   .glass-projects:hover .skill-icon,
-  .glass-projects:hover .icon {
+  .glass-projects:hover .icon,
+  .glass-projects:hover .about-info-icon {
     transform: none !important;
     box-shadow: none !important;
   }
@@ -695,6 +841,15 @@
     width: 60px;
     height: 60px;
     margin-bottom: 0.75rem;
+  }
+
+  .glass-projects .about-info-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .glass-projects .about-info-icon i {
+    font-size: 1.1rem;
   }
 
   .glass-projects .count-icon i,
@@ -719,7 +874,6 @@
   /* Glass button — simplified for mobile */
   .glass-btn {
     box-shadow: 0 0 10px rgba(24, 210, 110, 0.15) !important;
-    text-shadow: none !important;
   }
 
   .contact .info-box .contact-social-links.glass-social {
@@ -735,7 +889,7 @@
   }
 
   #header .social-links.glass-social {
-    margin-top: 0px !important;
+    margin-top: 0 !important;
     display: flex;
     gap: 8px;
   }
@@ -790,6 +944,7 @@
   .glass-projects .count-icon,
   .glass-projects .skill-icon,
   .glass-projects .icon,
+  .glass-projects .about-info-icon,
   .glass-projects .tech-tag,
   .glass-projects .action-btn,
   .glass-projects .light-reflection,
@@ -798,7 +953,6 @@
   .glass-projects p,
   .glass-projects .testimonial-img,
   .glass-projects h3,
-  .glass-projects h4,
   .glass-projects .quote-icon-left,
   .glass-projects .quote-icon-right,
   .glass-social a,
