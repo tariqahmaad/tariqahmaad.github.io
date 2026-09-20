@@ -3,7 +3,7 @@
  * Intelligent chat assistant with knowledge about skills, experience, and projects
  */
 
-import { knowledgeBase } from './knowledge-base.js';
+import { knowledgeBase } from './knowledge-base.js?v=20260921';
 
 class AIAssistant {
     constructor() {
@@ -1061,10 +1061,38 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.elements.sendBtn.addEventListener('click', () => this.sendMessage());
 
         // Enter key to send message
-        this.elements.messageInput.addEventListener('keypress', (e) => {
+        this.elements.messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 this.sendMessage();
+            }
+        });
+
+        // Escape closes the dialog; Tab stays trapped inside while it is open
+        this.elements.chatWidget.addEventListener('keydown', (e) => {
+            if (this.isMinimized) return;
+
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                this.closeChat();
+                return;
+            }
+
+            if (e.key === 'Tab') {
+                const focusables = this.elements.chatWidget.querySelectorAll(
+                    'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+                );
+                if (!focusables.length) return;
+                const first = focusables[0];
+                const last = focusables[focusables.length - 1];
+
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
             }
         });
 
@@ -1093,6 +1121,9 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Show the chat widget with smooth animation
      */
     showChat() {
+        // Remember where focus came from so it can be restored on close
+        this.previouslyFocusedElement = document.activeElement;
+
         // Update ARIA state
         this.elements.chatFab.setAttribute('aria-expanded', 'true');
         this.elements.chatWidget.setAttribute('aria-modal', 'true');
@@ -1164,6 +1195,11 @@ He's continuously learning and adapting to stay at the forefront of technologica
             this.elements.chatWidget.classList.remove(animationClass);
             this.unlockBodyScroll();
             this.showFab();
+            // Return focus to the element that opened the dialog
+            if (this.previouslyFocusedElement && typeof this.previouslyFocusedElement.focus === 'function') {
+                this.previouslyFocusedElement.focus();
+                this.previouslyFocusedElement = null;
+            }
             if (!setMinimizedNow) {
                 this.isMinimized = true;
             }
@@ -2551,7 +2587,10 @@ His projects demonstrate both technical proficiency and practical application of
 
         let correctedMessage = message;
         for (const [typo, correction] of Object.entries(typoCorrections)) {
-            const regex = new RegExp(typo, 'gi');
+            // Word-bounded so corrections never corrupt valid words
+            // (e.g. 'jav' must not turn "javascript" into "javaascript")
+            const escaped = typo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
             correctedMessage = correctedMessage.replace(regex, correction);
         }
 
@@ -2567,8 +2606,13 @@ His projects demonstrate both technical proficiency and practical application of
             if (similarity >= threshold) {
                 return true;
             }
-            // Also check if pattern is contained within text or vice versa
-            if (text.includes(pattern) || pattern.includes(text)) {
+            // Pattern contained in the message counts; the reverse check is
+            // limited to messages of 3+ chars so short input ("pr") can't
+            // match every pattern containing it.
+            if (text.includes(pattern)) {
+                return true;
+            }
+            if (text.length >= 3 && pattern.includes(text)) {
                 return true;
             }
         }
@@ -3173,10 +3217,7 @@ His projects demonstrate both technical proficiency and practical application of
     getSocialLinks() {
         const kb = this.knowledgeBase;
         return `💼 **LinkedIn:** [Connect with Tariq](${kb.personal.linkedin})
-💻 **GitHub:** [View Code](${kb.personal.github})
-🐦 **Twitter:** [Follow Tariq](${kb.personal.twitter})
-📘 **Facebook:** [Connect with Tariq](${kb.personal.facebook})
-📷 **Instagram:** [Follow Tariq](${kb.personal.instagram})`;
+💻 **GitHub:** [View Code](${kb.personal.github})`;
     }
 
     /**
@@ -3551,10 +3592,18 @@ His projects demonstrate both technical proficiency and practical application of
 
 }
 
-// Initialize the AI Assistant when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize the AI Assistant when DOM is loaded.
+// When lazy-loaded (idle import) DOMContentLoaded has already fired,
+// so initialize immediately in that case.
+function initAssistant() {
     // Wait a bit to ensure all other scripts are loaded
     setTimeout(() => {
         window.aiAssistant = new AIAssistant();
     }, 1000);
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAssistant);
+} else {
+    initAssistant();
+}

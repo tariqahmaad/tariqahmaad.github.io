@@ -33,6 +33,12 @@ function deferParticleInit() {
 
 function initParticles() {
   try {
+    // Respect the reduced-motion preference: a continuously animating
+    // canvas can't be stopped by the CSS `animation: none` fallbacks.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const isMobile = window.innerWidth < 768;
     const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 
@@ -114,8 +120,7 @@ function initParticles() {
           }
         }
       },
-      retina_detect: true,
-      fps_limit: isMobile ? 20 : (isTablet ? 25 : 30)
+      retina_detect: true
     };
 
     // Initialize particles if element exists and particlesJS is available

@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Tariq Ahmad - Computer Engineer & Full-Stack Developer Portfolio</title>
+  <title>Tariq Ahmad | Computer Engineer &amp; Full-Stack Developer</title>
   <meta
-    content="Tariq Ahmad, Computer Engineer specializing in Full-Stack Development, Python, React, Django, and Spring Boot. View my projects, skills, and experience. Available for freelance work."
+    content="Computer Engineer specializing in Full-Stack Development with Python, React, Django, and Spring Boot. Open to full-time roles and freelance projects."
     name="description">
   <meta
-    content="portfolio, computer engineering, software development, web development, Python developer, React developer, Django, Spring Boot, JavaScript, Full-Stack Developer, Istanbul, Turkey"
+    content="portfolio, computer engineering, software development, web development, Python developer, React developer, Django, Spring Boot, JavaScript, Full-Stack Developer"
     name="keywords">
   <meta name="author" content="Tariq Ahmad">
   <meta name="theme-color" content="#18d26e">
@@ -25,18 +25,19 @@
   <meta property="og:title" content="Tariq Ahmad - Computer Engineer & Full-Stack Developer">
   <meta property="og:description"
     content="Computer Engineer specializing in Full-Stack Development, Python, React, Django, and Spring Boot. View my projects, skills, and experience.">
-  <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/me.jpg">
+  <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://tariqahmaad.github.io/">
-  <meta property="twitter:title" content="Tariq Ahmad - Computer Engineer & Full-Stack Developer">
-  <meta property="twitter:description"
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://tariqahmaad.github.io/">
+  <meta name="twitter:title" content="Tariq Ahmad - Computer Engineer & Full-Stack Developer">
+  <meta name="twitter:description"
     content="Computer Engineer specializing in Full-Stack Development, Python, React, Django, and Spring Boot. View my projects, skills, and experience.">
-  <meta property="twitter:image" content="https://tariqahmaad.github.io/assets/img/me.jpg">
+  <meta name="twitter:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
+  <link href="favicon.ico" rel="icon" sizes="any">
+  <link href="assets/img/favicon.png" rel="icon" type="image/png" sizes="32x32">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Preload critical fonts -->
@@ -51,7 +52,7 @@
   </noscript>
 
   <!-- Critical CSS: Bootstrap for layout -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20260920" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
   <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style"
@@ -128,26 +129,26 @@
     }
   </style>
     <!-- Main CSS: Critical for instant styling -->
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/branding.css" rel="stylesheet">
-  <link href="assets/css/glassmorphism.css" rel="stylesheet">
+  <link href="assets/css/style.min.css?v=20260921" rel="stylesheet">
+  <link href="assets/css/branding.min.css?v=20260920" rel="stylesheet">
+  <link href="assets/css/glassmorphism.min.css?v=20260920" rel="stylesheet">
 
   <!-- Non-Critical CSS: Below-fold content and visual effects (async) -->
 
-  <link rel="preload" href="assets/css/testimonials-professional.css" as="style"
+  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20260920" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/testimonials-professional.css" rel="stylesheet">
+    <link href="assets/css/testimonials-professional.min.css?v=20260920" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/projects-custom.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/projects-custom.min.css?v=20260920" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/projects-custom.css" rel="stylesheet">
+    <link href="assets/css/projects-custom.min.css?v=20260920" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/ai-assistant.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20260920" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/ai-assistant.css" rel="stylesheet">
+    <link href="assets/css/ai-assistant.min.css?v=20260920" rel="stylesheet">
   </noscript>
 
   <!-- CSS Preload Polyfill for older browsers -->
@@ -156,19 +157,131 @@
     !function (n) { "use strict"; n.loadCSS || (n.loadCSS = function () { }); var o = loadCSS.relpreload = {}; if (o.support = function () { var o; try { o = n.document.createElement("link").relList.supports("preload") } catch (e) { o = !1 } return function () { return o } }(), o.bindMediaToggle = function (n) { var o = n.media || "all"; function e() { n.addEventListener ? n.removeEventListener("load", e) : n.attachEvent && n.detachEvent("onload", e), n.setAttribute("onload", null), n.media = o } n.addEventListener ? n.addEventListener("load", e) : n.attachEvent && n.attachEvent("onload", e), setTimeout(function () { n.rel = "stylesheet", n.media = "only x" }), setTimeout(e, 3e3) }, !o.support()) { o.poly(); var e = n.document.getElementsByTagName("link"); if (e) for (var t = 0; t < e.length; t++) { var l = e[t]; "preload" !== l.rel || "style" !== l.getAttribute("as") || l.getAttribute("data-loadcss") || (l.setAttribute("data-loadcss", !0), o.bindMediaToggle(l)) } !function e() { if (!n.document.querySelectorAll) return; for (var t = n.document.querySelectorAll("link[rel=preload][as=style]:not([data-loadcss])"), l = 0; l < t.length; l++)t[l].setAttribute("data-loadcss", !0), o.bindMediaToggle(t[l]); setTimeout(e, 500) }() } }(this);
   </script>
 
-  <!-- Particles.js - Deferred for faster LCP -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" defer></script>
+  <!-- Particles.js - Self-hosted, deferred for faster LCP -->
+  <script src="assets/vendor/particles.js/particles.min.js" defer></script>
 
-  <!-- Load structured data after LCP -->
-  <script>
-    // Deferred loading of structured data to improve LCP
-    (function () {
-      var script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.src = 'structured-data.json';
-      script.async = true;
-      document.head.appendChild(script);
-    })();
+  <!-- Mark JS availability early so CSS can hide SPA-style sections only when JS runs -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Structured data (inline so search engines can read it) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://tariqahmaad.github.io/#person",
+        "name": "Tariq Ahmad",
+        "url": "https://tariqahmaad.github.io/",
+        "image": "https://tariqahmaad.github.io/assets/img/me.jpg",
+        "sameAs": [
+          "https://www.linkedin.com/in/tariq-ahmad-a43320264",
+          "https://github.com/tariqahmaad"
+        ],
+        "jobTitle": "Computer Engineer",
+        "alumniOf": "Istanbul Aydin University",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Freelance"
+        },
+        "knowsAbout": [
+          "Python", "C++", "C#", "Java", "JavaScript", "PHP", "Django", "Spring Boot",
+          "React", "Next.js", "React Native", "Bootstrap", "MySQL", "MongoDB", "PostgreSQL",
+          "SQLite", "Git", "Docker", "TensorFlow", "Linux"
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://tariqahmaad.github.io/#projects",
+        "name": "Tariq Ahmad Portfolio Projects",
+        "description": "Collection of software development projects by Tariq Ahmad",
+        "numberOfItems": 9,
+        "itemListElement": [
+          {
+            "@type": "SoftwareApplication",
+            "position": 1,
+            "name": "CV Builder",
+            "description": "Privacy-first resume builder with real-time preview, ATS-friendly templates, PDF export, and version control, built with Next.js and Firebase",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web Browser",
+            "url": "https://ta-cv.vercel.app/"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 2,
+            "name": "Quizlet - Interactive University Quiz Platform",
+            "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web Browser",
+            "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 3,
+            "name": "BudgetWise - React Native Expense Tracker",
+            "description": "Mobile expense tracking app built with React Native, Node.js, and Firebase",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "iOS, Android",
+            "programmingLanguage": ["React Native", "JavaScript", "Node.js"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 4,
+            "name": "Graduation Project Presentation",
+            "description": "Interactive presentation showcasing the graduation project, built with HTML, CSS, and JavaScript",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web Browser",
+            "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 5,
+            "name": "Note-Taking Web Application",
+            "description": "Web-based note-taking application with PHP, MySQL, and JavaScript",
+            "applicationCategory": "ProductivityApplication",
+            "operatingSystem": "Web Browser",
+            "programmingLanguage": ["PHP", "MySQL", "JavaScript"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 6,
+            "name": "Hospital Management System",
+            "description": "Hospital management system built with Java, Spring Boot, and MySQL",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web Browser",
+            "programmingLanguage": ["Java", "Spring Boot", "MySQL"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 7,
+            "name": "Hand-Written Digit Classifier",
+            "description": "Machine learning project for classifying handwritten digits using Neural Networks and TensorFlow",
+            "applicationCategory": "MachineLearningApplication",
+            "operatingSystem": "Cross-Platform",
+            "programmingLanguage": ["Python"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 8,
+            "name": "Hotel Management System",
+            "description": "Hotel management system with CRUD operations built with C# and MySQL",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Windows",
+            "programmingLanguage": ["C#", ".NET", "MySQL"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "position": 9,
+            "name": "Banking Management System",
+            "description": "Banking management system with account management built with Java Swing",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Cross-Platform",
+            "programmingLanguage": ["Java"]
+          }
+        ]
+      }
+    ]
+  }
   </script>
 </head>
 
@@ -180,18 +293,19 @@
   <header id="header" role="banner">
     <div class="container">
 
-      <a href="index.html" class="mr-auto"><i class="ri-code-s-slash-fill"></i></a>
+      <a href="index.html" class="mr-auto" aria-label="Home"><i class="ri-code-s-slash-fill"></i></a>
       <h1><a href="index.html" class="stylish-name">Tariq Ahmad</a></h1>
       <h2 class="header-subtitle">I'm a passionate</h2>
-      <h2 class="header-subtitle role-h2"><span id="role"></span></h2><br>
+      <h2 class="header-subtitle role-h2"><span id="role">Full-Stack Developer</span></h2><br>
 
       <div class="hire-me-btn">
-        <a href="mailto:tariq_muzamil@live.com?subject=Job%20Opportunity%20for%20You" class="btn-hire">
+        <a href="mailto:me@tariqahmad.dev?subject=Job%20Opportunity%20for%20You" class="btn-hire">
           <i class="bi bi-briefcase"></i> Hire Me
         </a>
       </div>
 
-      <i class="bi bi-list mobile-nav-toggle"></i>
+      <button type="button" class="bi bi-list mobile-nav-toggle" aria-label="Open navigation menu"
+        aria-expanded="false" aria-controls="navbar"></button>
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link active" href="#header">Home</a></li>
@@ -200,11 +314,6 @@
           <li><a class="nav-link" href="#projects">Projects</a></li>
           <li><a class="nav-link" href="#contact">Contact</a></li>
           <div class="mobile-social-links glass-social">
-            <a href="https://x.com/arrick007" class="twitter" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
-            <a href="https://www.facebook.com/tariq.ahmaaad" class="facebook" aria-label="Facebook"><i
-                class="bi bi-facebook"></i></a>
-            <a href="https://www.instagram.com/0xtahmad/" class="instagram" aria-label="Instagram"><i
-                class="bi bi-instagram"></i></a>
             <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
                 class="bi bi-linkedin"></i></a>
             <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
@@ -214,11 +323,6 @@
       </nav><!-- .navbar -->
 
       <div class="social-links glass-social">
-        <a href="https://x.com/arrick007" class="twitter" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
-        <a href="https://www.facebook.com/tariq.ahmaaad" class="facebook" aria-label="Facebook"><i
-            class="bi bi-facebook"></i></a>
-        <a href="https://www.instagram.com/0xtahmad/" class="instagram" aria-label="Instagram"><i
-            class="bi bi-instagram"></i></a>
         <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
             class="bi bi-linkedin"></i></a>
         <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i class="ri-github-fill"></i></a>
@@ -239,15 +343,16 @@
       </div>
 
       <div class="row">
-        <div class="col-lg-4 animate-on-scroll" data-aos="fade-right">
+        <div class="col-lg-4 animate-on-scroll">
           <img src="assets/img/me.jpg" class="img-fluid" alt="Tariq Ahmad portrait" width="400" height="400">
         </div>
-        <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+        <div class="col-lg-8 pt-4 pt-lg-0 content">
           <h3>Computer Engineer</h3>
           <p>
-            I am a Computer Engineering graduate from Istanbul Aydin University (CGPA: 3.36/4.0) with over 3 years of
+            I am a Computer Engineering graduate from Istanbul Aydin University (CGPA: 3.36/4.0) with hands-on
             experience
-            in full-stack development, system design, and research. My expertise encompasses Python, Java, C++, C#, and
+            across 5 internships and research roles in full-stack development, system design, and research. My
+            expertise encompasses Python, Java, C++, C#, and
             modern web technologies, along with database management and cloud integration.
             <br><br>
             I have successfully delivered 9 diverse projects ranging from web applications to mobile apps, earning 7
@@ -518,9 +623,10 @@
 
       <div class="section-title">
         <h2>References</h2>
+        <p>Full references available upon request</p>
       </div>
 
-      <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+      <div class="testimonials-slider swiper">
         <div class="swiper-wrapper">
 
           <div class="swiper-slide">
@@ -644,7 +750,7 @@
           <h2>Resume</h2>
           <p class="mb-0">Background and Experience</p>
         </div>
-        <a href="assets/CV.pdf" download class="btn-cv btn-brand glass-btn mt-2 mt-md-0">
+        <a href="https://cv.tariqahmad.dev/share/SrQUaAO1?download=1" target="_blank" rel="noopener noreferrer" class="btn-cv btn-brand glass-btn mt-2 mt-md-0">
           <i class="bi bi-file-earmark-arrow-down"></i> Download CV
         </a>
       </div>
@@ -757,15 +863,13 @@
             <h4>Researcher Intern</h4>
             <h5>Oct 2024 - Jul 2025</h5>
             <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
-            <p>
-            <ul>
+                        <ul>
               <li>Systematic Literature Reviews</li>
               <li>Mixed Methods Data Analysis</li>
               <li>Experimental Design & Prototyping</li>
               <li>Technical Writing & Presentations</li>
               <li>Analytical Problem-Solving</li>
             </ul>
-            </p>
           </div>
 
 
@@ -773,58 +877,50 @@
             <h4>Engineering Researcher Intern</h4>
             <h5>March 2024 - June 2024</h5>
             <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
-            <p>
-            <ul>
+                        <ul>
               <li>Literature Review</li>
               <li>Data Collection & Analysis</li>
               <li>Experimentations & Prototyping Collaboration</li>
               <li>Report Writing and Presentation</li>
               <li>Problem Solving</li>
             </ul>
-            </p>
           </div>
 
           <div class="resume-item">
             <h4>Frontend Developer (Angular) Intern</h4>
             <h5>Nov 2023 - Jan 2024</h5>
             <p><em>Caretta Software Company, Istanbul, Turkey </em></p>
-            <p>
-            <ul>
+                        <ul>
               <li>User Interface Development</li>
               <li>Application Structure</li>
               <li>Angular Framework Expertise</li>
               <li>Responsive Design</li>
               <li>API Integration</li>
             </ul>
-            </p>
           </div>
 
           <div class="resume-item">
             <h4>Research Assistant Intern</h4>
             <h5>Oct 2023 - Jan 2024</h5>
             <p><em>Industrial 4.0 Research Center, Istanbul, Turkey</em></p>
-            <p>
-            <ul>
+                        <ul>
               <li>Data Collection and Analysis.</li>
               <li>Literature review, Report writing and Documentation.</li>
               <li>Data entry.</li>
               <li>Collaboration and Presentation.</li>
               <li>Critical thinking.</li>
             </ul>
-            </p>
           </div>
 
           <div class="resume-item">
             <h4>Network Technician</h4>
             <h5>July 2023 – Sept 2023</h5>
             <p><em>Tawhid Almas Logistics Company</em></p>
-            <p>
-            <ul>
+                        <ul>
               <li>Installed and troubleshot networks</li>
               <li>Monitored network performance</li>
               <li>Managed backup and recovery</li>
             </ul>
-            </p>
           </div>
         </div>
 
@@ -838,7 +934,7 @@
 
       <div class="section-title">
         <h2>Projects</h2>
-        <p>community contributions</p>
+        <p>Selected work</p>
       </div>
 
       <div class="row">
@@ -858,11 +954,8 @@
             <p>A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly
               templates, PDF export, and version control built with Next.js and Firebase.</p>
             <div class="project-actions">
-              <a href="https://ta-cv.vercel.app/" target="_blank" class="action-btn">
+              <a href="https://ta-cv.vercel.app/" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="bi bi-eye"></i>Live Demo
-              </a>
-              <a href="https://github.com/tariqahmaad/CV-Builder" target="_blank" class="action-btn">
-                <i class="ri-github-fill"></i>View Code
               </a>
             </div>
           </div>
@@ -887,10 +980,10 @@
               interface.
             </p>
             <div class="project-actions">
-              <a href="https://tariqahmaad.github.io/quizlet/index.html" target="_blank" class="action-btn">
+              <a href="https://tariqahmaad.github.io/quizlet/index.html" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="bi bi-eye"></i>Live Demo
               </a>
-              <a href="https://github.com/tariqahmaad/quizlet" target="_blank" class="action-btn">
+              <a href="https://github.com/tariqahmaad/quizlet" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill"></i>View Code
               </a>
             </div>
@@ -917,7 +1010,7 @@
               Users log daily expenses, set budgets, and view real-time analytics via RESTful APIs and cloud-sync.
             </p>
             <div class="project-actions">
-              <a href="https://github.com/tariqahmaad/BudgetWise" target="_blank" class="action-btn">
+              <a href="https://github.com/tariqahmaad/BudgetWise" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill"></i> View Code
               </a>
             </div>
@@ -928,7 +1021,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-file-earmark-ppt"></i></div>
-            <h4><a href="https://github.com/tariqahmaad/Presentation" target="_blank">Graduation Project
+            <h4><a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer">Graduation Project
                 Presentation</a>
             </h4>
             <div class="tech-tags">
@@ -940,10 +1033,10 @@
             <p>Developed an interactive presentation showcasing my graduation project, utilizing HTML, CSS, and
               JavaScript for a dynamic and engaging user experience.</p>
             <div class="project-actions">
-              <a href="https://tariqahmaad.github.io/Presentation/index.html" target="_blank" class="action-btn">
+              <a href="https://tariqahmaad.github.io/Presentation/index.html" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="bi bi-eye"></i>Live Demo
               </a>
-              <a href="https://github.com/tariqahmaad/Presentation" target="_blank" class="action-btn">
+              <a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill"></i>View Code
               </a>
             </div>
@@ -968,7 +1061,7 @@
               authentication,
               role-specific functions, and a responsive, cross-browser interface.</p>
             <div class="project-actions">
-              <a href="https://github.com/tariqahmaad/Note-Taking-Web-Application" target="_blank" class="action-btn">
+              <a href="https://github.com/tariqahmaad/Note-Taking-Web-Application" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill"></i>View Code
               </a>
             </div>
@@ -993,7 +1086,7 @@
               system design
               skills in healthcare software solutions.</p>
             <div class="project-actions">
-              <a href="https://github.com/tariqahmaad/Hospital-Management-System" target="_blank" class="action-btn">
+              <a href="https://github.com/tariqahmaad/Hospital-Management-System" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill"></i>View Code
               </a>
             </div>
@@ -1004,7 +1097,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hand"></i></div>
-            <h4>Hand-Written Digital Classifier using Neural Networking</h4>
+            <h4>Hand-Written Digit Classifier using Neural Networking</h4>
             <div class="tech-tags">
               <span class="tech-tag">Python</span>
               <span class="tech-tag">Neural Networks</span>
@@ -1075,9 +1168,9 @@
 
         <div class="col-md-6 d-flex align-items-stretch">
           <div class="info-box">
-            <i class="bx bx-map"></i>
-            <h3>My Address</h3>
-            <p>Istanbul, Turkey</p>
+            <i class="bi bi-globe"></i>
+            <h3>Work Availability</h3>
+            <p>Open to remote and on-site roles.</p>
           </div>
         </div>
 
@@ -1086,12 +1179,6 @@
             <i class="bx bx-share-alt"></i>
             <h3>Social Profiles</h3>
             <div class="social-links contact-social-links glass-social">
-              <a href="https://twitter.com/taahmad007" class="twitter" aria-label="Twitter"><i
-                  class="ri-twitter-x-line"></i></a>
-              <a href="https://www.facebook.com/tariq.ahmaaad" class="facebook" aria-label="Facebook"><i
-                  class="bi bi-facebook"></i></a>
-              <a href="https://www.instagram.com/0xtahmad/" class="instagram" aria-label="Instagram"><i
-                  class="bi bi-instagram"></i></a>
               <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
                   class="bi bi-linkedin"></i></a>
               <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
@@ -1104,19 +1191,27 @@
           <div class="info-box">
             <i class="bx bx-envelope"></i>
             <h3>Email Me</h3>
-            <p>tariq_muzamil@live.com</p>
+            <p><a href="mailto:me@tariqahmad.dev">me@tariqahmad.dev</a></p>
           </div>
         </div>
         <div class="col-md-6 mt-4 d-flex align-items-stretch">
           <div class="info-box">
             <i class="bx bx-phone-call"></i>
-            <h3>Call Me</h3>
-            <p>+90 534 540 3345</p>
+            <h3>Prefer to Talk?</h3>
+            <div>
+              <p>Phone number available on request.</p>
+              <a href="mailto:me@tariqahmad.dev?subject=Call%20Request" class="btn-brand btn-sm-info">Email Me Instead</a>
+            </div>
           </div>
         </div>
       </div>
 
-      <form id="contact-form" role="form" class="php-email-form mt-4" method="post">
+      <form id="contact-form" class="php-email-form mt-4" method="post">
+        <!-- Honeypot: hidden from humans, bots fill it and are silently ignored -->
+        <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+        </div>
         <div class="row">
           <div class="col-md-6 form-group">
             <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
@@ -1131,7 +1226,7 @@
         <div class="form-group mt-3">
           <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
         </div>
-        <div class="my-3">
+        <div class="my-3" aria-live="polite">
           <div class="loading">Loading</div>
           <div class="error-message"></div>
           <div class="sent-message">Your message has been sent. Thank you!</div>
@@ -1144,21 +1239,27 @@
 
   <!-- Vendor JS Files (deferred for faster page load) -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js" defer></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js" defer></script>
 
-  <!-- EmailJS SDK (Load BEFORE validate.js to prevent retry messages) -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+  <!-- EmailJS SDK (Self-hosted; Load BEFORE validate.js to prevent retry messages) -->
+  <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Form Validation (Depends on EmailJS, loaded after) -->
-  <script src="assets/vendor/php-email-form/validate.js" defer></script>
+  <script src="assets/vendor/php-email-form/validate.js?v=20260921" defer></script>
 
   <!-- Template Main JS Files -->
-  <script src="assets/js/particles-config.js" defer></script>
-  <script src="assets/js/progressive-enhancement.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/knowledge-base.js?v=20251023" type="module" defer></script>
-  <script src="assets/js/ai-assistant.js?v=20251023" type="module" defer></script>
+  <script src="assets/js/particles-config.js?v=20260920" defer></script>
+  <script src="assets/js/progressive-enhancement.js?v=20260920" defer></script>
+  <script src="assets/js/main.js?v=20260920" defer></script>
+  <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
+  <script type="module">
+    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20260921');
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(bootAssistant, { timeout: 4000 });
+    } else {
+      setTimeout(bootAssistant, 2000);
+    }
+  </script>
 
 </body>
 

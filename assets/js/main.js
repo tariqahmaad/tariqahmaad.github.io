@@ -68,16 +68,33 @@
   /**
    * Mobile nav toggle
    */
-  on('click', '.mobile-nav-toggle', function (e) {
-    select('#navbar').classList.toggle('navbar-mobile')
-    this.classList.toggle('bi-list')
-    this.classList.toggle('bi-x')
+  const setMobileNav = (open) => {
+    const navbar = select('#navbar');
+    const toggle = select('.mobile-nav-toggle');
+    if (!navbar || !toggle) return;
 
-    // Prevent body scrolling when menu is open
-    if (select('#navbar').classList.contains('navbar-mobile')) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    navbar.classList.toggle('navbar-mobile', open);
+    toggle.classList.toggle('bi-list', !open);
+    toggle.classList.toggle('bi-x', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  on('click', '.mobile-nav-toggle', function () {
+    setMobileNav(!select('#navbar').classList.contains('navbar-mobile'));
+  })
+
+  /**
+   * Close mobile menu with Escape key and restore focus to the toggle
+   */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    const navbar = select('#navbar');
+    if (navbar && navbar.classList.contains('navbar-mobile')) {
+      setMobileNav(false);
+      const toggle = select('.mobile-nav-toggle');
+      if (toggle) toggle.focus();
     }
   })
 
@@ -99,11 +116,7 @@
       // Close if: outside navbar AND not on toggle
       // OR clicked on social links (even though they're in navbar)
       if ((!clickedInsideNavbar && !clickedToggle) || clickedSocialLink) {
-        // Close the menu
-        navbar.classList.remove('navbar-mobile');
-        toggle.classList.remove('bi-x');
-        toggle.classList.add('bi-list');
-        document.body.style.overflow = '';
+        setMobileNav(false);
       }
     }
   })
@@ -128,11 +141,7 @@
       this.classList.add('active')
 
       if (navbar.classList.contains('navbar-mobile')) {
-        navbar.classList.remove('navbar-mobile')
-        let navbarToggle = select('.mobile-nav-toggle')
-        navbarToggle.classList.toggle('bi-list')
-        navbarToggle.classList.toggle('bi-x')
-        document.body.style.overflow = ''; // Re-enable scrolling
+        setMobileNav(false); // Also re-enables scrolling
       }
 
       if (this.hash == '#header') {
@@ -265,7 +274,7 @@
   }
 
   // Optimized typing effect for role text
-  const roles = ["Cybersecurity Analyst", "Security Consultant", "Penetration Tester", "Security Engineer", "Incident Response Specialist", "Ethical Hacker", "Computer Engineer"];
+  const roles = ["Full-Stack Developer", "Software Engineer", "Computer Engineer", "Python Developer", "React Developer"];
   const typeEffect = (() => {
     let currentRole = 0;
     let charIndex = 0;

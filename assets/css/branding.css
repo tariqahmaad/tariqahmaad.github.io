@@ -17,8 +17,6 @@
   --space-lg: 3rem;
   --space-xl: 4rem;
   
-  /* Brand-specific Effects */
-  --glow-effect: 0 0 15px rgba(15, 169, 88, 0.5);
 }
 
 /* NOTE: Base typography (h1-h6, body) is defined in style.css */
@@ -36,17 +34,6 @@
   background-color: var(--primary-color);
 }
 
-/* Icon System */
-.brand-icon {
-  fill: var(--primary-color);
-  transition: var(--transition);
-}
-
-.brand-icon:hover {
-  fill: var(--secondary-color);
-  filter: var(--glow-effect);
-}
-
 /* Modern Button System - Cyber Redesign */
 .btn-brand {
   display: inline-flex;
@@ -57,7 +44,7 @@
   overflow: hidden;
   padding: 12px 24px;
   border-radius: 4px; /* Sharper cyber look */
-  font-family: 'Space Grotesk', var(--display-font); /* Tech font preference */
+  font-family: var(--display-font); /* Space Grotesk was never loaded */
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.08em;

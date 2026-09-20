@@ -20,7 +20,7 @@
   /* Text */
   --assistant-text-primary: rgba(255, 255, 255, 0.92);
   --assistant-text-secondary: rgba(255, 255, 255, 0.6);
-  --assistant-text-muted: rgba(255, 255, 255, 0.38);
+  --assistant-text-muted: rgba(255, 255, 255, 0.6);
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

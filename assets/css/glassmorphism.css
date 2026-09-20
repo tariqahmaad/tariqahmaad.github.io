@@ -7,7 +7,7 @@
 :root {
   /* Blur Depth Levels — lower blur = closer to viewer = sharper */
   --glass-blur-sm: blur(4px);       /* Level 3: Tags, buttons, social links */
-  --glass-blur-md: blur(8px);       /* Level 2: Cards (count, skill, icon-box) */
+  --glass-blur-md: blur(8px);       /* Level 2: Cards (count, skill) */
   --glass-blur-lg: blur(12px);      /* Level 1: Large panels (testimonials) */
   --glass-blur-bg: blur(16px);      /* Level 0: Section containers (deepest) */
 
@@ -71,7 +71,7 @@
 
 /* ==========================================================================
    GLASS PROJECTS — Base Class
-   Applied to: count-card, skill-card, testimonial-item, icon-box
+   Applied to: count-card, skill-card, testimonial-item, about-info-card
    ========================================================================== */
 
 .glass-projects {
@@ -120,7 +120,6 @@
 /* Level 2: Mid-depth cards */
 .count-card.glass-projects,
 .skill-card.glass-projects,
-.icon-box.glass-projects,
 .about-info-card.glass-projects {
   backdrop-filter: var(--glass-blur-md);
   -webkit-backdrop-filter: var(--glass-blur-md);
@@ -174,7 +173,6 @@
 
 .count-card.glass-projects:hover,
 .skill-card.glass-projects:hover,
-.icon-box.glass-projects:hover,
 .about-info-card.glass-projects:hover {
   background: var(--glass-bg-hover);
   border: var(--glass-border-hover);
@@ -227,7 +225,6 @@
 
 .count-card.glass-projects .count-icon,
 .skill-card.glass-projects .skill-icon,
-.icon-box.glass-projects .icon,
 .about-info-card.glass-projects .about-info-icon {
   position: relative;
   display: inline-flex;
@@ -249,7 +246,6 @@
 
 .count-card.glass-projects:hover .count-icon,
 .skill-card.glass-projects:hover .skill-icon,
-.icon-box.glass-projects:hover .icon,
 .about-info-card.glass-projects:hover .about-info-icon {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
@@ -260,7 +256,6 @@
 
 .count-card.glass-projects .count-icon i,
 .skill-card.glass-projects .skill-icon i,
-.icon-box.glass-projects .icon i,
 .about-info-card.glass-projects .about-info-icon i {
   font-size: 1.8rem;
   color: var(--primary-color);
@@ -273,7 +268,6 @@
 
 .count-card.glass-projects:hover .count-icon i,
 .skill-card.glass-projects:hover .skill-icon i,
-.icon-box.glass-projects:hover .icon i,
 .about-info-card.glass-projects:hover .about-info-icon i {
   color: var(--primary-color-hover);
   transform: scale(1.05);
@@ -435,8 +429,7 @@
 }
 
 .count-card.glass-projects h4,
-.skill-card.glass-projects h4,
-.icon-box.glass-projects h4 {
+.skill-card.glass-projects h4 {
   font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
@@ -448,25 +441,13 @@
 }
 
 .count-card.glass-projects:hover h4,
-.skill-card.glass-projects:hover h4,
-.icon-box.glass-projects:hover h4 {
+.skill-card.glass-projects:hover h4 {
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
   transform: translateY(-1px);
 }
 
-.icon-box.glass-projects h4 a {
-  color: inherit;
-  text-decoration: none;
-  transition: var(--glass-transition-fast);
-}
-
-.icon-box.glass-projects:hover h4 a {
-  color: var(--primary-color);
-}
-
-.count-card.glass-projects .count-detail p,
-.icon-box.glass-projects p {
+.count-card.glass-projects .count-detail p {
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.95rem;
   line-height: 1.6;
@@ -477,16 +458,14 @@
   z-index: 2;
 }
 
-.count-card.glass-projects:hover .count-detail p,
-.icon-box.glass-projects:hover p {
+.count-card.glass-projects:hover .count-detail p {
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* ── Tech Tags (Level 3 blur — smallest elements) ── */
 
-.skill-card.glass-projects .skill-tags,
-.icon-box.glass-projects .tech-tags {
+.skill-card.glass-projects .skill-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -495,8 +474,7 @@
   z-index: 2;
 }
 
-.skill-card.glass-projects .tech-tag,
-.icon-box.glass-projects .tech-tag {
+.skill-card.glass-projects .tech-tag {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
@@ -511,47 +489,10 @@
   font-weight: 500;
 }
 
-.skill-card.glass-projects:hover .tech-tag,
-.icon-box.glass-projects:hover .tech-tag {
+.skill-card.glass-projects:hover .tech-tag {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.25), rgba(var(--primary-brand-rgb), 0.15));
   border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
   box-shadow: 0 4px 12px rgba(var(--primary-brand-rgb), 0.2);
-  color: var(--primary-color-hover);
-}
-
-/* ── Action Buttons (Level 3 blur) ── */
-
-.icon-box.glass-projects .project-actions {
-  display: flex;
-  gap: 0.8rem;
-  margin-top: 1rem;
-  position: relative;
-  z-index: 2;
-}
-
-.icon-box.glass-projects .action-btn {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1));
-  backdrop-filter: var(--glass-blur-sm);
-  -webkit-backdrop-filter: var(--glass-blur-sm);
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
-  border-radius: 20px;
-  padding: 0.6rem 1.2rem;
-  color: var(--primary-color);
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: var(--glass-transition-fast);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.icon-box.glass-projects .action-btn:hover {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  box-shadow: 0 6px 20px rgba(var(--primary-brand-rgb), 0.2);
   color: var(--primary-color-hover);
 }
 
@@ -762,8 +703,7 @@
     transform: translateY(-1px);
   }
 
-  .skill-card.glass-projects .skill-tags,
-  .icon-box.glass-projects .tech-tags {
+  .skill-card.glass-projects .skill-tags {
     gap: 0.3rem;
   }
 
@@ -933,6 +873,12 @@
   .glass-projects::after,
   .glass-projects .light-reflection {
     display: none !important;
+  }
+
+  /* Hover-revealed content must be visible on touch devices */
+  .count-card .count-detail {
+    max-height: none;
+    opacity: 1;
   }
 }
 

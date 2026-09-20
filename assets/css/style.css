@@ -27,8 +27,29 @@ body {
   color: var(--text-color);
   position: relative;
   background: transparent;
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For IE and Edge */
+}
+
+/* Slim themed scrollbar (keeps scroll-position feedback) */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(24, 210, 110, 0.35) rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(24, 210, 110, 0.35);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(24, 210, 110, 0.55);
 }
 
 body::before {
@@ -47,11 +68,6 @@ body::before {
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-}
-
-/* Hide scrollbar */
-::-webkit-scrollbar {
-  display: none;
 }
 
 /* Typography */
@@ -239,7 +255,7 @@ a:hover {
     font-size: 70px !important;
   }
 
-  #header h2 #role {
+  #header .role-h2 #role {
     border-bottom: none;
     padding-bottom: 0;
   }
@@ -254,9 +270,8 @@ a:hover {
     white-space: nowrap !important;
   }
 
-  #header.header-top img {
-    max-height: 50px !important;
-  }
+}
+
 /* iPad-specific fixes for background attachment */
 @media only screen
   and (min-device-width: 768px)
@@ -321,7 +336,6 @@ a:hover {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
   }
-}
 }
 
 /* Animations */
@@ -401,11 +415,11 @@ a:hover {
   transition: color 0.6s ease, text-shadow 0.6s ease;
 }
 
-#header h2 #role.typing {
+#header .header-subtitle #role.typing {
   animation: textGlow 2s infinite;
 }
 
-#header h2 #role.completed {
+#header .header-subtitle #role.completed {
   animation: completedGlow 3s infinite;
 }
 
@@ -435,7 +449,7 @@ a:hover {
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--primary-color);
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif; /* Raleway: Poppins was never loaded */
   animation: fadeInUp 0.6s ease forwards;
   text-shadow: 0 2px 4px rgba(24, 210, 110, 0.3);
 }
@@ -455,7 +469,7 @@ a:hover {
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif; /* Raleway: Poppins was never loaded */
   color: rgba(255, 255, 255, 0.85);
   animation: fadeInUp 0.6s ease forwards;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -556,65 +570,6 @@ a:hover {
   }
 }
 
-/* Common card styling */
-.card-base {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 30px 20px;
-  text-align: center;
-  height: 100%;
-  border: var(--card-border);
-  transition: var(--transition);
-  box-shadow: var(--card-shadow);
-  overflow: hidden;
-  position: relative;
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
-}
-
-.card-base:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--card-hover-shadow);
-  background: var(--card-hover-bg);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.card-base:before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-  transform: scaleX(0);
-  transform-origin: bottom right;
-  transition: transform 0.5s ease-out;
-}
-
-.card-base:hover:before {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-.card-icon {
-  margin-bottom: 15px;
-  display: inline-block;
-}
-
-.card-icon i {
-  font-size: 2.5rem;
-  color: var(--primary-color);
-  transition: var(--transition);
-}
-
-.card-base:hover .card-icon i,
-.card-base:hover h4,
-.card-base:hover p {
-  transform: scale(1.2);
-  color: #000;
-}
-
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
@@ -636,7 +591,6 @@ a:hover {
 #header h1,
 #header h1 a,
 #header h1 .stylish-name,
-#header img,
 #header .ri-code-s-slash-fill,
 #header .social-links,
 #header .social-links a {
@@ -649,7 +603,7 @@ a:hover {
   padding: 0;
   line-height: 1;
   font-weight: 700;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif; /* Raleway: Poppins was never loaded */
 }
 
 #header h1 a,
@@ -659,7 +613,7 @@ a:hover {
   display: inline-block;
 }
 
-#header h2 {
+#header .header-subtitle {
   font-size: 24px;
   margin-top: 20px;
   color: rgba(255, 255, 255, 0.8);
@@ -701,22 +655,18 @@ a:hover {
   }
 }
 
-#header h2 span {
+#header .header-subtitle span {
   color: #fff;
   border-bottom: 2px solid var(--primary-color);
   padding-bottom: 6px;
 }
 
 /* Override for #role to prevent it from inheriting span styling */
-#header h2 #role {
+#header .header-subtitle #role {
   border-bottom: none;
   padding-bottom: 0;
 }
 
-#header img {
-  padding: 0;
-  margin: 0;
-}
 
 #header .social-links {
   margin-top: 40px;
@@ -746,7 +696,7 @@ a:hover {
     font-size: 36px;
   }
 
-  #header h2 {
+  #header .header-subtitle {
     font-size: 18px;
     line-height: 30px;
   }
@@ -774,7 +724,7 @@ a:hover {
 }
 
 #header.header-top .social-links,
-#header.header-top h2 {
+#header.header-top .header-subtitle {
   display: none;
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -799,11 +749,6 @@ a:hover {
   transition: none !important;
 }
 
-#header.header-top img {
-  max-height: 60px;
-  margin-right: 20px !important;
-  transition: none;
-}
 
 #header.header-top .container {
   display: flex;
@@ -861,7 +806,7 @@ a:hover {
   }
 
   /* Adjust spacing for proper positioning */
-  #header h2 {
+  #header .header-subtitle {
     margin-bottom: 5px;
   }
 }
@@ -875,11 +820,6 @@ a:hover {
     width: 100%;
   }
 
-  #header.header-top img {
-    max-height: 42px !important;
-    margin-right: 10px !important;
-    margin-top: 2px;
-  }
 
   #header.header-top h1 {
     font-size: 18px !important;
@@ -909,11 +849,6 @@ a:hover {
     width: 100%;
   }
 
-  #header.header-top img {
-    max-height: 38px !important;
-    margin-right: 8px !important;
-    margin-top: 2px;
-  }
 
   #header.header-top h1 {
     font-size: 16px !important;
@@ -950,15 +885,6 @@ a:hover {
     width: 100%;
   }
 
-  #header.header-top img {
-    order: -1;
-    max-height: 50px;
-    margin-right: 12px;
-    margin-top: 3px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-  }
 
   #header.header-top h1 {
     font-size: 22px;
@@ -998,15 +924,6 @@ a:hover {
     width: 100%;
   }
 
-  #header.header-top img {
-    order: -1;
-    max-height: 55px;
-    margin-right: 15px;
-    margin-top: 3px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-  }
 
   #header.header-top h1 {
     font-size: 24px;
@@ -1062,7 +979,7 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   padding: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif; /* Raleway: Poppins was never loaded */
   font-size: 16px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.7);
@@ -1193,6 +1110,16 @@ a:hover {
   z-index: 9999;
   transform: translateZ(0);
   will-change: transform, color;
+  /* button element resets */
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+}
+
+.mobile-nav-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
 }
 
 .mobile-nav-toggle.bi-x {
@@ -1342,8 +1269,8 @@ a:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   transition: 0.3s;
   border: none;
   padding: 0;
@@ -1423,7 +1350,9 @@ a:hover {
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
-section {
+/* Sections are hidden SPA-style only when JS is available;
+   without JS they render in normal flow below the header. */
+html.js section {
   overflow: hidden;
   position: absolute;
   width: 100%;
@@ -1434,7 +1363,7 @@ section {
   z-index: 2;
 }
 
-section.section-show {
+html.js section.section-show {
   top: 100px;
   bottom: auto;
   opacity: 1;
@@ -1762,17 +1691,6 @@ section .container {
   color: #000; /* Change tag text to black when card is hovered */
 }
 
-#toggle-skills-view {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  transition: all 0.3s;
-}
-
-#toggle-skills-view:hover {
-  background-color: var(--primary-color);
-  color: #fff;
-}
-
 /* Animation for skill cards */
 .skills-modern .skill-card {
   animation: fadeInUp 0.6s ease-out forwards;
@@ -1829,7 +1747,7 @@ section .container {
 .testimonials .testimonial-item h4 {
   font-size: 0.8rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.65);
   margin: 0;
   font-style: italic;
   letter-spacing: 0.3px;
@@ -1928,7 +1846,7 @@ section .container {
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif; /* Raleway: Poppins was never loaded */
   color: var(--primary-color);
   margin-bottom: 10px;
 }
@@ -1967,11 +1885,11 @@ section .container {
 }
 
 /* Resume Download Button Styles */
-.download-cv-btn {
-  display: flex;
-  justify-content: flex-start;
+/* Compact button inside contact info-boxes */
+.btn-sm-info {
+  padding: 8px 16px;
+  font-size: 0.8rem;
   margin-top: 10px;
-  margin-bottom: 30px;
 }
 
 /* ==========================================================================
@@ -2030,12 +1948,24 @@ section .container {
   mix-blend-mode: overlay;
 }
 
-.contact .info-box i.bx {
+.contact .info-box p a {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.contact .info-box > i.bx,
+.contact .info-box > i.bi {
   grid-row: 1 / span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   font-size: 24px;
+  line-height: 1;
   color: var(--primary-color);
   border-radius: 50%;
-  padding: 14px;
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1));
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
@@ -2044,6 +1974,10 @@ section .container {
   transition: var(--glass-transition-fast);
   z-index: 2;
   position: relative;
+}
+
+.contact .info-box > i.bi {
+  font-size: 27px;
 }
 
 .contact .info-box h3 {
@@ -2094,7 +2028,8 @@ section .container {
   transform: translateY(-1px);
 }
 
-.contact .info-box:hover i.bx {
+.contact .info-box:hover i.bx,
+.contact .info-box:hover > i.bi {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2));
   border-color: rgba(var(--primary-brand-rgb), 0.5);
   box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.3);
@@ -2216,13 +2151,13 @@ section .container {
 
 .contact .php-email-form input::-moz-placeholder,
 .contact .php-email-form textarea::-moz-placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   opacity: 1;
 }
 
 .contact .php-email-form input::placeholder,
 .contact .php-email-form textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   opacity: 1;
 }
 
@@ -2276,7 +2211,8 @@ section .container {
     display: none !important;
   }
 
-  .contact .info-box i.bx {
+  .contact .info-box > i.bx,
+  .contact .info-box > i.bi {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
@@ -2318,38 +2254,6 @@ section .container {
     padding: 14px 18px;
     font-size: 0.85rem;
   }
-}
-
-/*--------------------------------------------------------------
-# Credits
---------------------------------------------------------------*/
-.credits {
-  position: fixed;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  padding: 15px;
-  text-align: right;
-  font-size: 13px;
-  color: #fff;
-  z-index: 999999;
-}
-
-@media (max-width: 992px) {
-  .credits {
-    text-align: center;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.8);
-  }
-}
-
-.credits a {
-  color: var(--primary-color);
-  transition: 0.3s;
-}
-
-.credits a:hover {
-  color: #fff;
 }
 
 @media (min-width: 992px) {

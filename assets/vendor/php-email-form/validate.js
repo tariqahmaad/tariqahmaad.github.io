@@ -1,54 +1,54 @@
 /**
-* EmailJS Contact Form Validation - v5.0
-* Clean version for EmailJS integration
+* EmailJS Contact Form Handling - v5.1
+* - Validates input client-side
+* - Honeypot spam trap (hidden "website" field)
+* - Graceful fallback when the EmailJS CDN is unavailable
+* - No visitor form data logged to the console
 */
 (function () {
   "use strict";
 
+  var RETRY_LIMIT = 20; // ~2s of retries before giving up on the CDN
+
   // Wait for EmailJS to be loaded, then initialize
-  function initEmailJS() {
+  function initEmailJS(attempt) {
+    attempt = attempt || 0;
     if (typeof emailjs !== 'undefined') {
       emailjs.init({
         publicKey: "4aq1DyE-SO5ZA9z08",
       });
-      console.log('EmailJS initialized successfully');
-    } else {
-      console.error('EmailJS library is not loaded yet, retrying in 100ms...');
-      setTimeout(initEmailJS, 100);
+    } else if (attempt < RETRY_LIMIT) {
+      setTimeout(function () { initEmailJS(attempt + 1); }, 100);
     }
+    // If the CDN never loads, the submit handler below shows a mailto fallback.
   }
 
   // Start initialization
   initEmailJS();
 
   // Wait for DOM to be fully loaded
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check if EmailJS is loaded before proceeding
-    if (typeof emailjs === 'undefined') {
-      console.error('EmailJS library is not loaded! Please check the CDN link.');
-      return;
-    }
+  document.addEventListener('DOMContentLoaded', function () {
+    var forms = document.querySelectorAll('.php-email-form');
 
-    console.log('EmailJS library is loaded, setting up form handlers...');
-
-    let forms = document.querySelectorAll('.php-email-form');
-    console.log('Found forms:', forms.length);
-
-    forms.forEach( function(e) {
-      console.log('Attaching event listener to form:', e.id);
-      e.addEventListener('submit', function(event) {
-        console.log('Form submitted!', e.id);
+    forms.forEach(function (e) {
+      e.addEventListener('submit', function (event) {
         // Always prevent default form submission
         event.preventDefault();
         event.stopPropagation();
 
-        let thisForm = this;
+        var thisForm = this;
 
-        // Check if this is EmailJS form (has id="contact-form")
+        // Honeypot: real users never see or fill the hidden "website" field.
+        // Pretend success so bots move on without sending anything.
+        var honeypot = thisForm.querySelector('input[name="website"]');
+        if (honeypot && honeypot.value) {
+          thisForm.reset();
+          thisForm.querySelector('.sent-message').classList.add('d-block');
+          return;
+        }
+
         if (thisForm.id === 'contact-form') {
-          console.log('Handling EmailJS submission');
           emailjs_submit(thisForm);
-          return false;
         }
       });
     });
@@ -104,10 +104,33 @@
       displayError(thisForm, validation.error);
       return;
     }
-    console.log('Starting EmailJS submission...');
+
+    // EmailJS SDK failed to load (blocked CDN, offline, etc.) — show a
+    // usable fallback instead of dying silently.
+    if (typeof emailjs === 'undefined') {
+      displayError(thisForm,
+        'The messaging service could not be loaded. Please email ' +
+        '<a href="mailto:me@tariqahmad.dev">me@tariqahmad.dev</a> directly.');
+      return;
+    }
+
     thisForm.querySelector('.loading').classList.add('d-block');
     thisForm.querySelector('.error-message').classList.remove('d-block');
     thisForm.querySelector('.sent-message').classList.remove('d-block');
+
+    // Prevent double submissions while a message is being sent
+    const submitBtn = thisForm.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.dataset.originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+    }
+    const restoreBtn = function () {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.originalText || 'Send Message';
+      }
+    };
 
     // Get form data
     const name = thisForm.querySelector('#name').value;
@@ -116,31 +139,28 @@
     const messageElem = thisForm.querySelector('#message') || thisForm.querySelector('textarea[name="message"]');
     const message = messageElem ? messageElem.value : '';
 
-    console.log('Form data:', { name, email, subject, message });
-
     // Prepare template parameters (matching your EmailJS template)
     const templateParams = {
       name: name,
       email: email,
       title: subject,
       message: message,
-      to_email: 'tariq_muzamil@live.com'
+      to_email: 'me@tariqahmad.dev'
     };
-
-    console.log('Sending email via EmailJS...', { serviceID: 'portfolio-contact-form', templateID: 'template_nivqe7n' });
 
     // Send email using EmailJS
     emailjs.send('portfolio-contact-form', 'template_nivqe7n', templateParams)
       .then((response) => {
-        console.log('EmailJS success:', response);
         thisForm.querySelector('.loading').classList.remove('d-block');
         thisForm.querySelector('.sent-message').classList.add('d-block');
         thisForm.reset();
+        restoreBtn();
       })
       .catch((error) => {
-        console.error('EmailJS error details:', error);
         thisForm.querySelector('.loading').classList.remove('d-block');
-        displayError(thisForm, 'Failed to send message. Please try again later.');
+        displayError(thisForm, 'Failed to send message. Please try again later, or email ' +
+          '<a href="mailto:me@tariqahmad.dev">me@tariqahmad.dev</a> directly.');
+        restoreBtn();
       });
   }
 

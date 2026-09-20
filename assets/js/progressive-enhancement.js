@@ -1,6 +1,11 @@
 /**
  * Progressive Enhancement Utility
- * Adapts UI and features based on device capabilities
+ * Adapts UI to user preferences (reduced motion, high contrast).
+ *
+ * Note: the old performance-metrics machinery (performanceUpdate listener,
+ * deferNonCriticalFeatures re-injecting the ai-assistant script, particle
+ * reduction events) was removed — none of its events were ever dispatched,
+ * and the script re-injection could double-construct the assistant.
  */
 
 class ProgressiveEnhancement {
@@ -14,45 +19,11 @@ class ProgressiveEnhancement {
             chatAnimations: true
         };
 
-        this.init();
-    }
-
-    init() {
-        // Listen for performance updates
-        window.addEventListener('performanceUpdate', (event) => {
-            this.adaptToPerformance(event.detail);
-        });
-
-        // Check for user preferences
         this.checkUserPreferences();
     }
 
     /**
-     * Adapt features based on performance metrics
-     */
-    adaptToPerformance(metrics) {
-        const recommendations = metrics.recommendations || [];
-
-        // Disable features based on performance
-        if (recommendations.includes('low-end-device') || recommendations.includes('low-fps')) {
-            this.disableAnimations();
-            this.reduceParticles();
-            this.disableBlurEffects();
-            this.reduceShadows();
-            this.simplifyTransitions();
-        }
-
-        if (recommendations.includes('slow-connection')) {
-            this.deferNonCriticalFeatures();
-        }
-
-        if (recommendations.includes('high-memory')) {
-            this.optimizeMemoryUsage();
-        }
-    }
-
-    /**
-     * Check user preferences (reduced motion, etc.)
+     * Check user preferences (reduced motion, high contrast)
      */
     checkUserPreferences() {
         // Check for reduced motion preference
@@ -68,13 +39,12 @@ class ProgressiveEnhancement {
     }
 
     /**
-     * Disable animations for better performance
+     * Disable animations for better accessibility/performance
      */
     disableAnimations() {
         this.enhancements.animations = false;
         this.enhancements.chatAnimations = false;
 
-        // Add CSS to disable animations
         const style = document.createElement('style');
         style.id = 'disable-animations';
         style.textContent = `
@@ -85,56 +55,6 @@ class ProgressiveEnhancement {
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Reduce particle count for better performance
-     */
-    reduceParticles() {
-        this.enhancements.particles = false;
-
-        // Dispatch event for particles config to listen
-        window.dispatchEvent(new CustomEvent('reduceParticles'));
-    }
-
-    /**
-     * Disable blur effects for better performance
-     */
-    disableBlurEffects() {
-        this.enhancements.blurEffects = false;
-
-        const style = document.createElement('style');
-        style.id = 'disable-blur';
-        style.textContent = `
-            .chat-widget,
-            .message-content,
-            .input-container,
-            .quick-actions {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Reduce shadow effects for better performance
-     */
-    reduceShadows() {
-        this.enhancements.shadows = false;
-
-        const style = document.createElement('style');
-        style.id = 'reduce-shadows';
-        style.textContent = `
-            .chat-widget,
-            .chat-fab,
-            .message-content,
-            .send-btn,
-            .control-btn {
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             }
         `;
         document.head.appendChild(style);
@@ -156,54 +76,6 @@ class ProgressiveEnhancement {
             .control-btn,
             .quick-action {
                 transition: opacity 0.2s ease, transform 0.2s ease !important;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Defer non-critical features on slow connections
-     */
-    deferNonCriticalFeatures() {
-        // Defer particles initialization
-        setTimeout(() => {
-            if (typeof particlesJS !== 'undefined') {
-                window.dispatchEvent(new CustomEvent('initParticles'));
-            }
-        }, 2000);
-
-        // Defer AI assistant initialization
-        const assistantScript = document.querySelector('script[src*="ai-assistant"]');
-        if (assistantScript && assistantScript.getAttribute('data-defer') !== 'true') {
-            assistantScript.setAttribute('data-defer', 'true');
-            // Re-initialize with defer attribute
-            const newScript = document.createElement('script');
-            newScript.src = assistantScript.src;
-            newScript.defer = true;
-            assistantScript.parentNode.replaceChild(newScript, assistantScript);
-        }
-    }
-
-    /**
-     * Optimize memory usage
-     */
-    optimizeMemoryUsage() {
-        // Clear chat history periodically
-        if (window.aiAssistant) {
-            setInterval(() => {
-                if (window.aiAssistant.messageHistory.length > 50) {
-                    window.aiAssistant.messageHistory = window.aiAssistant.messageHistory.slice(-50);
-                }
-            }, 30000);
-        }
-
-        // Reduce image quality
-        const style = document.createElement('style');
-        style.id = 'optimize-memory';
-        style.textContent = `
-            img {
-                image-rendering: optimizeSpeed;
-                image-rendering: -webkit-optimize-contrast;
             }
         `;
         document.head.appendChild(style);
