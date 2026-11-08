@@ -19,21 +19,6 @@
   
 }
 
-/* NOTE: Base typography (h1-h6, body) is defined in style.css */
-
-/* Brand Colors */
-.brand-primary {
-  color: var(--primary-color);
-}
-
-.brand-secondary {
-  color: var(--secondary-color);
-}
-
-.bg-brand-primary {
-  background-color: var(--primary-color);
-}
-
 /* Modern Button System - Cyber Redesign */
 .btn-brand {
   display: inline-flex;
@@ -285,8 +270,7 @@
   }
 
   /* Tap state for mobile */
-  .btn-brand:active,
-  .btn-brand:focus {
+  .btn-brand:active {
     transform: scale(0.96);
     background: rgba(24, 210, 110, 0.15);
     box-shadow:
@@ -295,8 +279,7 @@
       inset 0 -1px 0 rgba(255, 255, 255, 0.04);
   }
 
-  .btn-brand.btn-cv:active,
-  .btn-brand.btn-cv:focus {
+  .btn-brand.btn-cv:active {
     background: rgba(255, 255, 255, 0.1);
     border-color: #fff;
     box-shadow:
@@ -596,4 +579,19 @@
     transition-duration: 0.01ms !important;
     transform: none !important;
   }
+}
+
+/*--------------------------------------------------------------
+# Keyboard focus (all interactive elements)
+# :where() keeps specificity at zero so components can still refine it.
+--------------------------------------------------------------*/
+:where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* Elements sitting on dark/green glass need a light ring to stay visible */
+:where(.btn-brand, .btn-hire, .action-btn, .glass-btn, .glass-social a, .project-tile a):focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 6px rgba(var(--primary-brand-rgb), 0.45);
 }

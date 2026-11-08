@@ -55,7 +55,7 @@
   </noscript>
 
   <!-- Critical CSS: Bootstrap for layout -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20261108" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20261108b" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
   <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style"
@@ -132,26 +132,26 @@
     }
   </style>
     <!-- Main CSS: Critical for instant styling -->
-  <link href="assets/css/style.min.css?v=20261108" rel="stylesheet">
-  <link href="assets/css/branding.min.css?v=20261108" rel="stylesheet">
-  <link href="assets/css/glassmorphism.min.css?v=20261108" rel="stylesheet">
+  <link href="assets/css/style.min.css?v=20261108b" rel="stylesheet">
+  <link href="assets/css/branding.min.css?v=20261108b" rel="stylesheet">
+  <link href="assets/css/glassmorphism.min.css?v=20261108b" rel="stylesheet">
 
   <!-- Non-Critical CSS: Below-fold content and visual effects (async) -->
 
-  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20261108" as="style"
+  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20261108b" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/testimonials-professional.min.css?v=20261108" rel="stylesheet">
+    <link href="assets/css/testimonials-professional.min.css?v=20261108b" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/projects-custom.min.css?v=20261108" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/projects-custom.min.css?v=20261108b" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/projects-custom.min.css?v=20261108" rel="stylesheet">
+    <link href="assets/css/projects-custom.min.css?v=20261108b" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20261108" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20261108b" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/ai-assistant.min.css?v=20261108" rel="stylesheet">
+    <link href="assets/css/ai-assistant.min.css?v=20261108b" rel="stylesheet">
   </noscript>
 
   <!-- CSS Preload Polyfill for older browsers -->
@@ -1337,15 +1337,15 @@
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Form Validation (Depends on EmailJS, loaded after) -->
-  <script src="assets/vendor/php-email-form/validate.js?v=20261108" defer></script>
+  <script src="assets/vendor/php-email-form/validate.js?v=20261108b" defer></script>
 
   <!-- Template Main JS Files -->
-  <script src="assets/js/particles-config.js?v=20261108" defer></script>
-  <script src="assets/js/progressive-enhancement.js?v=20261108" defer></script>
-  <script src="assets/js/main.js?v=20261108" defer></script>
+  <script src="assets/js/particles-config.js?v=20261108b" defer></script>
+  <script src="assets/js/progressive-enhancement.js?v=20261108b" defer></script>
+  <script src="assets/js/main.js?v=20261108b" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
-    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20261108');
+    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20261108b');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

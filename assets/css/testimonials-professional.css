@@ -154,38 +154,6 @@
   box-shadow: 0 4px 20px rgba(var(--primary-brand-rgb), 0.15);
 }
 
-/* ── Monogram avatar — initials in a brand-green ring ── */
-.testimonials .testimonial-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--display-font);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #fff;
-  background: linear-gradient(
-    135deg,
-    rgba(var(--primary-brand-rgb), 0.38),
-    rgba(var(--primary-brand-rgb), 0.12)
-  );
-  border: 2px solid rgba(var(--primary-brand-rgb), 0.45);
-  box-shadow: var(--glass-shadow-sm);
-  margin: 0 0 var(--space-xs, 0.5rem) 0;
-  position: relative;
-  z-index: 3;
-  transition: var(--glass-transition);
-  user-select: none;
-}
-
-.testimonials .testimonial-item:hover .testimonial-avatar {
-  border-color: rgba(var(--primary-brand-rgb), 0.8);
-  box-shadow: 0 4px 20px rgba(var(--primary-brand-rgb), 0.25);
-}
-
 /* ── Name and role — uses site typography vars ── */
 .testimonials .testimonial-info {
   text-align: center;

@@ -667,7 +667,6 @@ a:hover {
   padding-bottom: 0;
 }
 
-
 #header .social-links {
   margin-top: 40px;
   display: flex;
@@ -749,7 +748,6 @@ a:hover {
   transition: none !important;
 }
 
-
 #header.header-top .container {
   display: flex;
   align-items: center;
@@ -820,7 +818,6 @@ a:hover {
     width: 100%;
   }
 
-
   #header.header-top h1 {
     font-size: 18px !important;
     margin: 0;
@@ -848,7 +845,6 @@ a:hover {
     max-width: 100%;
     width: 100%;
   }
-
 
   #header.header-top h1 {
     font-size: 16px !important;
@@ -884,7 +880,6 @@ a:hover {
     max-width: 100%;
     width: 100%;
   }
-
 
   #header.header-top h1 {
     font-size: 22px;
@@ -923,7 +918,6 @@ a:hover {
     max-width: 100%;
     width: 100%;
   }
-
 
   #header.header-top h1 {
     font-size: 24px;
@@ -2187,10 +2181,10 @@ section .container {
 .contact .php-email-form input:focus,
 .contact .php-email-form textarea:focus {
   background-color: rgba(255, 255, 255, 0.07);
-  border-color: rgba(var(--primary-brand-rgb), 0.35);
+  border-color: var(--primary-color);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
-              0 0 0 3px rgba(var(--primary-brand-rgb), 0.08);
-  outline: none;
+              0 0 0 3px rgba(var(--primary-brand-rgb), 0.55);
+  outline: 2px solid transparent; /* keeps a visible ring in forced-colors mode */
 }
 
 .contact .php-email-form input::-moz-placeholder,
@@ -2220,7 +2214,6 @@ section .container {
   padding: 14px 18px;
   margin-top: 10px;
 }
-
 
 @keyframes animate-loading {
   0% {
@@ -2391,7 +2384,6 @@ section .container {
    ACCESSIBILITY: REDUCED MOTION
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .card-base,
   .count-card,
   .skill-card,
   .about-info-card,
@@ -2407,12 +2399,25 @@ section .container {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
-
-  .card-base:hover,
   .count-card:hover,
   .skill-card:hover,
   .about-info-card:hover,
   .contact .info-box:hover {
     transform: none !important;
+  }
+}
+
+/*--------------------------------------------------------------
+# Reduced motion (global safety net)
+# Kept in the main stylesheet so it applies before async CSS loads.
+--------------------------------------------------------------*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
