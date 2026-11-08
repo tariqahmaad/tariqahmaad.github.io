@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://tariqahmaad.github.io/</loc>
-    <lastmod>2026-09-19</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-11-08</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/og-image.jpg</image:loc>
+      <image:title>Tariq Ahmad portfolio preview</image:title>
+      <image:caption>Social preview image for the portfolio of Tariq Ahmad</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/me.jpg</image:loc>
+      <image:title>Tariq Ahmad - Computer Engineer</image:title>
+      <image:caption>Professional photo of Tariq Ahmad, Computer Engineer</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-1.jpg</image:loc>
+      <image:title>Professional Testimonial 1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-2.jpg</image:loc>
+      <image:title>Professional Testimonial 2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-3.jpg</image:loc>
+      <image:title>Professional Testimonial 3</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-4.jpg</image:loc>
+      <image:title>Professional Testimonial 4</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-5.jpg</image:loc>
+      <image:title>Professional Testimonial 5</image:title>
+    </image:image>
   </url>
 </urlset>

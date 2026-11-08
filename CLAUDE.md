@@ -1,0 +1,156 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is a **static HTML/CSS/JavaScript single-page portfolio website** for Tariq Ahmad, a Computer Engineer and Full-Stack Developer. The site showcases projects, skills, and experience, and includes a rule-based AI assistant chat widget.
+
+**Live URL**: https://tariqahmaad.github.io/
+
+## Development
+
+This is a **static website** with no build tools, package manager, or minified assets. Edit files directly and view changes by serving via a local HTTP server (opening `index.html` via `file://` breaks ES modules).
+
+### Local Development
+
+```bash
+# Simple HTTP server (Python 3)
+python -m http.server 8000
+
+# Or using Node.js http-server
+npx http-server -p 8000
+```
+
+Then visit http://localhost:8000
+
+### Performance Characteristics
+
+- **Critical CSS**: Inlined in `<style>` tags for faster LCP
+- **Font Preloading**: Google Fonts loaded asynchronously with preload
+- **Non-critical CSS**: Loaded asynchronously to prevent render-blocking
+- **Minified CSS ships, sources stay editable**: index.html references `*.min.css`; edit the source `.css` files then run `bash scripts/minify.sh` (esbuild via npx) and bump the `?v=` version in index.html
+- **Bootstrap is SUBSETTED**: `bootstrap.subset.min.css` (~32KB of the original 233KB) contains only the Bootstrap classes used by index.html. Regenerate with `python scripts/bootstrap-subset.py` after adding new Bootstrap classes, then re-minify.
+- **AI assistant is lazy-loaded**: an inline module imports `ai-assistant.js` on `requestIdleCallback` (4s cap). Its init uses `document.readyState` — safe for lazy loading. The knowledge-base module is imported by ai-assistant.js only; do NOT add a separate script tag for it (it would load twice).
+- **Icon fonts are SUBSETTED**: the three icon fonts contain only the glyphs actually used (~9KB total instead of ~400KB). If you add a new `bi-*`, `bx-*`/`bxs-*`, or `ri-*` icon class, regenerate the subsets with fontTools.subset (add the glyph's codepoint from the vendor CSS to the `--unicodes` list and re-run pyftsubset on the .woff2/.woff files in place) or the icon will render as tofu.
+- **No CDN JavaScript**: particles.js and the EmailJS SDK are self-hosted in `assets/vendor/`
+- **Particle Optimization**: Device-adaptive particle count (mobile: 30, tablet: 25, desktop: 85), skipped entirely under `prefers-reduced-motion`
+- **Favicons**: root `favicon.ico` (multi-size) + 32px `favicon.png` + 180px `apple-touch-icon.png`; `og-image.jpg` is 1200×630
+
+## Architecture
+
+### Directory Structure
+
+```
+/
+├── index.html                    # Entire single-page site (all sections + JSON-LD)
+├── assets/
+│   ├── css/                      # Stylesheets (all loaded by index.html)
+│   │   ├── style.css             # Main styles
+│   │   ├── ai-assistant.css      # AI chat widget styles
+│   │   ├── glassmorphism.css     # Glass card system (glass-projects, glass-social, glass-btn)
+│   │   ├── branding.css          # Design tokens and brand buttons
+│   │   ├── projects-custom.css   # Project tile styles
+│   │   └── testimonials-professional.css
+│   ├── js/                       # JavaScript files
+│   │   ├── main.js               # Core functionality (nav, typing effect, scroll)
+│   │   ├── ai-assistant.js       # AI chat assistant (ES module, ~3.5k lines)
+│   │   ├── knowledge-base.js     # Portfolio data for AI assistant (ES module)
+│   │   ├── particles-config.js   # Particles.js initialization
+│   │   └── progressive-enhancement.js
+│   ├── img/                      # Images (favicon, bg.jpg, me.jpg)
+│   └── vendor/                   # Third-party libraries
+│       ├── bootstrap/            # Bootstrap CSS framework
+│       ├── boxicons/             # Icon font
+│       ├── remixicon/            # Icon font
+│       ├── bootstrap-icons/      # Icon font
+│       ├── swiper/               # References slider
+│       ├── purecounter/          # Counter animation
+│       └── php-email-form/       # validate.js — contact form handler (EmailJS)
+├── robots.txt / sitemap.xml / images.xml   # SEO files (domain: tariqahmaad.github.io)
+└── .htaccess                     # Apache config — INERT on GitHub Pages
+```
+
+There is **no `projects/` directory** — all project info lives in the index.html projects section.
+
+### Key Components
+
+#### 1. Single-page SPA-style navigation
+- `<html class="js">` is set by an inline head script; CSS hides `section`s (SPA-style) **only** under `html.js`, so the page renders fully without JavaScript
+- `main.js` shows/hides sections via `.section-show` and toggles `#header.header-top`
+
+#### 2. AI Assistant (`assets/js/ai-assistant.js`)
+- Rule-based chat widget (keyword/intent matching, fuzzy matching with Levenshtein distance, typo correction with word-boundary regexes)
+- ES module importing from `knowledge-base.js`
+- Modal dialog: `aria-modal`, Escape-to-close, Tab focus trap, focus restore to FAB on close
+- Knowledge base contains personal info, skills, experience, projects, certifications
+
+#### 3. Contact form (`assets/vendor/php-email-form/validate.js`)
+- EmailJS integration (service `portfolio-contact-form`, template `template_nivqe7n`)
+- Honeypot field (`website`) — bots that fill it get a fake success
+- Mailto fallback error if the EmailJS CDN fails to load
+- No visitor form data is logged to the console
+
+#### 4. Hero typing effect (`assets/js/main.js`)
+- Matrix-style decode/glitch typing for the role rotator (`roles` array)
+- Static fallback role text is embedded in the HTML `<span id="role">` for no-JS visitors
+- Reduced-motion users get a plain text cycle instead of the animation
+
+### Branding Rules
+
+- Career positioning: **Full-Stack Developer / Software Engineer / Computer Engineer** (hero rotator, title tag, About must agree — no security-focused titles)
+- **Location privacy (2026-09-20)**: the contact page has no address — its first box is "Work Availability" (remote/on-site). The chatbot's `personal.location` is "Details available on request" and the JSON-LD has no PostalAddress. NOTE: the About section's Location card, resume entry cities, and `alumniOf` still mention Istanbul — those are credentials the owner chose to keep; ask before scrubbing them.
+- Social presence: **LinkedIn + GitHub only** — X/Twitter, Facebook, and Instagram profiles are removed from the site, structured data, and chatbot (do not re-add). The twitter:card meta tags stay: they control link previews, not a profile link.
+- References section shows quotes with photos + "Full references available upon request"
+- **Contact privacy**: phone number is NOT published anywhere (site or chatbot) — the contact box shows "Prefer to Talk?" with an "Email Me Instead" mailto button. The public email is **me@tariqahmad.dev** (hero Hire Me, contact box, form to_email, chatbot knowledge base). Do not reintroduce the old address or phone.
+- Structured data (JSON-LD) is **inline** in index.html; keep `numberOfItems` in sync with the ItemList
+
+## Common Tasks
+
+### Adding a New Project
+
+1. Add a `.project-tile` block in the projects section of `index.html` (copy an existing tile)
+2. Update the inline JSON-LD ItemList (and `numberOfItems`)
+3. Update `assets/js/knowledge-base.js` project entries
+4. Every project action link needs `rel="noopener noreferrer"` when using `target="_blank"` — and verify the target URL actually exists
+
+### Modifying AI Assistant Knowledge
+
+Edit `assets/js/knowledge-base.js` (bump the `?v=` cache parameter on the script tags in index.html when data changes).
+
+### Updating Styles
+
+- Main styles: `assets/css/style.css`; component-specific styles in their own files
+- Use the CSS custom properties defined in `:root` (style.css, glassmorphism.css, ai-assistant.css)
+- Only "Open Sans" and "Raleway" are loaded as web fonts — don't reference others
+
+## Deployment
+
+This site is deployed to **GitHub Pages** at https://tariqahmaad.github.io/
+
+The repository should be pushed to a GitHub repository named `tariqahmaad.github.io` for automatic GitHub Pages deployment. Note: `.htaccess` has no effect there.
+
+## Vendor Libraries
+
+- **Bootstrap 5**: CSS only (`bootstrap.min.css`) for layout — the JS bundle is NOT used
+- **Boxicons / Remixicon / Bootstrap Icons**: icon fonts (subsetted — see Performance)
+- **Swiper**: References carousel
+- **Particles.js**: Background particle effects (self-hosted)
+- **PureCounter**: Number counting animations
+- **EmailJS**: Contact form delivery (self-hosted)
+
+## Important Files
+
+- **index.html**: ~55KB single-page portfolio (all sections + inline JSON-LD)
+- **assets/js/ai-assistant.js**: ~3.6k lines of chat assistant logic
+- **assets/js/knowledge-base.js**: portfolio data module
+- **assets/css/style.css**: main stylesheet with CSS custom properties
+
+## Color Scheme
+
+```css
+--primary-color: #18d26e;        /* Green accent */
+--primary-color-hover: #35e888;   /* Lighter green for hover */
+--bg-color: #040404;              /* Dark background */
+--text-color: #fff;               /* White text */
+```

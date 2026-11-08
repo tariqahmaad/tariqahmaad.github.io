@@ -9,9 +9,6 @@
   <meta
     content="Computer Engineer specializing in Full-Stack Development with Python, React, Django, and Spring Boot. Open to full-time roles and freelance projects."
     name="description">
-  <meta
-    content="portfolio, computer engineering, software development, web development, Python developer, React developer, Django, Spring Boot, JavaScript, Full-Stack Developer"
-    name="keywords">
   <meta name="author" content="Tariq Ahmad">
   <meta name="theme-color" content="#18d26e">
   <meta name="google-site-verification" content="geLpufK_dlELVa0MzvHuTVrULt-Ml6grrN9XzVVdP_8" />
@@ -22,18 +19,24 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tariqahmaad.github.io/">
-  <meta property="og:title" content="Tariq Ahmad - Computer Engineer & Full-Stack Developer">
+  <meta property="og:title" content="Tariq Ahmad - Computer Engineer &amp; Full-Stack Developer">
   <meta property="og:description"
     content="Computer Engineer specializing in Full-Stack Development, Python, React, Django, and Spring Boot. View my projects, skills, and experience.">
+  <meta property="og:site_name" content="Tariq Ahmad">
+  <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Tariq Ahmad - Computer Engineer and Full-Stack Developer portfolio">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://tariqahmaad.github.io/">
-  <meta name="twitter:title" content="Tariq Ahmad - Computer Engineer & Full-Stack Developer">
+  <meta name="twitter:title" content="Tariq Ahmad - Computer Engineer &amp; Full-Stack Developer">
   <meta name="twitter:description"
     content="Computer Engineer specializing in Full-Stack Development, Python, React, Django, and Spring Boot. View my projects, skills, and experience.">
   <meta name="twitter:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
+  <meta name="twitter:image:alt" content="Tariq Ahmad - Computer Engineer and Full-Stack Developer portfolio">
 
   <!-- Favicons -->
   <link href="favicon.ico" rel="icon" sizes="any">
@@ -52,7 +55,7 @@
   </noscript>
 
   <!-- Critical CSS: Bootstrap for layout -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20260920" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20261108" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
   <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style"
@@ -100,7 +103,7 @@
     body::before {
       content: "";
       position: fixed;
-      background: var(--bg-color) url("../img/bg.jpg") top right no-repeat;
+      background: var(--bg-color) url("assets/img/bg.jpg") top right no-repeat;
       background-size: cover;
       background-attachment: fixed;
       background-position: top right;
@@ -129,26 +132,26 @@
     }
   </style>
     <!-- Main CSS: Critical for instant styling -->
-  <link href="assets/css/style.min.css?v=20260921" rel="stylesheet">
-  <link href="assets/css/branding.min.css?v=20260920" rel="stylesheet">
-  <link href="assets/css/glassmorphism.min.css?v=20260920" rel="stylesheet">
+  <link href="assets/css/style.min.css?v=20261108" rel="stylesheet">
+  <link href="assets/css/branding.min.css?v=20261108" rel="stylesheet">
+  <link href="assets/css/glassmorphism.min.css?v=20261108" rel="stylesheet">
 
   <!-- Non-Critical CSS: Below-fold content and visual effects (async) -->
 
-  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20260920" as="style"
+  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20261108" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/testimonials-professional.min.css?v=20260920" rel="stylesheet">
+    <link href="assets/css/testimonials-professional.min.css?v=20261108" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/projects-custom.min.css?v=20260920" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/projects-custom.min.css?v=20261108" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/projects-custom.min.css?v=20260920" rel="stylesheet">
+    <link href="assets/css/projects-custom.min.css?v=20261108" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20260920" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20261108" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/ai-assistant.min.css?v=20260920" rel="stylesheet">
+    <link href="assets/css/ai-assistant.min.css?v=20261108" rel="stylesheet">
   </noscript>
 
   <!-- CSS Preload Polyfill for older browsers -->
@@ -178,16 +181,36 @@
           "https://www.linkedin.com/in/tariq-ahmad-a43320264",
           "https://github.com/tariqahmaad"
         ],
-        "jobTitle": "Computer Engineer",
+        "jobTitle": [
+          "Computer Engineer",
+          "Full-Stack Developer"
+        ],
         "alumniOf": "Istanbul Aydin University",
         "worksFor": {
           "@type": "Organization",
           "name": "Freelance"
         },
         "knowsAbout": [
-          "Python", "C++", "C#", "Java", "JavaScript", "PHP", "Django", "Spring Boot",
-          "React", "Next.js", "React Native", "Bootstrap", "MySQL", "MongoDB", "PostgreSQL",
-          "SQLite", "Git", "Docker", "TensorFlow", "Linux"
+          "Python",
+          "C++",
+          "C#",
+          "Java",
+          "JavaScript",
+          "PHP",
+          "Django",
+          "Spring Boot",
+          "React",
+          "Next.js",
+          "React Native",
+          "Bootstrap",
+          "MySQL",
+          "MongoDB",
+          "PostgreSQL",
+          "SQLite",
+          "Git",
+          "Docker",
+          "TensorFlow",
+          "Linux"
         ]
       },
       {
@@ -198,85 +221,154 @@
         "numberOfItems": 9,
         "itemListElement": [
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 1,
-            "name": "CV Builder",
-            "description": "Privacy-first resume builder with real-time preview, ATS-friendly templates, PDF export, and version control, built with Next.js and Firebase",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Web Browser",
-            "url": "https://ta-cv.vercel.app/"
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "CV Builder",
+              "description": "Privacy-first resume builder with real-time preview, ATS-friendly templates, PDF export, and version control, built with Next.js and Firebase",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "url": "https://ta-cv.vercel.app/"
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 2,
-            "name": "Quizlet - Interactive University Quiz Platform",
-            "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students",
-            "applicationCategory": "EducationalApplication",
-            "operatingSystem": "Web Browser",
-            "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Quizlet - Interactive University Quiz Platform",
+              "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "HTML",
+                "CSS",
+                "JavaScript"
+              ],
+              "codeRepository": "https://github.com/tariqahmaad/quizlet"
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 3,
-            "name": "BudgetWise - React Native Expense Tracker",
-            "description": "Mobile expense tracking app built with React Native, Node.js, and Firebase",
-            "applicationCategory": "FinanceApplication",
-            "operatingSystem": "iOS, Android",
-            "programmingLanguage": ["React Native", "JavaScript", "Node.js"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "BudgetWise - React Native Expense Tracker",
+              "description": "Mobile expense tracking app built with React Native, Node.js, and Firebase",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "React Native",
+                "JavaScript",
+                "Node.js"
+              ],
+              "codeRepository": "https://github.com/tariqahmaad/BudgetWise"
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 4,
-            "name": "Graduation Project Presentation",
-            "description": "Interactive presentation showcasing the graduation project, built with HTML, CSS, and JavaScript",
-            "applicationCategory": "EducationalApplication",
-            "operatingSystem": "Web Browser",
-            "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Graduation Project Presentation",
+              "description": "Interactive presentation showcasing the graduation project, built with HTML, CSS, and JavaScript",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "HTML",
+                "CSS",
+                "JavaScript"
+              ],
+              "codeRepository": "https://github.com/tariqahmaad/Presentation"
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 5,
-            "name": "Note-Taking Web Application",
-            "description": "Web-based note-taking application with PHP, MySQL, and JavaScript",
-            "applicationCategory": "ProductivityApplication",
-            "operatingSystem": "Web Browser",
-            "programmingLanguage": ["PHP", "MySQL", "JavaScript"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Note-Taking Web Application",
+              "description": "Web-based note-taking application with PHP, MySQL, and JavaScript",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "PHP",
+                "MySQL",
+                "JavaScript"
+              ],
+              "codeRepository": "https://github.com/tariqahmaad/Note-Taking-Web-Application"
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 6,
-            "name": "Hospital Management System",
-            "description": "Hospital management system built with Java, Spring Boot, and MySQL",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Web Browser",
-            "programmingLanguage": ["Java", "Spring Boot", "MySQL"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Hospital Management System",
+              "description": "Hospital management system built with Java, Spring Boot, and MySQL",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "Java",
+                "Spring Boot",
+                "MySQL"
+              ],
+              "codeRepository": "https://github.com/tariqahmaad/Hospital-Management-System"
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 7,
-            "name": "Hand-Written Digit Classifier",
-            "description": "Machine learning project for classifying handwritten digits using Neural Networks and TensorFlow",
-            "applicationCategory": "MachineLearningApplication",
-            "operatingSystem": "Cross-Platform",
-            "programmingLanguage": ["Python"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Hand-Written Digit Classifier",
+              "description": "Machine learning project for classifying handwritten digits using Neural Networks and TensorFlow",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "Python"
+              ]
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 8,
-            "name": "Hotel Management System",
-            "description": "Hotel management system with CRUD operations built with C# and MySQL",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Windows",
-            "programmingLanguage": ["C#", ".NET", "MySQL"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Hotel Management System",
+              "description": "Hotel management system with CRUD operations built with C# and MySQL",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "C#",
+                ".NET",
+                "MySQL"
+              ]
+            }
           },
           {
-            "@type": "SoftwareApplication",
+            "@type": "ListItem",
             "position": 9,
-            "name": "Banking Management System",
-            "description": "Banking management system with account management built with Java Swing",
-            "applicationCategory": "FinanceApplication",
-            "operatingSystem": "Cross-Platform",
-            "programmingLanguage": ["Java"]
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": "Banking Management System",
+              "description": "Banking management system with account management built with Java Swing",
+              "author": {
+                "@id": "https://tariqahmaad.github.io/#person"
+              },
+              "programmingLanguage": [
+                "Java"
+              ]
+            }
           }
         ]
       }
@@ -286,21 +378,22 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <!-- Particles background -->
   <div id="particles-js"></div>
 
   <!-- ======= Header ======= -->
-  <header id="header" role="banner">
+  <header id="header">
     <div class="container">
 
-      <a href="index.html" class="mr-auto" aria-label="Home"><i class="ri-code-s-slash-fill"></i></a>
+      <a href="index.html" class="mr-auto" aria-label="Home"><i class="ri-code-s-slash-fill" aria-hidden="true"></i></a>
       <h1><a href="index.html" class="stylish-name">Tariq Ahmad</a></h1>
-      <h2 class="header-subtitle">I'm a passionate</h2>
-      <h2 class="header-subtitle role-h2"><span id="role">Full-Stack Developer</span></h2><br>
+      <p class="header-subtitle">I'm a passionate</p>
+      <p class="header-subtitle role-h2"><span id="role">Full-Stack Developer</span></p><br>
 
       <div class="hire-me-btn">
         <a href="mailto:me@tariqahmad.dev?subject=Job%20Opportunity%20for%20You" class="btn-hire">
-          <i class="bi bi-briefcase"></i> Hire Me
+          <i class="bi bi-briefcase" aria-hidden="true"></i> Hire Me
         </a>
       </div>
 
@@ -313,23 +406,25 @@
           <li><a class="nav-link" href="#resume">Resume</a></li>
           <li><a class="nav-link" href="#projects">Projects</a></li>
           <li><a class="nav-link" href="#contact">Contact</a></li>
-          <div class="mobile-social-links glass-social">
+          <li class="mobile-social-links glass-social">
             <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
                 class="bi bi-linkedin"></i></a>
             <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
                 class="ri-github-fill"></i></a>
-          </div>
+          </li>
         </ul>
       </nav><!-- .navbar -->
 
       <div class="social-links glass-social">
         <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
             class="bi bi-linkedin"></i></a>
-        <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i class="ri-github-fill"></i></a>
+        <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i class="ri-github-fill" aria-hidden="true"></i></a>
       </div>
 
     </div>
   </header><!-- End Header -->
+
+  <main id="main-content" tabindex="-1">
 
   <!-- ======= About Section ======= -->
   <section id="about" class="about">
@@ -751,8 +846,7 @@
           <p class="mb-0">Background and Experience</p>
         </div>
         <a href="https://cv.tariqahmad.dev/share/SrQUaAO1?download=1" target="_blank" rel="noopener noreferrer" class="btn-cv btn-brand glass-btn mt-2 mt-md-0">
-          <i class="bi bi-file-earmark-arrow-down"></i> Download CV
-        </a>
+          <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> Download CV<span class="sr-only"> (opens in new tab)</span></a>
       </div>
 
       <div class="row">
@@ -925,6 +1019,7 @@
         </div>
 
       </div>
+    </div><!-- .container -->
   </section><!-- End Resume Section -->
 
 
@@ -942,8 +1037,8 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="bi bi-file-earmark-person"></i></div>
-            <h4><a href="https://github.com/tariqahmaad/CV-Builder">CV Builder</a></h4>
+            <div class="icon"><i class="bi bi-file-earmark-person" aria-hidden="true"></i></div>
+            <h4>CV Builder</h4>
             <div class="tech-tags">
               <span class="tech-tag">Next.js</span>
               <span class="tech-tag">TypeScript</span>
@@ -955,8 +1050,7 @@
               templates, PDF export, and version control built with Next.js and Firebase.</p>
             <div class="project-actions">
               <a href="https://ta-cv.vercel.app/" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="bi bi-eye"></i>Live Demo
-              </a>
+                <i class="bi bi-eye" aria-hidden="true"></i>Live Demo<span class="sr-only"> (opens in new tab)</span></a>
             </div>
           </div>
         </div>
@@ -964,7 +1058,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="ri-question-answer-line"></i></div>
+            <div class="icon"><i class="ri-question-answer-line" aria-hidden="true"></i></div>
             <h4>Quizlet – Interactive University Quiz Platform</h4>
             <div class="tech-tags">
               <span class="tech-tag">HTML</span>
@@ -981,11 +1075,9 @@
             </p>
             <div class="project-actions">
               <a href="https://tariqahmaad.github.io/quizlet/index.html" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="bi bi-eye"></i>Live Demo
-              </a>
+                <i class="bi bi-eye" aria-hidden="true"></i>Live Demo<span class="sr-only"> (opens in new tab)</span></a>
               <a href="https://github.com/tariqahmaad/quizlet" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="ri-github-fill"></i>View Code
-              </a>
+                <i class="ri-github-fill" aria-hidden="true"></i>View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
           </div>
         </div>
@@ -994,7 +1086,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="bi bi-cash-stack"></i></div>
+            <div class="icon"><i class="bi bi-cash-stack" aria-hidden="true"></i></div>
             <h4>
               BudgetWise – React Native Expense Tracker
             </h4>
@@ -1011,8 +1103,7 @@
             </p>
             <div class="project-actions">
               <a href="https://github.com/tariqahmaad/BudgetWise" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="ri-github-fill"></i> View Code
-              </a>
+                <i class="ri-github-fill" aria-hidden="true"></i> View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
           </div>
         </div>
@@ -1020,9 +1111,9 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="bi bi-file-earmark-ppt"></i></div>
+            <div class="icon"><i class="bi bi-file-earmark-ppt" aria-hidden="true"></i></div>
             <h4><a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer">Graduation Project
-                Presentation</a>
+                Presentation<span class="sr-only"> (opens in new tab)</span></a>
             </h4>
             <div class="tech-tags">
               <span class="tech-tag">HTML</span>
@@ -1034,11 +1125,9 @@
               JavaScript for a dynamic and engaging user experience.</p>
             <div class="project-actions">
               <a href="https://tariqahmaad.github.io/Presentation/index.html" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="bi bi-eye"></i>Live Demo
-              </a>
+                <i class="bi bi-eye" aria-hidden="true"></i>Live Demo<span class="sr-only"> (opens in new tab)</span></a>
               <a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="ri-github-fill"></i>View Code
-              </a>
+                <i class="ri-github-fill" aria-hidden="true"></i>View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
           </div>
         </div>
@@ -1048,7 +1137,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="ri-notion-line"></i></div>
+            <div class="icon"><i class="ri-notion-line" aria-hidden="true"></i></div>
             <h4>Note-Taking Web Applications
             </h4>
             <div class="tech-tags">
@@ -1062,8 +1151,7 @@
               role-specific functions, and a responsive, cross-browser interface.</p>
             <div class="project-actions">
               <a href="https://github.com/tariqahmaad/Note-Taking-Web-Application" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="ri-github-fill"></i>View Code
-              </a>
+                <i class="ri-github-fill" aria-hidden="true"></i>View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
           </div>
         </div>
@@ -1071,7 +1159,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="ri-hospital-fill"></i></div>
+            <div class="icon"><i class="ri-hospital-fill" aria-hidden="true"></i></div>
             <h4>Hospital Management System
             </h4>
             <div class="tech-tags">
@@ -1087,8 +1175,7 @@
               skills in healthcare software solutions.</p>
             <div class="project-actions">
               <a href="https://github.com/tariqahmaad/Hospital-Management-System" target="_blank" rel="noopener noreferrer" class="action-btn">
-                <i class="ri-github-fill"></i>View Code
-              </a>
+                <i class="ri-github-fill" aria-hidden="true"></i>View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
           </div>
         </div>
@@ -1096,7 +1183,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="ri-hand"></i></div>
+            <div class="icon"><i class="ri-hand" aria-hidden="true"></i></div>
             <h4>Hand-Written Digit Classifier using Neural Networking</h4>
             <div class="tech-tags">
               <span class="tech-tag">Python</span>
@@ -1114,7 +1201,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="bi bi-building"></i></div>
+            <div class="icon"><i class="bi bi-building" aria-hidden="true"></i></div>
             <h4>Hotel Management System</h4>
             <div class="tech-tags">
               <span class="tech-tag">C#</span>
@@ -1133,7 +1220,7 @@
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
           <div class="project-tile">
             <div class="light-reflection"></div>
-            <div class="icon"><i class="bi bi-bank"></i></div>
+            <div class="icon"><i class="bi bi-bank" aria-hidden="true"></i></div>
             <h4>Banking Management System</h4>
             <div class="tech-tags">
               <span class="tech-tag">Java</span>
@@ -1168,7 +1255,7 @@
 
         <div class="col-md-6 d-flex align-items-stretch">
           <div class="info-box">
-            <i class="bi bi-globe"></i>
+            <i class="bi bi-globe" aria-hidden="true"></i>
             <h3>Work Availability</h3>
             <p>Open to remote and on-site roles.</p>
           </div>
@@ -1176,7 +1263,7 @@
 
         <div class="col-md-6 mt-4 mt-md-0 d-flex align-items-stretch">
           <div class="info-box">
-            <i class="bx bx-share-alt"></i>
+            <i class="bx bx-share-alt" aria-hidden="true"></i>
             <h3>Social Profiles</h3>
             <div class="social-links contact-social-links glass-social">
               <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
@@ -1189,14 +1276,14 @@
 
         <div class="col-md-6 mt-4 d-flex align-items-stretch">
           <div class="info-box">
-            <i class="bx bx-envelope"></i>
+            <i class="bx bx-envelope" aria-hidden="true"></i>
             <h3>Email Me</h3>
             <p><a href="mailto:me@tariqahmad.dev">me@tariqahmad.dev</a></p>
           </div>
         </div>
         <div class="col-md-6 mt-4 d-flex align-items-stretch">
           <div class="info-box">
-            <i class="bx bx-phone-call"></i>
+            <i class="bx bx-phone-call" aria-hidden="true"></i>
             <h3>Prefer to Talk?</h3>
             <div>
               <p>Phone number available on request.</p>
@@ -1214,17 +1301,21 @@
         </div>
         <div class="row">
           <div class="col-md-6 form-group">
-            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+            <label for="name" class="sr-only">Your name</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" autocomplete="name" required>
           </div>
           <div class="col-md-6 form-group mt-3 mt-md-0">
-            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+            <label for="email" class="sr-only">Your email</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" autocomplete="email" required>
           </div>
         </div>
         <div class="form-group mt-3">
-          <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+          <label for="subject" class="sr-only">Subject</label>
+          <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" autocomplete="off" required>
         </div>
         <div class="form-group mt-3">
-          <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+          <label for="message" class="sr-only">Message</label>
+          <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message" required></textarea>
         </div>
         <div class="my-3" aria-live="polite">
           <div class="loading">Loading</div>
@@ -1236,6 +1327,7 @@
 
     </div>
   </section><!-- End Contact Section -->
+  </main>
 
   <!-- Vendor JS Files (deferred for faster page load) -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js" defer></script>
@@ -1245,15 +1337,15 @@
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Form Validation (Depends on EmailJS, loaded after) -->
-  <script src="assets/vendor/php-email-form/validate.js?v=20260921" defer></script>
+  <script src="assets/vendor/php-email-form/validate.js?v=20261108" defer></script>
 
   <!-- Template Main JS Files -->
-  <script src="assets/js/particles-config.js?v=20260920" defer></script>
-  <script src="assets/js/progressive-enhancement.js?v=20260920" defer></script>
-  <script src="assets/js/main.js?v=20260920" defer></script>
+  <script src="assets/js/particles-config.js?v=20261108" defer></script>
+  <script src="assets/js/progressive-enhancement.js?v=20261108" defer></script>
+  <script src="assets/js/main.js?v=20261108" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
-    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20260921');
+    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20261108');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

@@ -1,7 +1,14 @@
-# Development files
+# Editor / agent tooling
 .cursor/
 .roo/
 .rooignore
 .claude/
 .zcode/
-Claude.md
+
+# Dependencies and OS files
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Source-only assets (not referenced by the site)
+assets/img/og-image.png

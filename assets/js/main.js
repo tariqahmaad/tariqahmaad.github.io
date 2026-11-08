@@ -29,18 +29,77 @@
   }
 
   /**
+   * Selector lookup that tolerates invalid selectors (e.g. location.hash "#1")
+   */
+  const safeSelect = (selector) => {
+    try {
+      return selector ? select(selector) : null
+    } catch (err) {
+      return null
+    }
+  }
+
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const scrollBehavior = () => (reducedMotionQuery.matches ? 'auto' : 'smooth')
+
+  /** Fade-out duration of a section; header collapse/expand waits for it. */
+  const SECTION_FADE_MS = 200
+  /** Extra space between the collapsed header and the section top. */
+  const SCROLL_BUFFER_PX = 60
+
+  /**
    * Scrolls to an element with header offset
    */
   const scrollto = (el) => {
-    const element = select(el);
+    const element = safeSelect(el);
     if (element) {
       const headerOffset = select('#header').offsetHeight;
-      // Add 20px buffer to account for section top positioning
-      const additionalBuffer = 60;
       window.scrollTo({
-        top: element.offsetTop - headerOffset - additionalBuffer,
-        behavior: 'smooth'
+        top: element.offsetTop - headerOffset - SCROLL_BUFFER_PX,
+        behavior: scrollBehavior()
       });
+    }
+  }
+
+  /**
+   * Single owner of the "which section is visible" state. Hidden sections are
+   * made `inert` so they stay out of the tab order and accessibility tree.
+   */
+  let pendingSectionTimer = null
+
+  const showSection = (target, { focus = false } = {}) => {
+    select('section', true).forEach((section) => {
+      const visible = section === target
+      section.classList.toggle('section-show', visible)
+      section.inert = !visible
+      section.setAttribute('aria-hidden', String(!visible))
+      if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1')
+    })
+    if (target && focus) target.focus({ preventScroll: true })
+  }
+
+  const setActiveNav = (hash) => {
+    select('#navbar .nav-link', true).forEach((link) => {
+      const isActive = link.getAttribute('href') === hash
+      link.classList.toggle('active', isActive)
+      if (isActive) link.setAttribute('aria-current', 'page')
+      else link.removeAttribute('aria-current')
+    })
+  }
+
+  /**
+   * Open a section: collapse the header into its compact "top" form first (if
+   * needed), then fade the section in. Cancels any pending transition so rapid
+   * clicks can't leave an older section on top.
+   */
+  const openSection = (target, options) => {
+    clearTimeout(pendingSectionTimer)
+    const header = select('#header')
+    if (!header.classList.contains('header-top')) {
+      header.classList.add('header-top')
+      pendingSectionTimer = setTimeout(() => showSection(target, options), SECTION_FADE_MS)
+    } else {
+      showSection(target, options)
     }
   }
 
@@ -49,22 +108,22 @@
    * Hides all sections, expands the header, and scrolls to top.
    */
   const navigateHome = () => {
-    let sections = select('section', true);
-    sections.forEach((item) => {
-      item.classList.remove('section-show')
-    })
+    clearTimeout(pendingSectionTimer)
+    showSection(null)
 
     // Wait for section fade out animation to complete
-    setTimeout(function () {
+    pendingSectionTimer = setTimeout(() => {
       select('#header').classList.remove('header-top')
-    }, 200);
+    }, SECTION_FADE_MS);
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: scrollBehavior()
     });
   }
 
+  // Hidden sections must not be reachable before the first navigation either.
+  showSection(null)
   /**
    * Mobile nav toggle
    */
@@ -125,47 +184,23 @@
    * Scroll with offset on links with a class name .scrollto
    */
   on('click', '#navbar .nav-link', function (e) {
-    let section = select(this.hash)
-    if (section) {
-      e.preventDefault()
+    const section = safeSelect(this.hash)
+    if (!section) return
+    e.preventDefault()
 
-      let navbar = select('#navbar')
-      let header = select('#header')
-      let sections = select('section', true)
-      let navlinks = select('#navbar .nav-link', true)
+    setActiveNav(this.hash)
 
-      navlinks.forEach((item) => {
-        item.classList.remove('active')
-      })
-
-      this.classList.add('active')
-
-      if (navbar.classList.contains('navbar-mobile')) {
-        setMobileNav(false); // Also re-enables scrolling
-      }
-
-      if (this.hash == '#header') {
-        navigateHome();
-        return;
-      }
-
-      if (!header.classList.contains('header-top')) {
-        header.classList.add('header-top')
-        setTimeout(function () {
-          sections.forEach((item) => {
-            item.classList.remove('section-show')
-          })
-          section.classList.add('section-show')
-        }, 200);
-      } else {
-        sections.forEach((item) => {
-          item.classList.remove('section-show')
-        })
-        section.classList.add('section-show')
-      }
-
-      scrollto(this.hash)
+    if (select('#navbar').classList.contains('navbar-mobile')) {
+      setMobileNav(false); // Also re-enables scrolling
     }
+
+    if (this.hash === '#header') {
+      navigateHome();
+      return;
+    }
+
+    openSection(section, { focus: true })
+    scrollto(this.hash)
   }, true)
 
   /**
@@ -176,16 +211,7 @@
     if (select('#header').classList.contains('header-top')) {
       e.preventDefault();
 
-      let navlinks = select('#navbar .nav-link', true);
-
-      // Update navbar active state
-      navlinks.forEach((item) => {
-        item.classList.remove('active');
-        if (item.getAttribute('href') == '#header') {
-          item.classList.add('active');
-        }
-      });
-
+      setActiveNav('#header');
       navigateHome();
     }
   }, true)
@@ -194,40 +220,24 @@
    * Activate/show sections on load with hash links
    */
   window.addEventListener('load', () => {
-    if (window.location.hash) {
-      let initial_nav = select(window.location.hash)
+    const hash = window.location.hash
+    const initial = safeSelect(hash)
+    if (!initial || initial.tagName !== 'SECTION') return
 
-      if (initial_nav) {
-        let header = select('#header')
-        let navlinks = select('#navbar .nav-link', true)
-
-        header.classList.add('header-top')
-
-        navlinks.forEach((item) => {
-          if (item.getAttribute('href') == window.location.hash) {
-            item.classList.add('active')
-          } else {
-            item.classList.remove('active')
-          }
-        })
-
-        setTimeout(function () {
-          initial_nav.classList.add('section-show')
-        }, 350);
-
-        scrollto(window.location.hash)
-      }
-    }
+    setActiveNav(hash)
+    openSection(initial)
+    scrollto(hash)
   });
 
   // Initialize common components
   // Testimonials slider
-  new Swiper('.testimonials-slider', {
+  if (typeof Swiper !== 'undefined' && select('.testimonials-slider')) new Swiper('.testimonials-slider', {
     speed: 600,
     loop: true,
     autoHeight: false,
     spaceBetween: 16,
-    autoplay: {
+    // No auto-advancing content for users who asked for reduced motion
+    autoplay: reducedMotionQuery.matches ? false : {
       delay: 5000,
       disableOnInteraction: false
     },
@@ -262,7 +272,7 @@
       window.innerWidth < 1024;
   };
 
-  if (!isMobileOrTablet()) {
+  if (!isMobileOrTablet() && typeof PureCounter !== 'undefined') {
     new PureCounter();
   } else {
     // Set static values for mobile and iPad
@@ -293,8 +303,9 @@
     // Get random character for matrix effect
     const getRandomChar = (intensity = 1) => {
       // Just return the character itself - no HTML wrapping
-      if (Math.random() > 0.92) return '█';
-      if (Math.random() > 0.96) return '░';
+      const roll = Math.random();
+      if (roll > 0.96) return '░';
+      if (roll > 0.92) return '█';
 
       const visibleChars = Math.max(1, Math.floor(chars.length * (intensity * 0.8 + 0.2)));
       return chars[Math.floor(Math.random() * visibleChars)];
@@ -400,6 +411,13 @@
       const roleSpan = document.getElementById('role');
       if (!roleSpan) return;
 
+      // Don't burn CPU rewriting the DOM in a background tab; poll until visible.
+      if (document.hidden) {
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(typeEffect, 500);
+        return;
+      }
+
       const fullText = roles[currentRole];
       const baseSpeed = isDeleting ? 40 : 90;
       const timer = baseSpeed + Math.floor(Math.random() * 15);
@@ -494,9 +512,9 @@
         // Show one role at a time with cycling
         let currentIndex = 0;
         roleSpan.textContent = roles[currentIndex];
-        roleSpan.setAttribute('aria-live', 'polite');
 
         const roleInterval = setInterval(() => {
+          if (document.hidden) return;
           currentIndex = (currentIndex + 1) % roles.length;
           roleSpan.textContent = roles[currentIndex];
         }, 3000);
