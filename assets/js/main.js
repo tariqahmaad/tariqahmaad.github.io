@@ -34,7 +34,7 @@
   const safeSelect = (selector) => {
     try {
       return selector ? select(selector) : null
-    } catch (err) {
+    } catch {
       return null
     }
   }

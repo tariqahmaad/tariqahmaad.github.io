@@ -55,7 +55,7 @@
   </noscript>
 
   <!-- Critical CSS: Bootstrap for layout -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20261108b" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20261108c" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
   <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style"
@@ -132,26 +132,26 @@
     }
   </style>
     <!-- Main CSS: Critical for instant styling -->
-  <link href="assets/css/style.min.css?v=20261108b" rel="stylesheet">
-  <link href="assets/css/branding.min.css?v=20261108b" rel="stylesheet">
-  <link href="assets/css/glassmorphism.min.css?v=20261108b" rel="stylesheet">
+  <link href="assets/css/style.min.css?v=20261108c" rel="stylesheet">
+  <link href="assets/css/branding.min.css?v=20261108c" rel="stylesheet">
+  <link href="assets/css/glassmorphism.min.css?v=20261108c" rel="stylesheet">
 
   <!-- Non-Critical CSS: Below-fold content and visual effects (async) -->
 
-  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20261108b" as="style"
+  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20261108c" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/testimonials-professional.min.css?v=20261108b" rel="stylesheet">
+    <link href="assets/css/testimonials-professional.min.css?v=20261108c" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/projects-custom.min.css?v=20261108b" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/projects-custom.min.css?v=20261108c" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/projects-custom.min.css?v=20261108b" rel="stylesheet">
+    <link href="assets/css/projects-custom.min.css?v=20261108c" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20261108b" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20261108c" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/ai-assistant.min.css?v=20261108b" rel="stylesheet">
+    <link href="assets/css/ai-assistant.min.css?v=20261108c" rel="stylesheet">
   </noscript>
 
   <!-- CSS Preload Polyfill for older browsers -->
@@ -1296,8 +1296,8 @@
       <form id="contact-form" class="php-email-form mt-4" method="post">
         <!-- Honeypot: hidden from humans, bots fill it and are silently ignored -->
         <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
-          <label for="website">Website</label>
-          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+          <label for="company_site">Company site</label>
+          <input type="text" name="company_site" id="company_site" tabindex="-1" autocomplete="off">
         </div>
         <div class="row">
           <div class="col-md-6 form-group">
@@ -1319,7 +1319,7 @@
         </div>
         <div class="my-3" aria-live="polite">
           <div class="loading">Loading</div>
-          <div class="error-message"></div>
+          <div class="error-message" id="form-error" role="alert"></div>
           <div class="sent-message">Your message has been sent. Thank you!</div>
         </div>
         <div class="text-center"><button type="submit" class="btn-brand">Send Message</button></div>
@@ -1337,15 +1337,14 @@
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Form Validation (Depends on EmailJS, loaded after) -->
-  <script src="assets/vendor/php-email-form/validate.js?v=20261108b" defer></script>
+  <script src="assets/js/contact-form.js?v=20261108c" defer></script>
 
   <!-- Template Main JS Files -->
-  <script src="assets/js/particles-config.js?v=20261108b" defer></script>
-  <script src="assets/js/progressive-enhancement.js?v=20261108b" defer></script>
-  <script src="assets/js/main.js?v=20261108b" defer></script>
+  <script src="assets/js/particles-config.js?v=20261108c" defer></script>
+  <script src="assets/js/main.js?v=20261108c" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
-    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20261108b');
+    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20261108c');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

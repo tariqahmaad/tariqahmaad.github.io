@@ -3,6 +3,12 @@
  * Optimized for performance across different devices
  */
 
+(function () {
+'use strict';
+
+var MAX_POLLS = 50; // x100ms: stop waiting for particles.js after ~5s
+var polls = 0;
+
 // Wait for both DOM and particlesJS to be available, but don't block LCP
 if (document.readyState === 'loading') {
   // DOM is still loading, wait for it
@@ -24,7 +30,7 @@ function deferParticleInit() {
   } else {
     // Fallback: wait for particlesJS and then delay init
     if (typeof particlesJS === 'undefined') {
-      setTimeout(deferParticleInit, 100);
+      if (++polls < MAX_POLLS) setTimeout(deferParticleInit, 100);
       return;
     }
     setTimeout(initParticles, 500);
@@ -39,6 +45,7 @@ function initParticles() {
       return;
     }
 
+    // Particle count is picked once at load; a resize does not re-initialise it.
     const isMobile = window.innerWidth < 768;
     const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 
@@ -134,3 +141,5 @@ function initParticles() {
     console.error('Error initializing particles:', error);
   }
 }
+
+})();

@@ -3,9 +3,26 @@
  * Intelligent chat assistant with knowledge about skills, experience, and projects
  */
 
-import { knowledgeBase } from './knowledge-base.js?v=20260921';
+import { knowledgeBase } from './knowledge-base.js?v=20261108c';
+import { containsPhrase, calculateSimilarity, correctCommonTypos } from './assistant/text-match.js?v=20261108c';
+import {
+    extractTechnology, extractCompany, extractRole, extractProject,
+    getRelevantSkills, mentionsTech, techLabel
+} from './assistant/entities.js?v=20261108c';
+import { renderMarkdown, escapeHtml } from './assistant/markdown.js?v=20261108c';
+import { createPersonality, createUserProfile, createConversationMemory } from './assistant/state.js?v=20261108c';
+import {
+    MOBILE_BREAKPOINT, TIMING, INTENT_MIN_SCORE, TOPICAL_MIN_SCORE, STOP_WORDS, prefersReducedMotion
+} from './assistant/config.js?v=20261108c';
 
-class AIAssistant {
+/** Lower-cases the first letter of a sentence unless it starts a proper noun or non-letter. */
+function lowerFirst(text) {
+    return /^[A-Z][a-z]/.test(text) && !/^(Tariq|He|His|I)\b/.test(text)
+        ? text.charAt(0).toLowerCase() + text.slice(1)
+        : text;
+}
+
+export class AIAssistant {
     constructor() {
         this.isMinimized = false;
         this.isTyping = false;
@@ -15,39 +32,17 @@ class AIAssistant {
         this.notificationVisible = false;
         this.lastTopic = null;
         this.intentHandlers = this.initializeIntentHandlers();
-        this.conversationMemory = {
-            currentTopic: null,
-            mentionedEntities: new Set(),
-            userPreferences: {},
-            questionHistory: []
-        };
-        this.touchInteractionsAdded = false;
+        this.conversationMemory = createConversationMemory();
         this.isInitialized = false; // Add flag to track initialization state
+        // Bumped on restart so in-flight replies for an old conversation are dropped
+        this.sessionToken = 0;
+        // Bumped on every show/hide so a stale transition callback can't undo a newer one
+        this.visibilityToken = 0;
+        // True from send until the reply has finished streaming
+        this.isBusy = false;
 
-        // Enhanced personality system
-        this.personality = {
-            traits: {
-                enthusiastic: 0.8,
-                professional: 0.9,
-                humor: 0.6,
-                empathy: 0.7,
-                techSavvy: 0.9
-            },
-            currentMood: 'professional',
-            userInteractionStyle: 'neutral',
-            conversationDepth: 0,
-            engagementLevel: 0
-        };
-
-        // Enhanced user profiling
-        this.userProfile = {
-            visitCount: 0,
-            interests: new Set(),
-            technicalLevel: 0.5,
-            communicationStyle: 'professional',
-            lastVisit: null,
-            totalInteractions: 0
-        };
+        this.personality = createPersonality();
+        this.userProfile = createUserProfile();
 
         // Response variation system
         this.responseVariations = this.initializeResponseVariations();
@@ -83,12 +78,14 @@ class AIAssistant {
                     'good day', 'welcome', 'hiya', 'g\'day'
                 ],
                 handler: (kb, message) => {
+                    // Must be read before updateUserInteraction() bumps visitCount,
+                    // otherwise every first-time visitor is greeted as returning.
+                    const isReturningUser = this.userProfile.visitCount > 0;
                     this.conversationMemory.currentTopic = 'introduction';
                     this.updateUserInteraction('greeting');
                     this.personality.currentMood = 'enthusiastic';
 
                     const timeOfDay = this.getTimeOfDay();
-                    const isReturningUser = this.userProfile.visitCount > 0;
 
                     let responses;
                     if (isReturningUser) {
@@ -122,7 +119,7 @@ class AIAssistant {
                     this.updateUserInteraction('technical');
                     this.userProfile.interests.add('technical_skills');
 
-                    const specificTech = this.extractTechnology(message);
+                    const specificTech = extractTechnology(message);
                     if (specificTech !== 'technology') {
                         return this.handleSpecificTechnology(kb, specificTech);
                     }
@@ -164,8 +161,8 @@ ${contextualAddition}`;
                     this.updateUserInteraction('experience');
                     this.userProfile.interests.add('professional_experience');
 
-                    const specificCompany = this.extractCompany(message);
-                    const specificRole = this.extractRole(message);
+                    const specificCompany = extractCompany(message, kb);
+                    const specificRole = extractRole(message, kb);
 
                     if (specificCompany || specificRole) {
                         return this.handleSpecificExperience(kb, specificCompany, specificRole);
@@ -209,8 +206,8 @@ ${contextualAddition}`;
                     this.updateUserInteraction('projects');
                     this.userProfile.interests.add('projects');
 
-                    const specificProject = this.extractProject(message);
-                    const techFilter = this.extractTechnology(message);
+                    const specificProject = extractProject(message, kb);
+                    const techFilter = extractTechnology(message);
 
                     if (specificProject) {
                         return this.handleSpecificProject(kb, specificProject);
@@ -286,7 +283,7 @@ ${contextualAddition}`;
                     return `You can contact Tariq through:
 
 📧 **Email:** ${kb.personal.email}
-📱 **Phone:** ${kb.personal.phone}
+📞 **Prefer to talk?** Email me and we'll arrange a call
 📍 **Location:** ${kb.personal.location}
 ${this.getSocialLinks()}
 
@@ -306,9 +303,9 @@ He's actively seeking new opportunities and open to discussing projects!`;
                 handler: (kb) => {
                     return `Let me tell you about Tariq Ahmad:
 
-**Computer Engineer** from ${kb.personal.location}
+**Computer Engineer**
 Graduate from ${kb.personal.university}
-Currently working as a **${kb.experience[0].title}** at ${kb.experience[0].company}
+Most recent role: **${kb.experience[0].title}** at ${kb.experience[0].company}
 
 **Professional Focus:**
 • Full-stack development (Python, Java, JavaScript)
@@ -350,7 +347,7 @@ ${kb.personal.bio}`;
 **Best ways to reach him:**
 📧 ${kb.personal.email}
 💼 [LinkedIn](${kb.personal.linkedin})
-📱 ${kb.personal.phone}
+📞 Prefer to talk? Just email and arrange a call
 
 He's particularly interested in innovative projects and opportunities to apply his research background in practical applications!`;
                 }
@@ -565,7 +562,7 @@ You can find his latest projects, thoughts on technology, and professional updat
                     'what\'s his age', 'his age', 'what age', 'date of birth', 'when was he born'
                 ],
                 handler: (kb, message) => {
-                    return `I don't have Tariq's date of birth to share, but I can tell you he's a dynamic ${kb.personal.title} based in ${kb.personal.location}. He graduated from ${kb.personal.university} and has been actively building his career in full-stack development and research since 2023. His passion for technology and innovation makes him particularly adept at modern development practices and emerging technologies.`;
+                    return `I don't have Tariq's date of birth to share, but I can tell you he's a dynamic ${kb.personal.title}. He graduated from ${kb.personal.university} and has been actively building his career in full-stack development and research since 2023. His passion for technology and innovation makes him particularly adept at modern development practices and emerging technologies.`;
                 }
             },
 
@@ -628,16 +625,6 @@ His diverse language skills are a valuable asset in the global tech industry, en
 
 He's continuously learning and adapting to stay at the forefront of technological advancements!`;
                 }
-            },
-
-            // Intelligent Fallback - tries to understand and respond helpfully
-            {
-                name: 'intelligent_fallback',
-                patterns: ['.*'], // Matches everything
-                handler: (kb, message) => {
-                    return this.handleIntelligentFallback(kb, message);
-                },
-                priority: 0 // Lowest priority, only if nothing else matches
             }
         ];
     }
@@ -767,7 +754,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
                 ],
                 experience: [
                     'Would you like to know more about the challenges and achievements in these roles?',
-                    'Are you interested in how these experiences connect to his current work?',
+                    'Are you interested in how these experiences connect to his projects?',
                     'Should I share some standout moments from his professional journey?',
                     'Would you like to hear about the skills he developed in each position?'
                 ],
@@ -830,7 +817,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
         if (this.personality.traits.enthusiastic > 0.7) {
             const expressions = this.personalityExpressions.enthusiastic;
             const randomExclamation = this.getRandomResponse(expressions.exclamations);
-            const randomPhrase = this.getRandomResponse(expressions.phrases);
 
             if (Math.random() > 0.5) {
                 enhancedResponse = `${randomExclamation} ${enhancedResponse}`;
@@ -901,18 +887,15 @@ He's continuously learning and adapting to stay at the forefront of technologica
         // Auto-show notification badge after a delay if FAB hasn't been clicked
         setTimeout(() => {
             if (!this.hasFabBeenClicked) {
-                const isMobile = window.innerWidth < 768;
+                const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
                 const inSection = document.getElementById('header')?.classList.contains('header-top');
                 // Skip notification on mobile if user is in a section
                 if (isMobile && inSection) return;
                 this.showNotification();
             }
-        }, 5000);
+        }, TIMING.notificationDelayMs);
     }
 
-    /**
-     * Create the assistant UI elements
-     */
     /**
      * Get welcome message HTML (shared between create and restart)
      */
@@ -1121,6 +1104,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Show the chat widget with smooth animation
      */
     showChat() {
+        const token = ++this.visibilityToken;
         // Remember where focus came from so it can be restored on close
         this.previouslyFocusedElement = document.activeElement;
 
@@ -1144,6 +1128,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         // Focus input after animation completes
         this.waitForTransition(this.elements.chatWidget).then(() => {
+            if (token !== this.visibilityToken) return; // closed again in the meantime
             this.elements.chatWidget.classList.remove('opening');
             this.focusInput();
         });
@@ -1181,6 +1166,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * @param {boolean} setMinimizedNow - Whether to set isMinimized immediately
      */
     hideWidget(animationClass, setMinimizedNow) {
+        const token = ++this.visibilityToken;
         if (setMinimizedNow) {
             this.isMinimized = true;
         }
@@ -1191,6 +1177,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.elements.chatWidget.classList.add(animationClass);
 
         this.waitForTransition(this.elements.chatWidget).then(() => {
+            if (token !== this.visibilityToken) return; // re-opened during the transition
             this.elements.chatWidget.style.display = 'none';
             this.elements.chatWidget.classList.remove(animationClass);
             this.unlockBodyScroll();
@@ -1226,41 +1213,22 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Restart the chat conversation
      */
     restartChat() {
+        // Drop any reply that is still being generated or streamed
+        this.sessionToken++;
+        this.isBusy = false;
+        this.elements.chatMessages.setAttribute('aria-busy', 'false');
+
         // Reset conversation state
         this.messageHistory = [];
         this.lastUserMessage = '';
         this.isTyping = false;
         this.lastTopic = null;
+        this.conversationMemory = createConversationMemory();
+        this.personality = createPersonality();
 
-        // Reset conversation memory
-        this.conversationMemory = {
-            currentTopic: null,
-            mentionedEntities: new Set(),
-            userPreferences: {},
-            questionHistory: []
-        };
-
-        // Reset personality to initial state
-        this.personality = {
-            traits: { enthusiastic: 0.8, professional: 0.9, humor: 0.6, empathy: 0.7, techSavvy: 0.9 },
-            currentMood: 'professional',
-            userInteractionStyle: 'neutral',
-            conversationDepth: 0,
-            engagementLevel: 0
-        };
-
-        // Reset user profile (preserve visit count and interests for returning visitor)
-        const savedVisitCount = this.userProfile.visitCount;
-        const savedInterests = this.userProfile.interests;
-        const savedLastVisit = this.userProfile.lastVisit;
-        this.userProfile = {
-            visitCount: savedVisitCount,
-            interests: savedInterests,
-            technicalLevel: 0.5,
-            communicationStyle: 'professional',
-            lastVisit: savedLastVisit,
-            totalInteractions: 0
-        };
+        // Preserve visit info so a restart doesn't make the visitor "new" again
+        const { visitCount, interests, lastVisit } = this.userProfile;
+        this.userProfile = Object.assign(createUserProfile(), { visitCount, interests, lastVisit });
 
         // Clear input field
         this.elements.messageInput.value = '';
@@ -1290,7 +1258,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
         const input = this.elements.messageInput;
         if (!input) return;
 
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < MOBILE_BREAKPOINT) {
             // On mobile, use a delayed focus to reliably trigger the keyboard
             // visualViewport API handles keyboard positioning
             setTimeout(() => {
@@ -1300,7 +1268,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
             requestAnimationFrame(() => {
                 try {
                     input.focus({ preventScroll: true });
-                } catch (error) {
+                } catch {
                     input.focus();
                 }
             });
@@ -1355,7 +1323,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
      */
     async sendMessage() {
         const message = this.elements.messageInput.value.trim();
-        if (!message || this.isTyping) return;
+        if (!message || this.isBusy) return;
 
         // Detect repeated messages
         if (this.lastUserMessage && message.toLowerCase() === this.lastUserMessage.toLowerCase()) {
@@ -1365,6 +1333,10 @@ He's continuously learning and adapting to stay at the forefront of technologica
             this.addMessage('assistant', this.handleRepeatedMessage());
             return;
         }
+
+        const session = this.sessionToken;
+        this.isBusy = true;
+        this.elements.chatMessages.setAttribute('aria-busy', 'true');
 
         // Clear input and disable send button
         this.elements.messageInput.value = '';
@@ -1383,16 +1355,22 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         try {
             const response = await this.generateResponse(message);
+            if (session !== this.sessionToken) return; // chat was restarted meanwhile
             this.hideTypingIndicator();
-            await this.streamResponse(response);
+            await this.streamResponse(response, session);
         } catch (error) {
+            if (session !== this.sessionToken) return;
             this.hideTypingIndicator();
             this.addMessage('assistant', "I'm sorry, I encountered an error. Please try asking your question again.");
             console.error('Assistant error:', error);
+        } finally {
+            if (session === this.sessionToken) {
+                this.isBusy = false;
+                this.elements.chatMessages.setAttribute('aria-busy', 'false');
+                // Only re-enable sending if the user has typed something new
+                this.elements.sendBtn.disabled = this.elements.messageInput.value.trim().length === 0;
+            }
         }
-
-        // Re-enable send button
-        this.elements.sendBtn.disabled = false;
     }
 
     /**
@@ -1403,7 +1381,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
         const avatar = sender === 'assistant' ? '<i class="ri-message-3-line"></i>' : '<i class="ri-user-line"></i>';
 
         // Process content based on sender type
-        const processedContent = sender === 'assistant' ? this.parseMarkdown(content) : this.escapeHtml(content);
+        const processedContent = sender === 'assistant' ? renderMarkdown(content) : escapeHtml(content);
 
         // Create message elements using documentFragment for better performance
         const fragment = document.createDocumentFragment();
@@ -1451,19 +1429,21 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Streams the response to the chat, simulating a typing effect with optimized performance
      * @param {string} text - The full response text to be streamed.
      */
-    async streamResponse(text) {
+    async streamResponse(text, session = this.sessionToken) {
+        // Users who prefer reduced motion get the whole answer at once
+        if (prefersReducedMotion()) {
+            this.addMessage('assistant', text);
+            return;
+        }
+
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const avatar = '<i class="ri-message-3-line"></i>';
-
-        // Create a message element but with empty content
-        const messageId = `msg-${Date.now()}`;
 
         // Create elements using documentFragment for better performance
         const fragment = document.createDocumentFragment();
 
         const messageElement = document.createElement('div');
         messageElement.className = 'message assistant';
-        messageElement.id = messageId;
 
         const avatarElement = document.createElement('div');
         avatarElement.className = 'message-avatar';
@@ -1498,19 +1478,23 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         return new Promise((resolve) => {
             const streamWord = () => {
+                if (session !== this.sessionToken) {
+                    resolve(); // chat restarted: abandon this reply
+                    return;
+                }
                 if (wordIndex < words.length) {
                     currentContent += words[wordIndex] + ' ';
                     wordIndex++;
 
-                    contentElement.innerHTML = this.parseMarkdown(currentContent);
+                    contentElement.innerHTML = renderMarkdown(currentContent);
                     this.scrollToBottom();
 
                     // Vary the delay to simulate a more human-like typing speed
-                    const delay = Math.random() * 50 + 20;
+                    const delay = TIMING.streamMinMs + Math.random() * (TIMING.streamMaxMs - TIMING.streamMinMs);
                     setTimeout(streamWord, delay);
                 } else {
                     // Final update to ensure everything is correct
-                    contentElement.innerHTML = this.parseMarkdown(text);
+                    contentElement.innerHTML = renderMarkdown(text);
                     this.scrollToBottom();
                     this.messageHistory.push({ sender: 'assistant', content: text, time });
                     resolve();
@@ -1520,69 +1504,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
             // Start streaming
             streamWord();
         });
-    }
-
-    /**
-     * Parse markdown content to HTML
-     */
-    parseMarkdown(content) {
-        let html = content;
-
-        // Parse inline code `code` first (before bold/italic to avoid conflicts)
-        html = html.replace(/`(.*?)`/g, '<code>$1</code>');
-
-        // Parse bold text **text**
-        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-        // Parse italic text *text* (skip if already part of strong tags)
-        html = html.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-
-        // Parse links [text](url)
-        html = html.replace(/\[([^\]]*)\]\(([^)]*)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-
-        // Parse line breaks
-        html = html.replace(/\n\n/g, '</p><p>');
-        html = html.replace(/\n/g, '<br>');
-
-        // Parse bullet points • or -
-        html = html.replace(/^[•\-]\s(.*)$/gm, '<li>$1</li>');
-
-        // Wrap list items in ul
-        html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
-
-        // Parse numbered lists
-        html = html.replace(/^\d+\.\s(.*)$/gm, '<li>$1</li>');
-
-        // Parse headers (simple approach for **Header:** patterns)
-        html = html.replace(/^(\*\*.*?\*\*):?\s*$/gm, '<h4>$1</h4>');
-
-        // Wrap paragraphs
-        if (!html.includes('<p>') && !html.includes('<ul>') && !html.includes('<h4>')) {
-            html = `<p>${html}</p>`;
-        } else if (html.includes('</p><p>')) {
-            html = `<p>${html}</p>`;
-        }
-
-        // Clean up empty paragraphs and fix formatting
-        html = html.replace(/<p><\/p>/g, '');
-        html = html.replace(/<p>(<h4>.*?<\/h4>)<\/p>/g, '$1');
-        html = html.replace(/<p>(<ul>.*?<\/ul>)<\/p>/g, '$1');
-
-        return html;
-    }
-
-    /**
-     * Escape HTML characters for user input
-     */
-    escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, m => map[m]);
     }
 
     /**
@@ -1649,80 +1570,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
     }
 
     /**
-     * Enhanced technology extraction with synonyms
-     */
-    extractTechnology(message) {
-        const techSynonyms = {
-            'python': ['python', 'django', 'flask', 'fastapi'],
-            'java': ['java', 'spring', 'spring boot', 'maven', 'gradle'],
-            'javascript': ['javascript', 'js', 'node', 'nodejs', 'react', 'vue', 'angular', 'express'],
-            'csharp': ['c#', 'csharp', '.net', 'asp.net'],
-            'cpp': ['c++', 'cpp', 'qt'],
-            'php': ['php', 'laravel', 'symfony'],
-            'react': ['react', 'reactjs', 'react native'],
-            'angular': ['angular', 'angularjs'],
-            'vue': ['vue', 'vuejs'],
-            'django': ['django', 'python django'],
-            'mysql': ['mysql', 'sql'],
-            'mongodb': ['mongodb', 'mongo'],
-            'docker': ['docker', 'container'],
-            'git': ['git', 'github'],
-            'ai': ['ai', 'artificial intelligence', 'machine learning', 'ml'],
-            'neural': ['neural network', 'deep learning', 'tensorflow']
-        };
-
-        const lowerMessage = message.toLowerCase();
-        for (const [tech, synonyms] of Object.entries(techSynonyms)) {
-            if (synonyms.some(synonym => lowerMessage.includes(synonym))) {
-                return tech;
-            }
-        }
-        return 'technology';
-    }
-
-    /**
-     * Extract company names from message
-     */
-    extractCompany(message) {
-        const companies = ['industrial 4.0 research center', 'caretta software', 'tawhid almas logistics'];
-        const lowerMessage = message.toLowerCase();
-        return companies.find(company => lowerMessage.includes(company));
-    }
-
-    /**
-     * Extract role/job titles from message
-     */
-    extractRole(message) {
-        const roles = ['researcher intern', 'engineering researcher intern', 'frontend developer intern', 'research assistant intern', 'network technician'];
-        const lowerMessage = message.toLowerCase();
-        return roles.find(role => lowerMessage.includes(role));
-    }
-
-    /**
-     * Extract project names from message
-     */
-    extractProject(message) {
-        const lowerMessage = message.toLowerCase();
-
-        // First try matching by project name (more specific)
-        const byName = this.knowledgeBase.projects.find(project =>
-            lowerMessage.includes(project.name.toLowerCase())
-        );
-        if (byName) return byName;
-
-        // Then try matching by a unique combination — only if at least 2 technologies are mentioned
-        // to avoid false positives from common tech names like HTML/CSS/JavaScript
-        return this.knowledgeBase.projects.find(project =>
-            project.technologies.filter(tech => {
-                const lowerTech = tech.toLowerCase();
-                // Skip very common tech terms to reduce false positives
-                if (['html', 'css', 'javascript', 'mysql', 'rest api'].includes(lowerTech)) return false;
-                return lowerMessage.includes(lowerTech);
-            }).length >= 2
-        );
-    }
-
-    /**
      * Enhanced specific technology handler with personality
      */
     handleSpecificTechnology(kb, tech) {
@@ -1731,20 +1578,16 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         // Get relevant projects from knowledge base
         const relevantProjects = kb.projects.filter(project =>
-            project.technologies.some(projectTech =>
-                projectTech.toLowerCase().includes(tech.toLowerCase())
-            )
+            project.technologies.some(projectTech => mentionsTech(projectTech, tech))
         );
 
         // Get relevant experience from knowledge base
         const relevantExperience = kb.experience.filter(exp =>
-            exp.responsibilities.some(resp =>
-                resp.toLowerCase().includes(tech.toLowerCase())
-            )
+            exp.responsibilities.some(resp => mentionsTech(resp, tech))
         );
 
         // Get relevant skills from knowledge base
-        const relevantSkills = this.getRelevantSkills(kb, tech);
+        const relevantSkills = getRelevantSkills(kb, tech);
 
         // Build comprehensive response with knowledge base data
         const knownTechs = ['python', 'java', 'javascript', 'react', 'django', 'mysql', 'mongodb', 'docker', 'git', 'ai'];
@@ -1759,40 +1602,21 @@ He's continuously learning and adapting to stay at the forefront of technologica
     }
 
     /**
-     * Get relevant skills for a technology
-     */
-    getRelevantSkills(kb, tech) {
-        const techSkillMap = {
-            'python': ['Python', 'Django', 'Flask', 'FastAPI'],
-            'java': ['Java', 'Spring Boot', 'Maven', 'Gradle'],
-            'javascript': ['JavaScript', 'React', 'Node.js', 'Express'],
-            'react': ['React', 'React Native', 'Hooks', 'Context'],
-            'django': ['Django', 'Python', 'ORM', 'Middleware'],
-            'mysql': ['MySQL', 'SQL', 'Database Design', 'Query Optimization'],
-            'mongodb': ['MongoDB', 'NoSQL', 'Document Modeling', 'Aggregation'],
-            'docker': ['Docker', 'Containerization', 'DevOps', 'CI/CD'],
-            'git': ['Git', 'Version Control', 'GitHub', 'Collaboration'],
-            'ai': ['AI', 'Machine Learning', 'TensorFlow', 'Neural Networks']
-        };
-
-        return techSkillMap[tech] || [];
-    }
-
-    /**
      * Build professional technology response with knowledge base data
      */
     buildProfessionalTechResponse(kb, tech, projects, experience, skills) {
-        let response = `Tariq has extensive ${tech} experience, particularly with ${skills.join(', ')}. `;
+        let response = skills.length
+            ? `Tariq works with ${skills.join(', ')}. `
+            : `Tariq has worked with ${techLabel(tech)}. `;
 
         if (projects.length > 0) {
             response += `He's applied this in ${projects.length} projects, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
         }
 
         if (experience.length > 0) {
-            response += `His experience includes ${experience.length} roles where ${tech} was utilized, such as ${experience.slice(0, 2).map(e => e.title).join(', ')}. `;
+            response += `His experience includes ${experience.length} roles where ${techLabel(tech)} was utilized, such as ${experience.slice(0, 2).map(e => e.title).join(', ')}. `;
         }
 
-        response += `His ${tech} expertise covers ${skills.slice(0, 3).join(', ')}.`;
 
         return response;
     }
@@ -1816,17 +1640,17 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         const emoji = techEmojis[tech] || '💻';
 
-        let response = `${emoji} Oh, ${tech}! This is where Tariq truly shines! His ${skills.join(', ')} skills are absolutely incredible. `;
+        let response = `${emoji} Oh, ${techLabel(tech)}! This is a highlight of Tariq's work.${skills.length ? ` His skills include ${skills.join(', ')}.` : ''} `;
 
         if (projects.length > 0) {
-            response += `He's built ${projects.length} amazing projects with ${tech}, including ${projects.slice(0, 2).map(p => p.name).join(', ')} that showcase his brilliance! `;
+            response += `He's built ${projects.length} amazing projects with ${techLabel(tech)}, including ${projects.slice(0, 2).map(p => p.name).join(', ')} that showcase his brilliance! `;
         }
 
         if (experience.length > 0) {
-            response += `His ${experience.length} professional roles demonstrate his ${tech} mastery, especially ${experience.slice(0, 2).map(e => e.title).join(', ')}! `;
+            response += `His ${experience.length} professional roles demonstrate his ${techLabel(tech)} mastery, especially ${experience.slice(0, 2).map(e => e.title).join(', ')}! `;
         }
 
-        response += `From web development to machine learning, his ${tech} work is seriously impressive!`;
+        response += `From web development to machine learning, his ${techLabel(tech)} work is seriously impressive!`;
 
         return response;
     }
@@ -1835,17 +1659,17 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Build generic technology response with knowledge base data
      */
     buildGenericTechResponse(kb, tech, projects, experience, skills) {
-        let response = `Tariq has experience with ${tech} and has applied it in various projects. `;
+        let response = `Tariq has experience with ${techLabel(tech)} and has applied it in various projects. `;
 
         if (projects.length > 0) {
-            response += `He's worked on ${projects.length} projects using ${tech}, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
+            response += `He's worked on ${projects.length} projects using ${techLabel(tech)}, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
         }
 
         if (experience.length > 0) {
-            response += `His experience includes ${experience.length} roles where ${tech} was utilized. `;
+            response += `His experience includes ${experience.length} roles where ${techLabel(tech)} was utilized. `;
         }
 
-        response += `Would you like to see specific examples of his work with ${tech}?`;
+        response += `Would you like to see specific examples of his work with ${techLabel(tech)}?`;
 
         return response;
     }
@@ -1935,7 +1759,6 @@ He demonstrates particular strength in full-stack development with Python/Django
 
 **${experience.title}** at ${experience.company}
 📅 ${experience.duration}
-📍 ${experience.location || 'Remote'}
 
 **Key Responsibilities:**
 ${experience.responsibilities.map(resp => `• ${resp}`).join('\n')}
@@ -1945,7 +1768,8 @@ ${this.getExperienceImpact(experience)}`;
         }
 
         if (role) {
-            const experience = kb.experience.find(exp => exp.title.toLowerCase().includes(role.toLowerCase()));
+            const normalizeTitle = title => title.toLowerCase().replace(/\s*\([^)]*\)/g, '').trim();
+            const experience = kb.experience.find(exp => normalizeTitle(exp.title) === normalizeTitle(role));
             if (experience) {
                 const personalityIntro = this.getPersonalityExperienceIntro(experience);
                 return `${personalityIntro}
@@ -1953,7 +1777,6 @@ ${this.getExperienceImpact(experience)}`;
 Regarding his role as **${experience.title}** at ${experience.company}:
 
 📅 ${experience.duration}
-📍 ${experience.location || 'Remote'}
 
 **Key Achievements:**
 ${experience.responsibilities.map(resp => `• ${resp}`).join('\n')}
@@ -2057,17 +1880,15 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
      */
     handleProjectsByTechnology(kb, tech) {
         const relevantProjects = kb.projects.filter(project =>
-            project.technologies.some(projectTech =>
-                projectTech.toLowerCase().includes(tech.toLowerCase())
-            )
+            project.technologies.some(projectTech => mentionsTech(projectTech, tech))
         );
 
         if (relevantProjects.length === 0) {
             const userStyle = this.determineUserResponseStyle();
             if (userStyle === 'enthusiastic') {
-                return `🤔 While Tariq hasn't worked on any projects specifically using ${tech} yet, he's absolutely familiar with the technology and super eager to apply it in future projects! His learning agility is remarkable! Would you like to see his work in related technologies?`;
+                return `🤔 None of Tariq's projects use ${techLabel(tech)} yet. Would you like to see his work in related technologies instead?`;
             } else {
-                return `Tariq hasn't worked on any projects specifically using ${tech}, but he's familiar with the technology and eager to apply it in future projects. Would you like to see his work in related technologies?`;
+                return `None of Tariq's projects use ${techLabel(tech)} yet. Would you like to see his work in related technologies instead?`;
             }
         }
 
@@ -2100,7 +1921,7 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
             'javascript': '🚀 JavaScript projects! The language of the web in action!'
         };
 
-        return techIntros[tech.toLowerCase()] || `🚀 ${tech} projects! Here's where Tariq applies this technology!`;
+        return techIntros[tech.toLowerCase()] || `🚀 ${techLabel(tech)} projects! Here's where Tariq applies this technology!`;
     }
 
     /**
@@ -2110,9 +1931,9 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
         const userStyle = this.determineUserResponseStyle();
 
         if (userStyle === 'enthusiastic') {
-            return `Tariq's work with ${tech} is absolutely impressive! He's created ${projects.length} amazing projects that showcase his versatility and technical prowess. Each project demonstrates his ability to solve real-world problems with elegant solutions! ✨`;
+            return `Tariq's work with ${techLabel(tech)} is absolutely impressive! He's created ${projects.length} amazing projects that showcase his versatility and technical prowess. Each project demonstrates his ability to solve real-world problems with elegant solutions! ✨`;
         } else {
-            return `These ${projects.length} projects highlight Tariq's experience with ${tech} and his ability to deliver practical solutions using this technology.`;
+            return `These ${projects.length} projects highlight Tariq's experience with ${techLabel(tech)} and his ability to deliver practical solutions using this technology.`;
         }
     }
 
@@ -2125,7 +1946,7 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
 
         return `🚀 Oh, Tariq's professional journey is absolutely inspiring! His career path shows incredible growth and diverse experiences:
 
-**Current Role:** ${currentRole.title} at ${currentRole.company} 🏭
+**Most Recent Role:** ${currentRole.title} at ${currentRole.company} 🏭
 *He's working on cutting-edge technology that's shaping the future!*
 
 **Previous Experience:**
@@ -2142,8 +1963,8 @@ ${previousRoles}
 
         return `Tariq has gained valuable professional experience across multiple roles:
 
-**Current Position:** ${currentRole.title}
-${currentRole.company}, ${currentRole.location}
+**Most Recent Position:** ${currentRole.title}
+${currentRole.company}
 Focus on cutting-edge technology research and implementation
 
 **Previous Roles:**
@@ -2170,14 +1991,16 @@ ${projectList}
      * Get professional projects response
      */
     getProfessionalProjectsResponse(kb) {
-        const webApps = kb.projects.filter(p => p.technologies.includes('HTML') || p.technologies.includes('Django') || p.technologies.includes('Java'));
-        const mobileApps = kb.projects.filter(p => p.technologies.includes('React Native'));
-        const researchProjects = kb.projects.filter(p => p.technologies.includes('Neural Networks') || p.technologies.includes('TensorFlow'));
+        const isMobile = p => p.technologies.includes('React Native');
+        const isResearch = p => p.technologies.includes('Neural Networks') || p.technologies.includes('TensorFlow');
+        const mobileApps = kb.projects.filter(isMobile);
+        const researchProjects = kb.projects.filter(isResearch);
+        const webApps = kb.projects.filter(p => !isMobile(p) && !isResearch(p));
 
         return `Tariq has completed ${kb.stats.projects} diverse projects showcasing his technical expertise:
 
 **Web Applications:**
-${webApps.slice(0, 3).map(p => `- ${p.name} - ${p.technologies.join(', ')}`).join('\n')}
+${webApps.slice(0, 5).map(p => `- ${p.name} - ${p.technologies.join(', ')}`).join('\n')}
 
 **Mobile Applications:**
 ${mobileApps.map(p => `- ${p.name} - ${p.technologies.join(', ')}`).join('\n')}
@@ -2195,13 +2018,13 @@ Each project demonstrates practical application of technical skills, problem-sol
         const lowerMessage = message.toLowerCase();
 
         if (lowerMessage.includes('tariq') && (lowerMessage.includes('is') || lowerMessage.includes('are'))) {
-            return `Tariq Ahmad is a talented ${kb.personal.title} based in ${kb.personal.location}. He's a graduate from ${kb.personal.university} with a passion for full-stack development and research in Industry 4.0 technologies. Currently working as a ${kb.experience[0].title}, he's known for his expertise in Python/Django, Java/Spring Boot, and modern web technologies.`;
+            return `Tariq Ahmad is a talented ${kb.personal.title}. He's a graduate from ${kb.personal.university} with a passion for full-stack development and research in Industry 4.0 technologies. His most recent role was ${kb.experience[0].title}, and he's known for his expertise in Python/Django, Java/Spring Boot, and modern web technologies.`;
         }
 
         if (lowerMessage.includes('work') || lowerMessage.includes('company')) {
             const currentRole = kb.experience[0];
             const previousRoles = kb.experience.slice(1).map(exp => `${exp.title} at ${exp.company}`).join(', ');
-            return `Tariq currently works as a ${currentRole.title} at ${currentRole.company} in ${currentRole.location}. He's also worked at ${previousRoles}.`;
+            return `Tariq's most recent role was ${currentRole.title} at ${currentRole.company} (${currentRole.duration}). He has also worked as: ${previousRoles}.`;
         }
 
         if (lowerMessage.includes('recommend') || lowerMessage.includes('supervisor') || lowerMessage.includes('professor')) {
@@ -2248,20 +2071,20 @@ Each project demonstrates practical application of technical skills, problem-sol
         const lowerMessage = message.toLowerCase();
 
         if (lowerMessage.includes('live') || lowerMessage.includes('from') || lowerMessage.includes('location')) {
-            return `Tariq currently lives in ${kb.personal.location}. He's based in Istanbul, Turkey, where he studies and works. This location gives him access to Turkey's growing tech scene and international opportunities.`;
+            return `Tariq keeps his exact location private — details are available on request at ${kb.personal.email}. He is open to both remote and on-site work.`;
         }
 
         if (lowerMessage.includes('work') || lowerMessage.includes('company')) {
             const currentRole = kb.experience[0];
             const previousCompanies = kb.experience.slice(1).map(exp => exp.company).join(', ');
-            return `Tariq works at ${currentRole.company} in ${currentRole.location}. He has also worked at ${previousCompanies}, all located in ${kb.personal.location}.`;
+            return `Tariq's most recent role was at ${currentRole.company}. He has also worked at ${previousCompanies}.`;
         }
 
         if (lowerMessage.includes('study') || lowerMessage.includes('university') || lowerMessage.includes('school')) {
-            return `Tariq studied at ${kb.personal.university} in ${kb.personal.location}. He completed his Computer Engineering degree there, gaining both theoretical knowledge and practical experience in software development.`;
+            return `Tariq studied at ${kb.personal.university}. He completed his Computer Engineering degree there, gaining both theoretical knowledge and practical experience in software development.`;
         }
 
-        return `Tariq is based in ${kb.personal.location}, specifically Istanbul, Turkey. This vibrant city provides him with excellent opportunities in the tech industry and access to international collaborations.`;
+        return `Tariq keeps his exact location private — details are available on request at ${kb.personal.email}. He is open to both remote and on-site work and to international collaboration.`;
     }
 
     /**
@@ -2280,7 +2103,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         }
 
         if (lowerMessage.includes('born') || lowerMessage.includes('birthday')) {
-            return `I don't have Tariq's date of birth to share, but he's a driven Computer Engineer based in ${kb.personal.location}. He graduated from ${kb.personal.university} and brings fresh perspectives to software development and research.`;
+            return `I don't have Tariq's date of birth to share, but he's a driven Computer Engineer. He graduated from ${kb.personal.university} and brings fresh perspectives to software development and research.`;
         }
 
         if (lowerMessage.includes('available') || lowerMessage.includes('free')) {
@@ -2316,7 +2139,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         }
 
         if (lowerMessage.includes('old') || lowerMessage.includes('age')) {
-            return `Tariq is a Computer Engineer from ${kb.personal.location} who graduated from ${kb.personal.university}. His youth brings fresh perspectives and enthusiasm to technology, combined with solid academic training and practical experience.`;
+            return `Tariq is a Computer Engineer who graduated from ${kb.personal.university}. His youth brings fresh perspectives and enthusiasm to technology, combined with solid academic training and practical experience.`;
         }
 
         return "Tariq approaches his work with dedication and continuous learning. He combines academic knowledge with practical experience, focusing on quality solutions and user-centric design. He's built his expertise through hands-on projects and professional roles.";
@@ -2356,19 +2179,10 @@ Each project demonstrates practical application of technical skills, problem-sol
         if (currentTopic === 'skills') {
             return `To expand on Tariq's technical skills:
 
-**Advanced Skills:**
-• System Design & Architecture
-• API Development (RESTful & GraphQL)
-• Database Design & Optimization
-• Version Control & CI/CD
-• Cloud Services & Deployment
-
-**Soft Skills:**
-• Problem-Solving & Analytical Thinking
-• Team Collaboration & Communication
-• Project Management & Time Planning
-• Research & Documentation
-• Client Relations & Requirements Gathering
+**Databases:** ${kb.skills.databases.join(', ')}
+**Tools:** ${kb.skills.tools.join(', ')}
+**Networking:** ${kb.skills.networking.join(', ')}
+**Soft Skills:** ${kb.skills.softSkills.join(', ')}
 
 He's continuously expanding his skill set through new projects and learning opportunities.`;
         }
@@ -2380,7 +2194,7 @@ He's continuously expanding his skill set through new projects and learning oppo
 • Started with network infrastructure fundamentals
 • Moved to frontend development with modern frameworks
 • Advanced to research and engineering roles
-• Currently focused on Industry 4.0 technologies
+• Most recently focused on Industry 4.0 research
 
 **Key Learnings:**
 • Practical application of academic knowledge
@@ -2395,18 +2209,11 @@ Each role has built upon the previous, creating a strong foundation in both tech
             return `Tariq's project portfolio showcases his versatility:
 
 **Project Highlights:**
-• ${kb.projects.filter(p => p.technologies.includes('Django')).length} Django/Python web applications
-• ${kb.projects.filter(p => p.technologies.includes('React Native')).length} React Native mobile apps
-• ${kb.projects.filter(p => p.technologies.includes('MySQL') || p.technologies.includes('MongoDB')).length} database-driven systems
-• ${kb.projects.filter(p => p.technologies.includes('Neural Networks')).length} research implementations
-• ${kb.projects.length} real-world problem-solving applications
-
-**Development Approach:**
-• User-centered design principles
-• Clean, maintainable code architecture
-• Comprehensive testing and documentation
-• Performance optimization and security
-• Scalable and maintainable solutions
+• ${kb.projects.filter(p => p.technologies.includes('Java')).length} Java projects (Spring Boot and Swing)
+• ${kb.projects.filter(p => p.technologies.includes('React Native')).length} React Native mobile app
+• ${kb.projects.filter(p => p.technologies.includes('MySQL')).length} MySQL-backed systems
+• ${kb.projects.filter(p => p.technologies.includes('Neural Networks')).length} machine-learning project
+• ${kb.projects.length} projects in total
 
 His projects demonstrate both technical proficiency and practical application of engineering principles.`;
         }
@@ -2435,7 +2242,7 @@ His projects demonstrate both technical proficiency and practical application of
 • Spring Boot for robust backend systems
 • Excellent for large-scale applications
 
-**Tariq's Preference:** He enjoys both but often chooses Python for web development and Java for enterprise systems, depending on project requirements.`;
+**In his projects:** Python powers his Hand-Written Digit Classifier, while Java powers his Hospital Management System (Spring Boot) and Banking Management System (Swing).`;
         }
 
         if (lowerMessage.includes('react') && lowerMessage.includes('angular')) {
@@ -2445,15 +2252,16 @@ His projects demonstrate both technical proficiency and practical application of
 • More flexible and component-based
 • Easier learning curve for JavaScript developers
 • Better for smaller to medium projects
-• Used in his Quizlet project
+• Used in his CV Builder project
 
 **Angular:**
 • More structured and opinionated
 • Better for large enterprise applications
 • Steeper learning curve but more comprehensive
 • Strong TypeScript integration
+• Used during his Frontend Developer (Angular) internship at Caretta Software Company
 
-**Tariq's Experience:** He's more hands-on with React but understands Angular's architecture and would be comfortable working with either framework.`;
+**Tariq's Experience:** He has used React in his own projects and Angular in his frontend internship.`;
         }
 
         if (lowerMessage.includes('sql') && lowerMessage.includes('nosql')) {
@@ -2469,7 +2277,7 @@ His projects demonstrate both technical proficiency and practical application of
 • Flexible schema and scalability
 • Better for unstructured data
 • High performance for certain use cases
-• Used in his mobile applications
+• Listed in his database skills (his BudgetWise app uses Firebase, another NoSQL store)
 
 **Tariq's Approach:** He chooses the database technology based on the specific project requirements and data structure needs.`;
         }
@@ -2485,7 +2293,7 @@ His projects demonstrate both technical proficiency and practical application of
         this.updateUserInteraction('general');
 
         // Enhanced typo correction for common words
-        const correctedMessage = this.correctCommonTypos(lowerMessage);
+        const correctedMessage = correctCommonTypos(lowerMessage);
 
         // Enhanced personality-based greeting detection with typo tolerance
         const greetingPatterns = ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening'];
@@ -2501,7 +2309,7 @@ His projects demonstrate both technical proficiency and practical application of
 
         // Handle short conversational words with typo tolerance
         const conversationalWords = ['so', 'ok', 'okay', 'hmm', 'hmmm', 'ah', 'oh', 'well'];
-        if (conversationalWords.includes(correctedMessage) || conversationalWords.some(word => correctedMessage.includes(word))) {
+        if (conversationalWords.some(word => containsPhrase(correctedMessage, word))) {
             const continuationResponses = [
                 "🤔 I sense you're thinking! What would you like to know about Tariq's skills, experience, or projects?",
                 "💭 Ready to dive deeper into Tariq's professional journey? I can share details about his education, work, or achievements!",
@@ -2550,117 +2358,25 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
-     * Correct common typos in user messages
-     */
-    correctCommonTypos(message) {
-        const typoCorrections = {
-            'skil': 'skill',
-            'skils': 'skills',
-            'tehnology': 'technology',
-            'tehnologies': 'technologies',
-            'porject': 'project',
-            'porjects': 'projects',
-            'experiance': 'experience',
-            'educaton': 'education',
-            'universiy': 'university',
-            'contct': 'contact',
-            'contat': 'contact',
-            'avaliable': 'available',
-            'freelncer': 'freelancer',
-            'programing': 'programming',
-            'developement': 'development',
-            'framwork': 'framework',
-            'data base': 'database',
-            'data bases': 'databases',
-            'javascrpt': 'javascript',
-            'pyton': 'python',
-            'jav': 'java',
-            'reactjs': 'react',
-            'react js': 'react',
-            'springboot': 'spring boot',
-            'git hub': 'github',
-            'linkdin': 'linkedin',
-            'twiter': 'twitter',
-            'facebok': 'facebook',
-            'instgram': 'instagram'
-        };
-
-        let correctedMessage = message;
-        for (const [typo, correction] of Object.entries(typoCorrections)) {
-            // Word-bounded so corrections never corrupt valid words
-            // (e.g. 'jav' must not turn "javascript" into "javaascript")
-            const escaped = typo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
-            correctedMessage = correctedMessage.replace(regex, correction);
-        }
-
-        return correctedMessage;
-    }
-
-    /**
      * Fuzzy matching function for typo tolerance
      */
     fuzzyMatch(text, patterns, threshold = 0.7) {
         for (const pattern of patterns) {
-            const similarity = this.calculateSimilarity(text, pattern);
+            const similarity = calculateSimilarity(text, pattern);
             if (similarity >= threshold) {
                 return true;
             }
             // Pattern contained in the message counts; the reverse check is
             // limited to messages of 3+ chars so short input ("pr") can't
             // match every pattern containing it.
-            if (text.includes(pattern)) {
+            if (containsPhrase(text, pattern)) {
                 return true;
             }
-            if (text.length >= 3 && pattern.includes(text)) {
+            if (text.length >= 3 && containsPhrase(pattern, text)) {
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * Calculate similarity between two strings using Levenshtein distance
-     */
-    calculateSimilarity(str1, str2) {
-        const longer = str1.length > str2.length ? str1 : str2;
-        const shorter = str1.length > str2.length ? str2 : str1;
-
-        if (longer.length === 0) return 1.0;
-
-        const levenshteinDistance = this.calculateLevenshteinDistance(longer, shorter);
-        return (longer.length - levenshteinDistance) / longer.length;
-    }
-
-    /**
-     * Calculate Levenshtein distance between two strings
-     */
-    calculateLevenshteinDistance(str1, str2) {
-        const matrix = [];
-
-        for (let i = 0; i <= str2.length; i++) {
-            matrix[i] = [i];
-        }
-
-        for (let j = 0; j <= str1.length; j++) {
-            matrix[0][j] = j;
-        }
-
-        for (let i = 1; i <= str2.length; i++) {
-            for (let j = 1; j <= str1.length; j++) {
-                if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
-                    matrix[i][j] = matrix[i - 1][j - 1];
-                } else {
-                    matrix[i][j] = Math.min(
-                        matrix[i - 1][j - 1] + 1,
-                        matrix[i][j - 1] + 1,
-                        matrix[i - 1][j] + 1
-                    );
-                }
-            }
-        }
-
-        return matrix[str2.length][str1.length];
     }
 
     /**
@@ -2785,7 +2501,7 @@ His projects demonstrate both technical proficiency and practical application of
     handlePartialIntent(kb, intent, message) {
         const suggestions = {
             'skills': "I can tell you about Tariq's technical skills! He's proficient in Python, Java, JavaScript, and works with frameworks like Django, Spring Boot, and React. Would you like to know more about his programming languages, frameworks, or tools?",
-            'experience': "I can share details about Tariq's professional experience! He's worked as a Researcher Intern at Industrial 4.0 Research Center and has experience in frontend development. Are you interested in his current role or previous positions?",
+            'experience': "I can share details about Tariq's professional experience! He's worked as a Researcher Intern at Industrial 4.0 Research Center and has experience in frontend development. Are you interested in his most recent role or earlier positions?",
             'projects': "Tariq has worked on some impressive projects! Including a Quizlet platform, BudgetWise expense tracker, and various management systems. Would you like to hear about his web applications, mobile apps, or research projects?",
             'education': "I can tell you about Tariq's educational background! He studied Computer Engineering at Istanbul Aydin University. Would you like to know about his degree, certifications, or academic achievements?",
             'contact': "I can help you get in touch with Tariq! He's available for freelance projects and new opportunities. Would you like his contact information or professional profiles?"
@@ -2818,7 +2534,7 @@ His projects demonstrate both technical proficiency and practical application of
 
         if (message.includes('work') || message.includes('job')) {
             suggestions.push("• \"Where has Tariq worked?\"");
-            suggestions.push("• \"What is his current position?\"");
+            suggestions.push("• \"What was his most recent role?\"");
         }
 
         return suggestions.join('\n');
@@ -2853,18 +2569,17 @@ His projects demonstrate both technical proficiency and practical application of
      */
     extractEntities(message) {
         const entities = [];
-        const lowerMessage = message.toLowerCase();
 
         // Check for technologies
-        const tech = this.extractTechnology(message);
+        const tech = extractTechnology(message);
         if (tech !== 'technology') entities.push({ type: 'technology', value: tech });
 
         // Check for companies
-        const company = this.extractCompany(message);
+        const company = extractCompany(message, this.knowledgeBase);
         if (company) entities.push({ type: 'company', value: company });
 
         // Check for projects
-        const project = this.extractProject(message);
+        const project = extractProject(message, this.knowledgeBase);
         if (project) entities.push({ type: 'project', value: project.name });
 
         return entities;
@@ -2896,10 +2611,11 @@ His projects demonstrate both technical proficiency and practical application of
      * Enhanced AI response generation with natural conversation flow
      */
     async generateResponse(message) {
-        // Simulate thinking time with variation based on conversation complexity
-        const baseThinkingTime = 800 + Math.random() * 1200;
-        const complexityBonus = Math.min(this.personality.conversationDepth * 100, 500);
-        await new Promise(resolve => setTimeout(resolve, baseThinkingTime + complexityBonus));
+        // Brief "thinking" pause so the typing indicator is perceptible (skipped for reduced motion)
+        if (!prefersReducedMotion()) {
+            const thinkingTime = TIMING.thinkMinMs + Math.random() * (TIMING.thinkMaxMs - TIMING.thinkMinMs);
+            await new Promise(resolve => setTimeout(resolve, thinkingTime));
+        }
 
         // Update conversation context with more sophisticated analysis
         const normalizedMessage = message.toLowerCase();
@@ -2958,7 +2674,7 @@ His projects demonstrate both technical proficiency and practical application of
     analyzeUserInteraction(message) {
         // Analyze message characteristics (counting is done in updateUserInteraction)
         const messageLength = message.length;
-        const hasTechnicalTerms = this.extractTechnology(message) !== 'technology';
+        const hasTechnicalTerms = extractTechnology(message) !== 'technology';
 
         // Adjust user profile based on interaction
         if (hasTechnicalTerms) {
@@ -3020,7 +2736,6 @@ His projects demonstrate both technical proficiency and practical application of
             ]
         };
 
-        const userStyle = this.determineUserResponseStyle();
 
         // Only add flow enhancers for certain response types and contexts
         if (flowEnhancers[intent.name] && this.personality.conversationDepth === 1) {
@@ -3029,7 +2744,8 @@ His projects demonstrate both technical proficiency and practical application of
         }
 
         // Add natural transitions for follow-up conversations
-        if (this.personality.conversationDepth > 2) {
+        // (skipped for replies that open with an emoji or heading character)
+        if (this.personality.conversationDepth > 2 && /^[A-Za-z]/.test(response)) {
             const transitions = [
                 "Building on our conversation,",
                 "To expand on what we've been discussing,",
@@ -3039,7 +2755,7 @@ His projects demonstrate both technical proficiency and practical application of
 
             if (Math.random() > 0.5) {
                 const transition = this.getRandomResponse(transitions);
-                response = transition + " " + response.charAt(0).toLowerCase() + response.slice(1);
+                response = transition + " " + lowerFirst(response);
             }
         }
 
@@ -3077,7 +2793,7 @@ His projects demonstrate both technical proficiency and practical application of
             const phrase = this.getRandomResponse(referencePhrases)
                 .replace('{entity}', primaryEntity.value);
 
-            return phrase + " " + response.charAt(0).toLowerCase() + response.slice(1);
+            return phrase + " " + lowerFirst(response);
         }
 
         return response;
@@ -3108,22 +2824,39 @@ His projects demonstrate both technical proficiency and practical application of
         let bestScore = 0;
 
         // Apply typo correction before intent matching
-        const correctedMessage = this.correctCommonTypos(message.toLowerCase());
+        const correctedMessage = correctCommonTypos(message.toLowerCase());
+
+        // Generic wh-question intents (what/who/where/...) match almost any question and
+        // saturate at 1.0, so they only win when no topical intent is a plausible match.
+        let bestGeneric = null;
+        let bestGenericScore = 0;
+        // "about" ("tell me about ...") is broad: a clearly specific topic should beat it
+        let aboutIntent = null;
+        let aboutScore = 0;
 
         for (const intent of this.intentHandlers) {
-            const score = this.calculateIntentScore(correctedMessage, intent);
-
-            // Prioritize certain intents based on priority property
             const priorityBonus = typeof intent.priority === 'number' ? intent.priority : 1;
-            const finalScore = score * priorityBonus;
+            const score = this.calculateIntentScore(correctedMessage, intent) * priorityBonus;
 
-            if (finalScore > bestScore && finalScore > 0.3) { // Minimum threshold
-                bestScore = finalScore;
+            if (intent.name.endsWith('_questions')) {
+                if (score > bestGenericScore) {
+                    bestGenericScore = score;
+                    bestGeneric = intent;
+                }
+            } else if (intent.name === 'about') {
+                aboutIntent = intent;
+                aboutScore = score;
+            } else if (score > bestScore) {
+                bestScore = score;
                 bestMatch = intent;
             }
         }
 
-        return bestMatch;
+        if (bestMatch && bestScore > INTENT_MIN_SCORE) return bestMatch;
+        if (aboutIntent && aboutScore >= TOPICAL_MIN_SCORE) return aboutIntent;
+        if (bestMatch && bestScore >= TOPICAL_MIN_SCORE) return bestMatch;
+        if (bestGeneric && bestGenericScore > INTENT_MIN_SCORE) return bestGeneric;
+        return bestMatch && bestScore > INTENT_MIN_SCORE ? bestMatch : null;
     }
 
     /**
@@ -3131,6 +2864,8 @@ His projects demonstrate both technical proficiency and practical application of
      */
     calculateIntentScore(message, intent) {
         let score = 0;
+        let techBonus = 0; // added after normalization so big intents can't dilute it
+        let hasDistinctiveMatch = false; // a whole-word hit on a pattern of 5+ characters
         const lowerMessage = message.toLowerCase();
         const messageWords = lowerMessage.split(/\s+/).filter(word => word.length > 0);
 
@@ -3139,8 +2874,9 @@ His projects demonstrate both technical proficiency and practical application of
             const lowerPattern = pattern.toLowerCase();
 
             // Exact match
-            if (lowerMessage.includes(lowerPattern)) {
+            if (containsPhrase(lowerMessage, lowerPattern)) {
                 score += 1;
+                if (lowerPattern.length >= 5) hasDistinctiveMatch = true;
 
                 // Bonus for exact word matches
                 if (pattern.includes(' ')) {
@@ -3149,7 +2885,7 @@ His projects demonstrate both technical proficiency and practical application of
             }
             // Fuzzy match for single-word patterns
             else if (!pattern.includes(' ')) {
-                const similarity = this.calculateSimilarity(lowerMessage, lowerPattern);
+                const similarity = calculateSimilarity(lowerMessage, lowerPattern);
                 if (similarity > 0.8) {
                     score += 0.8 * similarity; // Weighted fuzzy match
                 }
@@ -3158,11 +2894,14 @@ His projects demonstrate both technical proficiency and practical application of
 
         // Word-level fuzzy matching
         for (const word of messageWords) {
+            if (STOP_WORDS.has(word)) continue;
             for (const pattern of intent.patterns) {
                 const patternWords = pattern.toLowerCase().split(/\s+/).filter(w => w.length > 0);
 
                 for (const patternWord of patternWords) {
-                    const similarity = this.calculateSimilarity(word, patternWord);
+                    // similarity > 0.85 is impossible when lengths differ by more than 15%
+                    if (Math.abs(word.length - patternWord.length) > Math.max(word.length, patternWord.length) * 0.15) continue;
+                    const similarity = calculateSimilarity(word, patternWord);
                     if (similarity > 0.85) {
                         score += 0.3 * similarity; // Word-level fuzzy match
                     }
@@ -3176,6 +2915,12 @@ His projects demonstrate both technical proficiency and practical application of
 
         if (intent.name === 'skills' && hasTechKeyword) {
             score += 2.0; // Strong bonus for skills intent when tech keywords present
+        }
+
+        // A named technology ("do you know java") is a skills question unless it asks for projects
+        if (intent.name === 'skills' && extractTechnology(lowerMessage) !== 'technology' &&
+            !containsPhrase(lowerMessage, 'project')) {
+            techBonus = 0.7;
         }
 
         // Context-based scoring
@@ -3195,13 +2940,14 @@ His projects demonstrate both technical proficiency and practical application of
 
         // For intents with many patterns, be more lenient
         const patternCount = intent.patterns.length;
-        if (patternCount > 10) {
-            // Use a more lenient normalization for intents with many patterns
-            return Math.min(score / Math.sqrt(patternCount), 1);
-        }
+        const normalized = patternCount > 10
+            ? Math.min(score / Math.sqrt(patternCount), 1)
+            : Math.min(score / patternCount, 1);
 
-        // Normalize score
-        return Math.min(score / patternCount, 1);
+        // One distinctive keyword ("certifications") is enough to be considered, however many
+        // patterns the intent has — otherwise big intents are diluted below the threshold.
+        const floored = hasDistinctiveMatch ? Math.max(normalized, INTENT_MIN_SCORE + 0.02) : normalized;
+        return Math.min(floored + techBonus, 1);
     }
 
     /**
@@ -3279,174 +3025,6 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
-     * Adjust chat widget for mobile devices
-     */
-    adjustForMobile() {
-        const isMobile = window.innerWidth < 768;
-
-        if (isMobile) {
-            // Add touch-friendly interactions
-            this.addTouchInteractions();
-        }
-    }
-
-    /**
-     * Add touch-friendly interactions for mobile devices
-     */
-    addTouchInteractions() {
-        if (!this.touchInteractionsAdded) {
-            // Add touch feedback to buttons
-            const buttons = this.elements.chatWidget.querySelectorAll('button');
-            buttons.forEach(button => {
-                button.addEventListener('touchstart', () => {
-                    button.style.transform = 'scale(0.95)';
-                }, { passive: true });
-
-                button.addEventListener('touchend', () => {
-                    button.style.transform = 'scale(1)';
-                }, { passive: true });
-            });
-
-            // Enhanced swipe gesture detection
-            let startY = 0;
-            let currentY = 0;
-            let startX = 0;
-            let isScrolling = false;
-            let isSwipeGesture = false;
-            let scrollStartTime = 0;
-            let touchTarget = null;
-            let initialScrollTop = 0;
-
-            this.elements.chatWidget.addEventListener('touchstart', (e) => {
-                const touch = e.touches[0];
-                startY = touch.clientY;
-                currentY = startY;
-                startX = touch.clientX;
-                isScrolling = false;
-                isSwipeGesture = false;
-                scrollStartTime = Date.now();
-                touchTarget = e.target;
-                
-                // Get initial scroll position of messages area
-                const messagesArea = this.elements.chatMessages;
-                initialScrollTop = messagesArea ? messagesArea.scrollTop : 0;
-                
-                // Show swipe indicator if touching header or input area
-                const isOnHeader = touchTarget.closest('.chat-header');
-                const isOnInput = touchTarget.closest('.chat-input');
-                if (isOnHeader || isOnInput) {
-                    this.elements.chatWidget.classList.add('swipe-indicator');
-                }
-            }, { passive: true });
-
-            this.elements.chatWidget.addEventListener('touchmove', (e) => {
-                const touch = e.touches[0];
-                currentY = touch.clientY;
-                const currentX = touch.clientX;
-                const deltaY = currentY - startY;
-                const deltaX = currentX - startX;
-                const deltaTime = Date.now() - scrollStartTime;
-                
-                // Calculate velocity
-                const velocityY = Math.abs(deltaY) / deltaTime;
-                
-                // Check if touch is on scrollable messages area
-                const isOnMessages = touchTarget.closest('.chat-messages');
-                const messagesArea = this.elements.chatMessages;
-                const currentScrollTop = messagesArea ? messagesArea.scrollTop : 0;
-                const hasScrollableContent = messagesArea && messagesArea.scrollHeight > messagesArea.clientHeight;
-                const isAtTop = currentScrollTop <= 0;
-                const isAtBottom = messagesArea && currentScrollTop >= (messagesArea.scrollHeight - messagesArea.clientHeight - 5);
-                
-                // Determine if this is a scroll gesture
-                // - Vertical movement is dominant
-                // - Fast movement or on scrollable area
-                // - Not a purely horizontal swipe
-                if (Math.abs(deltaY) > Math.abs(deltaX) && (velocityY > 0.3 || isOnMessages)) {
-                    isScrolling = true;
-                }
-                
-                // Detect swipe gesture for closing (only when not scrolling and on header/input area)
-                const isOnHeader = touchTarget.closest('.chat-header');
-                const isOnInput = touchTarget.closest('.chat-input');
-                const isOnSwipeArea = isOnHeader || isOnInput;
-                
-                if (!isScrolling && isOnSwipeArea && deltaY > 30 && Math.abs(deltaX) < 50) {
-                    isSwipeGesture = true;
-                    
-                    // Apply visual feedback
-                    const progress = Math.min(deltaY / 150, 1);
-                    this.elements.chatWidget.style.transform = `translateY(${progress * 80}px) scale(${1 - progress * 0.05})`;
-                    this.elements.chatWidget.style.opacity = 1 - progress * 0.3;
-                    this.elements.chatWidget.style.transition = 'none';
-                    
-                    // Hide swipe indicator when swipe starts
-                    this.elements.chatWidget.classList.remove('swipe-indicator');
-                }
-            }, { passive: true });
-
-            this.elements.chatWidget.addEventListener('touchend', () => {
-                const deltaY = currentY - startY;
-                const deltaX = Math.abs((currentY ? startY : 0) - startX);
-                const deltaTime = Date.now() - scrollStartTime;
-                const velocityY = Math.abs(deltaY) / deltaTime;
-
-                // Reset transition
-                this.elements.chatWidget.style.transition = '';
-
-                // Hide swipe indicator
-                this.elements.chatWidget.classList.remove('swipe-indicator');
-
-                // Close chat only if:
-                // 1. It was detected as a swipe gesture (not scrolling)
-                // 2. Swipe was primarily vertical
-                // 3. Swipe distance was sufficient
-                // 4. Velocity was reasonable (not too fast like scrolling)
-                // 5. Touch was on header or input area
-                if (isSwipeGesture &&
-                    deltaY > 80 &&
-                    deltaX < 100 &&
-                    velocityY < 1.5 &&
-                    deltaTime > 150) {
-                    this.minimizeChat();
-                } else {
-                    // Reset position with animation
-                    this.elements.chatWidget.style.transform = '';
-                    this.elements.chatWidget.style.opacity = '';
-                }
-
-                // Reset all variables
-                startY = 0;
-                currentY = 0;
-                startX = 0;
-                isScrolling = false;
-                isSwipeGesture = false;
-                touchTarget = null;
-                initialScrollTop = 0;
-            }, { passive: true });
-
-            // Also hide indicator when touch is cancelled
-            this.elements.chatWidget.addEventListener('touchcancel', () => {
-                this.elements.chatWidget.classList.remove('swipe-indicator');
-                this.elements.chatWidget.style.transition = '';
-                this.elements.chatWidget.style.transform = '';
-                this.elements.chatWidget.style.opacity = '';
-                
-                // Reset all variables
-                startY = 0;
-                currentY = 0;
-                startX = 0;
-                isScrolling = false;
-                isSwipeGesture = false;
-                touchTarget = null;
-                initialScrollTop = 0;
-            }, { passive: true });
-
-            this.touchInteractionsAdded = true;
-        }
-    }
-
-    /**
      * Set up resize listener to handle viewport changes
      */
     setupResizeListener() {
@@ -3461,7 +3039,7 @@ His projects demonstrate both technical proficiency and practical application of
                     return;
                 }
 
-                const isPhone = window.innerWidth < 768;
+                const isPhone = window.innerWidth < MOBILE_BREAKPOINT;
 
                 // Update FAB position: center on phones, fixed right on tablet/desktop
                 if (isPhone) {
@@ -3491,7 +3069,7 @@ His projects demonstrate both technical proficiency and practical application of
         if (!header || !assistantEl) return;
 
         const updateVisibility = () => {
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= MOBILE_BREAKPOINT) {
                 // Always visible on desktop
                 assistantEl.classList.remove('section-hidden');
                 return;
@@ -3523,7 +3101,7 @@ His projects demonstrate both technical proficiency and practical application of
      * Saves and restores scroll position to prevent page jump
      */
     lockBodyScroll() {
-        if (window.innerWidth >= 768) return;
+        if (window.innerWidth >= MOBILE_BREAKPOINT) return;
         this.savedScrollY = window.scrollY;
         document.body.classList.add('chat-open');
         document.body.style.top = `-${this.savedScrollY}px`;
@@ -3533,7 +3111,7 @@ His projects demonstrate both technical proficiency and practical application of
      * Unlock body scroll when chat is closed on mobile
      */
     unlockBodyScroll() {
-        if (window.innerWidth >= 768) return;
+        if (window.innerWidth >= MOBILE_BREAKPOINT) return;
         const scrollY = this.savedScrollY || 0;
         document.body.classList.remove('chat-open');
         document.body.style.top = '';
@@ -3562,7 +3140,7 @@ His projects demonstrate both technical proficiency and practical application of
             const chatWidget = this.elements ? this.elements.chatWidget : null;
             if (!chatWidget || chatWidget.style.display !== 'flex') return;
 
-            const isPhone = window.innerWidth < 768;
+            const isPhone = window.innerWidth < MOBILE_BREAKPOINT;
             if (!isPhone) return;
 
             const vv = window.visualViewport;
@@ -3592,18 +3170,17 @@ His projects demonstrate both technical proficiency and practical application of
 
 }
 
-// Initialize the AI Assistant when DOM is loaded.
-// When lazy-loaded (idle import) DOMContentLoaded has already fired,
-// so initialize immediately in that case.
+// Initialize once the DOM is ready. When lazy-loaded (idle import) DOMContentLoaded
+// has already fired, so initialize immediately in that case.
 function initAssistant() {
-    // Wait a bit to ensure all other scripts are loaded
-    setTimeout(() => {
-        window.aiAssistant = new AIAssistant();
-    }, 1000);
+    if (window.aiAssistant) return; // never create a second widget / duplicate ids
+    window.aiAssistant = new AIAssistant();
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAssistant);
-} else {
-    initAssistant();
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAssistant);
+    } else {
+        initAssistant();
+    }
 }

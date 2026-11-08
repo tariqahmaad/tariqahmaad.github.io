@@ -1,7 +1,7 @@
 /**
  * AI Assistant Knowledge Base
  * This file contains all the portfolio data for the AI assistant.
- * Version: 20260313
+ * Version: 20261108
  */
 
 export const knowledgeBase = {
@@ -102,6 +102,17 @@ export const knowledgeBase = {
 
     projects: [
         {
+            name: "CV Builder",
+            technologies: ["Next.js", "TypeScript", "React", "Firebase", "Tailwind CSS"],
+            description: "A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.",
+            details: [
+                "Role: Full-Stack Developer.",
+                "Challenge: Building a real-time dual-pane editor with live preview, PDF generation, and conflict resolution for offline/cloud sync.",
+                "Outcome: Delivered a production-ready application with guest mode, dark mode, auto-save, and multiple resume templates."
+            ],
+            liveDemo: "https://ta-cv.vercel.app/"
+        },
+        {
             name: "Quizlet – Interactive University Quiz Platform",
             technologies: ["HTML", "CSS", "JavaScript", "Responsive"],
             description: "A web-based quiz application designed to help students practice and test their knowledge in university-level courses.",
@@ -159,7 +170,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/Hospital-Management-System"
         },
         {
-            name: "Hand-Written Digital Classifier using Neural Networking",
+            name: "Hand-Written Digit Classifier using Neural Networking",
             technologies: ["Python", "Neural Networks", "Deep Learning", "TensorFlow"],
             description: "Developed a Hand-Written Digit Classifier with Neural Networks in a Deep Learning project, demonstrating proficiency in image recognition and machine learning techniques.",
             details: [
@@ -187,18 +198,6 @@ export const knowledgeBase = {
                 "Challenge: Implementing secure transaction logic and account management within a Swing GUI.",
                 "Outcome: Built a complete banking simulation with deposit, withdrawal, and balance tracking features."
             ]
-        },
-        {
-            name: "CV Builder",
-            technologies: ["Next.js", "TypeScript", "React", "Firebase", "Tailwind CSS"],
-            description: "A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.",
-            details: [
-                "Role: Full-Stack Developer.",
-                "Challenge: Building a real-time dual-pane editor with live preview, PDF generation, and conflict resolution for offline/cloud sync.",
-                "Outcome: Delivered a production-ready application with guest mode, dark mode, auto-save, and multiple resume templates."
-            ],
-            github: "https://github.com/tariqahmaad/CV-Builder",
-            liveDemo: "https://ta-cv.vercel.app/"
         }
     ],
 
@@ -244,7 +243,7 @@ export const knowledgeBase = {
         {
             name: "Oxford ELLT – Overall Level: 8",
             issuer: "Oxford English Language Level Test",
-            date: "Aug 2025"
+            date: "Nov 2025"
         },
         {
             name: "IELTS – Overall Band: 6.0",
@@ -252,7 +251,7 @@ export const knowledgeBase = {
             date: "Feb 2025"
         },
         {
-            name: "3rd Coding Competition - 2nd Position",
+            name: "Coding Competition (3rd edition) - 2nd Position",
             issuer: "Istanbul Aydin University",
             date: "May 2023",
             details: "Got a 2nd position with my team. Organized by Caretta Software Company."

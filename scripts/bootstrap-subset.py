@@ -1,11 +1,17 @@
 """Subset bootstrap.min.css to the classes actually used by index.html.
 
-Run this AFTER adding new Bootstrap classes to index.html:
-    python scripts/bootstrap-subset.py
-then re-minify with esbuild (see scripts/minify.sh).
+Run this AFTER adding new Bootstrap classes to index.html or to the scripts in
+assets/js (classes toggled from JavaScript, e.g. `d-block`, are picked up too):
+    python scripts/bootstrap-subset.py        (or: bash scripts/minify.sh)
+then re-minify with esbuild (scripts/minify.sh does both).
 The original bootstrap.min.css is kept untouched as the source.
 """
+import glob
+import os
 import re
+
+# Work from the repository root regardless of where the script is launched.
+os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 SRC = 'assets/vendor/bootstrap/css/bootstrap.min.css'
 OUT = 'assets/vendor/bootstrap/css/bootstrap.subset.min.css'
@@ -16,7 +22,21 @@ with open('index.html', encoding='utf-8') as f:
 used = set()
 for m in re.finditer(r'class="([^"]*)"', html):
     used.update(m.group(1).split())
-print('used class tokens:', len(used))
+
+# Classes applied from JavaScript: classList.add/remove/toggle/contains('x', ...)
+# and class="..." attributes inside JS template strings.
+CLASSLIST_CALL = re.compile(r'classList\.(?:add|remove|toggle|contains|replace)\(([^)]*)\)')
+QUOTED_TOKEN = re.compile(r"""["']([A-Za-z_][A-Za-z0-9_-]*)["']""")
+js_tokens = set()
+for path in glob.glob('assets/js/**/*.js', recursive=True):
+    with open(path, encoding='utf-8') as f:
+        js = f.read()
+    for call in CLASSLIST_CALL.finditer(js):
+        js_tokens.update(QUOTED_TOKEN.findall(call.group(1)))
+    for attr in re.finditer(r'class="([^"$]*)"', js):
+        js_tokens.update(attr.group(1).split())
+used |= js_tokens
+print('used class tokens:', len(used), '(%d from JS)' % len(js_tokens))
 
 class_tok = re.compile(r'\.([A-Za-z_][A-Za-z0-9_-]*)')
 attr_sel = re.compile(r'\[\s*(data-bs-[a-z-]+)')
@@ -93,5 +113,8 @@ kept_classes = set(class_tok.findall(result))
 print('original bytes:', len(css))
 print('subset bytes  :', len(result))
 print('classes in subset:', len(kept_classes))
-assert 'container' in kept_classes, 'container grid rule missing!'
-print('sanity: container present')
+# Guard against silently dropping classes that the page relies on.
+REQUIRED = ['container', 'row', 'd-block', 'is-invalid']
+missing = [c for c in REQUIRED if c not in kept_classes]
+assert not missing, 'required Bootstrap classes missing from subset: %s' % missing
+print('sanity: required classes present')
