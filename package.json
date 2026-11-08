@@ -1,0 +1,21 @@
+{
+  "name": "tariqahmaad-portfolio",
+  "private": true,
+  "description": "Static portfolio site. This package.json is dev-only: the site itself ships as plain files with no runtime build.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "bash scripts/minify.sh",
+    "check:build": "bash scripts/minify.sh && git diff --exit-code -- '*.min.css'",
+    "test": "node --test tests/",
+    "lint": "eslint assets/js tests",
+    "serve": "python -m http.server 8000"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0"
+  }
+}

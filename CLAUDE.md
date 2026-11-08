@@ -10,7 +10,17 @@ This is a **static HTML/CSS/JavaScript single-page portfolio website** for Tariq
 
 ## Development
 
-This is a **static website** with no build tools, package manager, or minified assets. Edit files directly and view changes by serving via a local HTTP server (opening `index.html` via `file://` breaks ES modules).
+This is a **static website**: the shipped site is plain files with no runtime build step. A dev-only `package.json` provides tests, linting and a pinned esbuild for the CSS minify step (`npm install` once; none of it is needed to *serve* the site). Edit files directly and view changes by serving via a local HTTP server (opening `index.html` via `file://` breaks ES modules).
+
+### Dev commands
+
+```bash
+npm test            # node --test tests/ (assistant logic, KB/HTML/JSON-LD consistency, privacy rules)
+npm run lint        # ESLint over assets/js and tests
+npm run build       # = bash scripts/minify.sh (rebuild *.min.css + Bootstrap subset)
+```
+
+CI (`.github/workflows/ci.yml`) runs lint, tests, and fails if a committed `*.min.css` is stale.
 
 ### Local Development
 
@@ -54,10 +64,16 @@ Then visit http://localhost:8000
 │   │   └── testimonials-professional.css
 │   ├── js/                       # JavaScript files
 │   │   ├── main.js               # Core functionality (nav, typing effect, scroll)
-│   │   ├── ai-assistant.js       # AI chat assistant (ES module, ~3.5k lines)
+│   │   ├── ai-assistant.js       # AI chat widget: UI, state, intent handlers (ES module, exports AIAssistant)
+│   │   ├── assistant/            # Pure, unit-tested modules used by ai-assistant.js
+│   │   │   ├── text-match.js     #   whole-word matching, Levenshtein, typo correction
+│   │   │   ├── entities.js       #   technology/role/company/project extraction
+│   │   │   ├── markdown.js       #   escape-first markdown renderer (XSS-safe)
+│   │   │   ├── state.js          #   conversation/personality/profile factories
+│   │   │   └── config.js         #   thresholds, timings, breakpoint, stop words
 │   │   ├── knowledge-base.js     # Portfolio data for AI assistant (ES module)
-│   │   ├── particles-config.js   # Particles.js initialization
-│   │   └── progressive-enhancement.js
+│   │   ├── contact-form.js       # EmailJS contact form handler
+│   │   └── particles-config.js   # Particles.js initialization
 │   ├── img/                      # Images (favicon, bg.jpg, me.jpg)
 │   └── vendor/                   # Third-party libraries
 │       ├── bootstrap/            # Bootstrap CSS framework
@@ -66,8 +82,11 @@ Then visit http://localhost:8000
 │       ├── bootstrap-icons/      # Icon font
 │       ├── swiper/               # References slider
 │       ├── purecounter/          # Counter animation
-│       └── php-email-form/       # validate.js — contact form handler (EmailJS)
-├── robots.txt / sitemap.xml / images.xml   # SEO files (domain: tariqahmaad.github.io)
+│       └── emailjs/              # EmailJS SDK (self-hosted)
+├── tests/                        # node --test suites (no dependencies)
+├── scripts/                      # minify.sh, bootstrap-subset.py
+├── 404.html                      # GitHub Pages not-found page
+├── robots.txt / sitemap.xml      # SEO files (sitemap.xml includes the image entries)
 └── .htaccess                     # Apache config — INERT on GitHub Pages
 ```
 
@@ -77,17 +96,22 @@ There is **no `projects/` directory** — all project info lives in the index.ht
 
 #### 1. Single-page SPA-style navigation
 - `<html class="js">` is set by an inline head script; CSS hides `section`s (SPA-style) **only** under `html.js`, so the page renders fully without JavaScript
-- `main.js` shows/hides sections via `.section-show` and toggles `#header.header-top`
+- `main.js` shows/hides sections via `showSection()`: it toggles `.section-show` and sets `inert` + `aria-hidden` on hidden sections (they must not be tabbable); `#header.header-top` is the compact-header state
+- `#main-content` (`<main>`) wraps the sections; the skip link targets it
 
 #### 2. AI Assistant (`assets/js/ai-assistant.js`)
-- Rule-based chat widget (keyword/intent matching, fuzzy matching with Levenshtein distance, typo correction with word-boundary regexes)
-- ES module importing from `knowledge-base.js`
+- Rule-based chat widget (whole-word intent matching, fuzzy matching with Levenshtein distance, typo correction with word-boundary regexes)
+- Intent routing: topical intents beat generic `*_questions` intents, specific topics beat `about`; question/function words are ignored by word-level fuzzy matching
+- Replies are rendered through `assistant/markdown.js` (escape first, `https:`/`mailto:` links only) — never assign unescaped text to `innerHTML`
+- `sessionToken` drops in-flight replies after a restart; `isBusy` blocks concurrent sends
+- ES module importing from `knowledge-base.js` and `assistant/*` (sub-module imports carry the same `?v=` as the entry — bump them together)
 - Modal dialog: `aria-modal`, Escape-to-close, Tab focus trap, focus restore to FAB on close
 - Knowledge base contains personal info, skills, experience, projects, certifications
 
-#### 3. Contact form (`assets/vendor/php-email-form/validate.js`)
-- EmailJS integration (service `portfolio-contact-form`, template `template_nivqe7n`)
-- Honeypot field (`website`) — bots that fill it get a fake success
+#### 3. Contact form (`assets/js/contact-form.js`)
+- EmailJS integration (service `portfolio-contact-form`, template `template_nivqe7n`); config lives in the `CONFIG` object at the top
+- Honeypot field (`company_site`) and a minimum fill time — bots get a fake success
+- Messages are shown by toggling Bootstrap's `d-block`; `scripts/bootstrap-subset.py` scans `assets/js` for such classes so the subset keeps them
 - Mailto fallback error if the EmailJS CDN fails to load
 - No visitor form data is logged to the console
 
@@ -111,12 +135,12 @@ There is **no `projects/` directory** — all project info lives in the index.ht
 
 1. Add a `.project-tile` block in the projects section of `index.html` (copy an existing tile)
 2. Update the inline JSON-LD ItemList (and `numberOfItems`)
-3. Update `assets/js/knowledge-base.js` project entries
+3. Update `assets/js/knowledge-base.js` project entries (keep the same order as the page — `tests/site.test.mjs` checks counts)
 4. Every project action link needs `rel="noopener noreferrer"` when using `target="_blank"` — and verify the target URL actually exists
 
 ### Modifying AI Assistant Knowledge
 
-Edit `assets/js/knowledge-base.js` (bump the `?v=` cache parameter on the script tags in index.html when data changes).
+Edit `assets/js/knowledge-base.js`, run `npm test` (it checks the KB against index.html and the privacy rules), and bump the `?v=` parameter on the assistant import in index.html and the matching `?v=` on the imports at the top of `ai-assistant.js`.
 
 ### Updating Styles
 
@@ -132,7 +156,7 @@ The repository should be pushed to a GitHub repository named `tariqahmaad.github
 
 ## Vendor Libraries
 
-- **Bootstrap 5**: CSS only (`bootstrap.min.css`) for layout — the JS bundle is NOT used
+- **Bootstrap 5**: CSS only for layout (`bootstrap.min.css` is the source, `bootstrap.subset.min.css` ships) — the JS bundle is NOT used
 - **Boxicons / Remixicon / Bootstrap Icons**: icon fonts (subsetted — see Performance)
 - **Swiper**: References carousel
 - **Particles.js**: Background particle effects (self-hosted)
@@ -142,7 +166,7 @@ The repository should be pushed to a GitHub repository named `tariqahmaad.github
 ## Important Files
 
 - **index.html**: ~55KB single-page portfolio (all sections + inline JSON-LD)
-- **assets/js/ai-assistant.js**: ~3.6k lines of chat assistant logic
+- **assets/js/ai-assistant.js**: chat assistant UI + intent handlers (~3.1k lines; pure logic is in `assets/js/assistant/`)
 - **assets/js/knowledge-base.js**: portfolio data module
 - **assets/css/style.css**: main stylesheet with CSS custom properties
 
