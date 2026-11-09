@@ -4,12 +4,12 @@
   "description": "Static portfolio site. This package.json is dev-only: the site itself ships as plain files with no runtime build.",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "build": "bash scripts/minify.sh",
     "check:build": "bash scripts/minify.sh && git diff --exit-code -- '*.min.css' '*.min.js'",
-    "test": "node --test tests/",
+    "test": "node --test \"tests/*.test.mjs\"",
     "lint": "eslint assets/js tests",
     "serve": "python -m http.server 8000"
   },

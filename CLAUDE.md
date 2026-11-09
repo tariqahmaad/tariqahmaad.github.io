@@ -15,7 +15,7 @@ This is a **static website**: the shipped site is plain files with no runtime bu
 ### Dev commands
 
 ```bash
-npm test            # node --test tests/ (assistant logic, KB/HTML/JSON-LD consistency, privacy rules, bundles in sync, headings, no third-party loads)
+npm test            # node --test "tests/*.test.mjs" (assistant logic, KB/HTML/JSON-LD consistency, privacy rules, bundles in sync, headings, no third-party loads)
 npm run lint        # ESLint over assets/js and tests
 npm run build       # = bash scripts/minify.sh (CSS/JS bundles + Bootstrap and icon subsets)
 ```
