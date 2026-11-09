@@ -43,122 +43,36 @@
   <link href="assets/img/favicon.png" rel="icon" type="image/png" sizes="32x32">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Preload critical fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap"
-    as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@100;300;400;500;600;700&display=swap">
-  </noscript>
-
-  <!-- Critical CSS: Bootstrap for layout -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.subset.min.css?v=20261108c" rel="stylesheet">
+  <!-- Render-blocking CSS, one request: Bootstrap subset + self-hosted fonts + style + branding + glass (npm run build).
+       Fonts are deliberately NOT preloaded: measured under throttling, preloading delayed first paint. -->
+  <link href="assets/css/critical.min.css?v=20261109a" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
-  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" as="style"
+  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261109a" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261109a" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.min.css" as="style"
+  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261109a" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261109a" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/remixicon/remixicon.min.css" as="style"
+  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261109a" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/remixicon/remixicon.min.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261109a" rel="stylesheet">
   </noscript>
 
-  <!-- Non-Critical CSS: Swiper for testimonials (below fold) -->
-  <link rel="preload" href="assets/vendor/swiper/swiper-bundle.min.css" as="style"
+
+  <!-- Below-the-fold CSS (testimonials, projects, assistant), one async request -->
+  <link rel="preload" href="assets/css/deferred.min.css?v=20261109a" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="assets/css/deferred.min.css?v=20261109a" rel="stylesheet">
   </noscript>
-
-  <!-- Critical CSS for LCP optimization -->
-  <style>
-    :root {
-      --primary-color: #18d26e;
-      --primary-color-hover: #35e888;
-      --bg-color: #040404;
-      --text-color: #fff;
-    }
-
-    body {
-      font-family: "Open Sans", sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      position: relative;
-      background: transparent;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      background: var(--bg-color) url("assets/img/bg.jpg") top right no-repeat;
-      background-size: cover;
-      background-attachment: fixed;
-      background-position: top right;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 100vh;
-      width: 100%;
-      z-index: -1;
-    }
-
-    .stylish-name {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.6em;
-      color: #18d26e;
-      text-shadow: 2px 2px 4px #000000;
-      white-space: nowrap;
-      margin-right: 10px;
-    }
-
-    #role {
-      font-family: 'Cascadia Mono', monospace;
-      color: #ffffff;
-      border-bottom: 2px solid #18d26e;
-      padding-bottom: 6px;
-    }
-  </style>
-    <!-- Main CSS: Critical for instant styling -->
-  <link href="assets/css/style.min.css?v=20261108c" rel="stylesheet">
-  <link href="assets/css/branding.min.css?v=20261108c" rel="stylesheet">
-  <link href="assets/css/glassmorphism.min.css?v=20261108c" rel="stylesheet">
-
-  <!-- Non-Critical CSS: Below-fold content and visual effects (async) -->
-
-  <link rel="preload" href="assets/css/testimonials-professional.min.css?v=20261108c" as="style"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link href="assets/css/testimonials-professional.min.css?v=20261108c" rel="stylesheet">
-  </noscript>
-
-  <link rel="preload" href="assets/css/projects-custom.min.css?v=20261108c" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link href="assets/css/projects-custom.min.css?v=20261108c" rel="stylesheet">
-  </noscript>
-
-  <link rel="preload" href="assets/css/ai-assistant.min.css?v=20261108c" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link href="assets/css/ai-assistant.min.css?v=20261108c" rel="stylesheet">
-  </noscript>
-
-  <!-- CSS Preload Polyfill for older browsers -->
-  <script>
-    /*! loadCSS rel=preload polyfill. [c]2017 Filament Group, Inc. MIT License */
-    !function (n) { "use strict"; n.loadCSS || (n.loadCSS = function () { }); var o = loadCSS.relpreload = {}; if (o.support = function () { var o; try { o = n.document.createElement("link").relList.supports("preload") } catch (e) { o = !1 } return function () { return o } }(), o.bindMediaToggle = function (n) { var o = n.media || "all"; function e() { n.addEventListener ? n.removeEventListener("load", e) : n.attachEvent && n.detachEvent("onload", e), n.setAttribute("onload", null), n.media = o } n.addEventListener ? n.addEventListener("load", e) : n.attachEvent && n.attachEvent("onload", e), setTimeout(function () { n.rel = "stylesheet", n.media = "only x" }), setTimeout(e, 3e3) }, !o.support()) { o.poly(); var e = n.document.getElementsByTagName("link"); if (e) for (var t = 0; t < e.length; t++) { var l = e[t]; "preload" !== l.rel || "style" !== l.getAttribute("as") || l.getAttribute("data-loadcss") || (l.setAttribute("data-loadcss", !0), o.bindMediaToggle(l)) } !function e() { if (!n.document.querySelectorAll) return; for (var t = n.document.querySelectorAll("link[rel=preload][as=style]:not([data-loadcss])"), l = 0; l < t.length; l++)t[l].setAttribute("data-loadcss", !0), o.bindMediaToggle(t[l]); setTimeout(e, 500) }() } }(this);
-  </script>
 
   <!-- Particles.js - Self-hosted, deferred for faster LCP -->
   <script src="assets/vendor/particles.js/particles.min.js" defer></script>
@@ -439,7 +353,7 @@
 
       <div class="row">
         <div class="col-lg-4 animate-on-scroll">
-          <img src="assets/img/me.jpg" class="img-fluid" alt="Tariq Ahmad portrait" width="400" height="400">
+          <img src="assets/img/me.jpg" class="img-fluid" alt="Tariq Ahmad portrait" width="400" height="400" decoding="async">
         </div>
         <div class="col-lg-8 pt-4 pt-lg-0 content">
           <h3>Computer Engineer</h3>
@@ -530,7 +444,7 @@
             </div>
             <span data-purecounter-start="0" data-purecounter-end="9" data-purecounter-duration="1"
               class="purecounter"></span>
-            <h4>Projects</h4>
+            <h3>Projects</h3>
             <div class="count-detail">
               <p>Portfolio of completed applications</p>
             </div>
@@ -545,7 +459,7 @@
             </div>
             <span data-purecounter-start="0" data-purecounter-end="3" data-purecounter-duration="1"
               class="purecounter"></span>
-            <h4>Awards</h4>
+            <h3>Awards</h3>
             <div class="count-detail">
               <p>Academic and technical recognition</p>
             </div>
@@ -560,7 +474,7 @@
             </div>
             <span data-purecounter-start="0" data-purecounter-end="7" data-purecounter-duration="1"
               class="purecounter"></span>
-            <h4>Certifications</h4>
+            <h3>Certifications</h3>
             <div class="count-detail">
               <p>Professional certificates earned</p>
             </div>
@@ -575,7 +489,7 @@
             </div>
             <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="1"
               class="purecounter"></span>
-            <h4>Experience</h4>
+            <h3>Experience</h3>
             <div class="count-detail">
               <p>Internships and positions</p>
             </div>
@@ -597,7 +511,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-file-code" aria-hidden="true"></i></div>
-            <h4>Markup & Style</h4>
+            <h3>Markup & Style</h3>
             <div class="skill-tags">
               <span class="tech-tag">HTML</span>
               <span class="tech-tag">CSS</span>
@@ -610,7 +524,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-terminal" aria-hidden="true"></i></div>
-            <h4>Languages</h4>
+            <h3>Languages</h3>
             <div class="skill-tags">
               <span class="tech-tag">C</span>
               <span class="tech-tag">C++</span>
@@ -628,7 +542,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-boxes" aria-hidden="true"></i></div>
-            <h4>Frameworks & Libraries</h4>
+            <h3>Frameworks & Libraries</h3>
             <div class="skill-tags">
               <span class="tech-tag">Django</span>
               <span class="tech-tag">Spring Boot</span>
@@ -643,7 +557,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-database" aria-hidden="true"></i></div>
-            <h4>Databases</h4>
+            <h3>Databases</h3>
             <div class="skill-tags">
               <span class="tech-tag">MySQL</span>
               <span class="tech-tag">MongoDB</span>
@@ -658,7 +572,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-tools" aria-hidden="true"></i></div>
-            <h4>Tools</h4>
+            <h3>Tools</h3>
             <div class="skill-tags">
               <span class="tech-tag">Git</span>
               <span class="tech-tag">Docker</span>
@@ -673,7 +587,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-globe" aria-hidden="true"></i></div>
-            <h4>Networking</h4>
+            <h3>Networking</h3>
             <div class="skill-tags">
               <span class="tech-tag">CCNA</span>
               <span class="tech-tag">TCP/IP</span>
@@ -687,7 +601,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-window-desktop" aria-hidden="true"></i></div>
-            <h4>OS & Systems</h4>
+            <h3>OS & Systems</h3>
             <div class="skill-tags">
               <span class="tech-tag">Windows</span>
               <span class="tech-tag">Linux</span>
@@ -701,7 +615,7 @@
           <div class="skill-card glass-projects">
             <div class="light-reflection"></div>
             <div class="skill-icon"><i class="bi bi-briefcase" aria-hidden="true"></i></div>
-            <h4>Soft Skills</h4>
+            <h3>Soft Skills</h3>
             <div class="skill-tags">
               <span class="tech-tag">Teamwork</span>
               <span class="tech-tag">Communication</span>
@@ -721,14 +635,14 @@
         <p>Full references available upon request</p>
       </div>
 
-      <div class="testimonials-slider swiper">
-        <div class="swiper-wrapper">
+      <div class="testimonials-slider" role="region" aria-roledescription="carousel" aria-label="References">
+        <div class="testimonials-track" tabindex="0">
 
-          <div class="swiper-slide">
+          <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="1 of 5">
             <div class="testimonial-item glass-projects">
               <div class="light-reflection"></div>
               <div class="testimonial-header">
-                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img"
+                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" width="60" height="60" decoding="async"
                   alt="Alparslan Horasan portrait">
                 <div class="testimonial-info">
                   <h3>ALPARSLAN HORASAN</h3>
@@ -745,11 +659,11 @@
             </div>
           </div><!-- End testimonial item -->
 
-          <div class="swiper-slide">
+          <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="2 of 5">
             <div class="testimonial-item glass-projects">
               <div class="light-reflection"></div>
               <div class="testimonial-header">
-                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img"
+                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" width="60" height="60" decoding="async"
                   alt="Selçuk Şener portrait">
                 <div class="testimonial-info">
                   <h3>SELÇUK ŞENER</h3>
@@ -766,11 +680,11 @@
             </div>
           </div><!-- End testimonial item -->
 
-          <div class="swiper-slide">
+          <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="3 of 5">
             <div class="testimonial-item glass-projects">
               <div class="light-reflection"></div>
               <div class="testimonial-header">
-                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="Roa'a Ali portrait">
+                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" width="60" height="60" decoding="async" alt="Roa'a Ali portrait">
                 <div class="testimonial-info">
                   <h3>ROA'A ALI</h3>
                   <h4>Assistant Professor</h4>
@@ -786,11 +700,11 @@
             </div>
           </div><!-- End testimonial item -->
 
-          <div class="swiper-slide">
+          <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="4 of 5">
             <div class="testimonial-item glass-projects">
               <div class="light-reflection"></div>
               <div class="testimonial-header">
-                <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="Wasim Raed portrait">
+                <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" width="60" height="60" decoding="async" alt="Wasim Raed portrait">
                 <div class="testimonial-info">
                   <h3>WASIM RAED</h3>
                   <h4>Senior Professor</h4>
@@ -806,11 +720,11 @@
             </div>
           </div><!-- End testimonial item -->
 
-          <div class="swiper-slide">
+          <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="5 of 5">
             <div class="testimonial-item glass-projects">
               <div class="light-reflection"></div>
               <div class="testimonial-header">
-                <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img"
+                <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" width="60" height="60" decoding="async"
                   alt="Zafer Aslan portrait">
                 <div class="testimonial-info">
                   <h3>ZAFER ASLAN</h3>
@@ -828,7 +742,7 @@
           </div><!-- End testimonial item -->
 
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="testimonials-dots"></div>
       </div>
 
     </div><!-- End Testimonials  -->
@@ -1038,7 +952,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-file-earmark-person" aria-hidden="true"></i></div>
-            <h4>CV Builder</h4>
+            <h3>CV Builder</h3>
             <div class="tech-tags">
               <span class="tech-tag">Next.js</span>
               <span class="tech-tag">TypeScript</span>
@@ -1059,7 +973,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-question-answer-line" aria-hidden="true"></i></div>
-            <h4>Quizlet – Interactive University Quiz Platform</h4>
+            <h3>Quizlet – Interactive University Quiz Platform</h3>
             <div class="tech-tags">
               <span class="tech-tag">HTML</span>
               <span class="tech-tag">CSS</span>
@@ -1087,9 +1001,9 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-cash-stack" aria-hidden="true"></i></div>
-            <h4>
+            <h3>
               BudgetWise – React Native Expense Tracker
-            </h4>
+            </h3>
             <div class="tech-tags">
               <span class="tech-tag">React Native</span>
               <span class="tech-tag">JavaScript</span>
@@ -1112,9 +1026,9 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-file-earmark-ppt" aria-hidden="true"></i></div>
-            <h4><a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer">Graduation Project
+            <h3><a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer">Graduation Project
                 Presentation<span class="sr-only"> (opens in new tab)</span></a>
-            </h4>
+            </h3>
             <div class="tech-tags">
               <span class="tech-tag">HTML</span>
               <span class="tech-tag">CSS</span>
@@ -1138,8 +1052,8 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-notion-line" aria-hidden="true"></i></div>
-            <h4>Note-Taking Web Applications
-            </h4>
+            <h3>Note-Taking Web Application
+            </h3>
             <div class="tech-tags">
               <span class="tech-tag">PHP</span>
               <span class="tech-tag">MySQL</span>
@@ -1160,8 +1074,8 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hospital-fill" aria-hidden="true"></i></div>
-            <h4>Hospital Management System
-            </h4>
+            <h3>Hospital Management System
+            </h3>
             <div class="tech-tags">
               <span class="tech-tag">Java</span>
               <span class="tech-tag">Spring Boot</span>
@@ -1184,7 +1098,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hand" aria-hidden="true"></i></div>
-            <h4>Hand-Written Digit Classifier using Neural Networking</h4>
+            <h3>Hand-Written Digit Classifier using Neural Networks</h3>
             <div class="tech-tags">
               <span class="tech-tag">Python</span>
               <span class="tech-tag">Neural Networks</span>
@@ -1202,7 +1116,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-building" aria-hidden="true"></i></div>
-            <h4>Hotel Management System</h4>
+            <h3>Hotel Management System</h3>
             <div class="tech-tags">
               <span class="tech-tag">C#</span>
               <span class="tech-tag">.NET</span>
@@ -1221,7 +1135,7 @@
           <div class="project-tile">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-bank" aria-hidden="true"></i></div>
-            <h4>Banking Management System</h4>
+            <h3>Banking Management System</h3>
             <div class="tech-tags">
               <span class="tech-tag">Java</span>
               <span class="tech-tag">Swing</span>
@@ -1293,6 +1207,11 @@
         </div>
       </div>
 
+      <noscript>
+        <p class="mb-3">The contact form needs JavaScript. Please email
+          <a href="mailto:me@tariqahmad.dev">me@tariqahmad.dev</a> instead.</p>
+      </noscript>
+
       <form id="contact-form" class="php-email-form mt-4" method="post">
         <!-- Honeypot: hidden from humans, bots fill it and are silently ignored -->
         <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
@@ -1331,20 +1250,15 @@
 
   <!-- Vendor JS Files (deferred for faster page load) -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js" defer></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js" defer></script>
 
   <!-- EmailJS SDK (Self-hosted; Load BEFORE validate.js to prevent retry messages) -->
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
-  <!-- Form Validation (Depends on EmailJS, loaded after) -->
-  <script src="assets/js/contact-form.js?v=20261108c" defer></script>
-
-  <!-- Template Main JS Files -->
-  <script src="assets/js/particles-config.js?v=20261108c" defer></script>
-  <script src="assets/js/main.js?v=20261108c" defer></script>
+  <!-- Site scripts: contact form + particles + navigation, bundled from assets/js/site.js (npm run build) -->
+  <script src="assets/js/site.min.js?v=20261109a" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
-    const bootAssistant = () => import('./assets/js/ai-assistant.js?v=20261108c');
+    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261109a');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

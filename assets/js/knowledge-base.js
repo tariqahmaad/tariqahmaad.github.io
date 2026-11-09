@@ -148,7 +148,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/Presentation"
         },
         {
-            name: "Note-Taking Web Applications",
+            name: "Note-Taking Web Application",
             technologies: ["PHP", "MySQL", "JavaScript", "Authentication"],
             description: "Developed a web-based note-taking app with PHP, MySQL, and front-end technologies, offering secure user authentication, role-specific functions, and a responsive, cross-browser interface.",
             details: [
@@ -170,7 +170,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/Hospital-Management-System"
         },
         {
-            name: "Hand-Written Digit Classifier using Neural Networking",
+            name: "Hand-Written Digit Classifier using Neural Networks",
             technologies: ["Python", "Neural Networks", "Deep Learning", "TensorFlow"],
             description: "Developed a Hand-Written Digit Classifier with Neural Networks in a Deep Learning project, demonstrating proficiency in image recognition and machine learning techniques.",
             details: [

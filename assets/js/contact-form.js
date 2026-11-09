@@ -77,6 +77,8 @@
   function showError(form, text, withMailto) {
     var box = statusEl(form, ".error-message");
     setVisible(statusEl(form, ".loading"), false);
+    // A stale "message sent" banner must not sit next to a fresh error.
+    setVisible(statusEl(form, ".sent-message"), false);
     if (!box) return;
 
     box.textContent = text;

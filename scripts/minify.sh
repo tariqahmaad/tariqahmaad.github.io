@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
-# Rebuild the minified CSS assets. Run after editing any source .css file:
+# Rebuild every generated asset. Run after editing any source .css or .js file:
 #     bash scripts/minify.sh        (or: npm run build)
-# Sources stay untouched; index.html references the .min.css files.
+# Sources stay untouched and editable; index.html loads the built bundles:
+#   assets/css/critical.min.css    render-blocking CSS   (from critical.css)
+#   assets/css/deferred.min.css    below-the-fold CSS    (from deferred.css)
+#   assets/js/site.min.js          classic script bundle (from site.js)
+#   assets/js/ai-assistant.min.js  lazy ES module bundle (from ai-assistant.js)
+#   *.subset.min.css               Bootstrap + icon-font subsets
 # Uses the pinned esbuild from devDependencies when `npm install` has been run,
 # otherwise falls back to the same version through npx.
 set -euo pipefail
@@ -21,12 +26,23 @@ else
   PY=python
 fi
 
-for f in style branding glassmorphism projects-custom testimonials-professional ai-assistant; do
-  esbuild "assets/css/$f.css" --minify --outfile="assets/css/$f.min.css"
-done
-
+# 1. Subsets first: the critical CSS bundle imports the Bootstrap subset.
 "$PY" scripts/bootstrap-subset.py
 esbuild "assets/vendor/bootstrap/css/bootstrap.subset.min.css" --minify \
   --outfile="assets/vendor/bootstrap/css/bootstrap.subset.min.css" --allow-overwrite
+"$PY" scripts/icon-subset.py
+
+# 2. CSS bundles. @import order in critical.css / deferred.css is the cascade
+#    order. Fonts and images are referenced by url() and are left as files.
+for bundle in critical deferred; do
+  esbuild "assets/css/$bundle.css" --bundle --minify     --external:*.woff2 --external:*.jpg --external:*.png --external:*.svg --external:*.webp \
+    --legal-comments=none --outfile="assets/css/$bundle.min.css"
+done
+
+# 3. JavaScript bundles.
+esbuild assets/js/site.js --bundle --minify --format=iife --target=es2020 \
+  --legal-comments=none --outfile=assets/js/site.min.js
+esbuild assets/js/ai-assistant.js --bundle --minify --format=esm --target=es2020 \
+  --legal-comments=none --outfile=assets/js/ai-assistant.min.js
 
 echo "Done. Bump the ?v= version in index.html so visitors' caches pick up the new files."

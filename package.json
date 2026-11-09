@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "bash scripts/minify.sh",
-    "check:build": "bash scripts/minify.sh && git diff --exit-code -- '*.min.css'",
+    "check:build": "bash scripts/minify.sh && git diff --exit-code -- '*.min.css' '*.min.js'",
     "test": "node --test tests/",
     "lint": "eslint assets/js tests",
     "serve": "python -m http.server 8000"

@@ -1,0 +1,8 @@
+# Keep LF everywhere so the esbuild output (checked in as *.min.*) is identical
+# on Windows checkouts and in CI.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

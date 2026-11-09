@@ -3,17 +3,17 @@
  * Intelligent chat assistant with knowledge about skills, experience, and projects
  */
 
-import { knowledgeBase } from './knowledge-base.js?v=20261108c';
-import { containsPhrase, calculateSimilarity, correctCommonTypos } from './assistant/text-match.js?v=20261108c';
+import { knowledgeBase } from './knowledge-base.js';
+import { containsPhrase, calculateSimilarity, correctCommonTypos } from './assistant/text-match.js';
 import {
     extractTechnology, extractCompany, extractRole, extractProject,
     getRelevantSkills, mentionsTech, techLabel
-} from './assistant/entities.js?v=20261108c';
-import { renderMarkdown, escapeHtml } from './assistant/markdown.js?v=20261108c';
-import { createPersonality, createUserProfile, createConversationMemory } from './assistant/state.js?v=20261108c';
+} from './assistant/entities.js';
+import { renderMarkdown, escapeHtml } from './assistant/markdown.js';
+import { createPersonality, createUserProfile, createConversationMemory } from './assistant/state.js';
 import {
     MOBILE_BREAKPOINT, TIMING, INTENT_MIN_SCORE, TOPICAL_MIN_SCORE, STOP_WORDS, prefersReducedMotion
-} from './assistant/config.js?v=20261108c';
+} from './assistant/config.js';
 
 /** Lower-cases the first letter of a sentence unless it starts a proper noun or non-letter. */
 function lowerFirst(text) {
@@ -95,10 +95,7 @@ export class AIAssistant {
                     }
 
                     const baseResponse = this.getRandomResponse(responses);
-                    const personalityEnhanced = this.addPersonalityToResponse(baseResponse, 'greeting');
-                    const contextualAddition = this.getContextualGreetingAddition();
-
-                    return `${personalityEnhanced}${contextualAddition}`;
+                    return this.addPersonalityToResponse(baseResponse, 'greeting');
                 }
             },
 
@@ -254,7 +251,7 @@ ${contextualAddition}`;
 
                     let response = `**Education Background:**
 
-🎓 **${kb.personal.degree}** in Computer Engineering
+🎓 **${kb.personal.degree}**
 📚 ${kb.personal.university}
 📅 ${kb.personal.graduationYear}
 🏆 CGPA: ${kb.personal.cgpa}
@@ -635,44 +632,44 @@ He's continuously learning and adapting to stay at the forefront of technologica
             greetings: {
                 firstTime: {
                     morning: [
-                        `Good morning! ☀️ I'm absolutely excited to introduce you to Tariq Ahmad's world of innovation! As his AI assistant, I've seen some incredible work that I'm eager to share.`,
-                        `Rise and shine! 🌟 Welcome to Tariq's professional playground! His tech journey is nothing short of inspiring, and I'm your guide to exploring it.`,
-                        `Top of the morning to you! ☕ Ready to dive into the fascinating universe of a Computer Engineer who's making waves in tech?`
+                        `Good morning! Welcome to Tariq Ahmad's portfolio. I'm his assistant and can walk you through his projects, skills and experience.`,
+                        `Good morning, and welcome. I can answer questions about Tariq's background, technical skills and projects.`,
+                        `Hello! Thanks for stopping by. Ask me anything about Tariq's work as a Computer Engineer and Full-Stack Developer.`
                     ],
                     afternoon: [
-                        `Good afternoon! 🚀 I'm buzzing with excitement to show you Tariq's impressive portfolio! His projects are seriously cool.`,
-                        `Hello there! 💻 Perfect time to explore some amazing tech work! Tariq's journey in software development is quite remarkable.`,
-                        `Greetings! ⚡ I'm thrilled to be your guide through Tariq's professional achievements. Prepare to be impressed!`
+                        `Good afternoon! Welcome to Tariq's portfolio. I can summarize his projects, skills and experience for you.`,
+                        `Hello, and welcome. I'm happy to answer questions about Tariq's software development work.`,
+                        `Good afternoon. Ask me about Tariq's education, experience, projects or how to get in touch.`
                     ],
                     evening: [
-                        `Good evening! 🌙 Welcome! I'm delighted to share Tariq's tech adventures with you. His work is absolutely fascinating!`,
-                        `Hello! ✨ What a perfect time to explore some innovative projects! Tariq's contributions to tech are truly inspiring.`,
-                        `Evening greetings! 🌟 I'm excited to walk you through Tariq's professional journey. It's quite a story!`
+                        `Good evening! Welcome to Tariq's portfolio. I can walk you through his projects, skills and background.`,
+                        `Hello, and welcome. Feel free to ask about Tariq's experience, projects or availability.`,
+                        `Good evening. I can answer questions about Tariq's work and how to reach him.`
                     ]
                 },
                 returning: {
                     morning: [
-                        `Great to see you back! ☀️ Ready to continue exploring Tariq's tech universe? I've got more fascinating details to share!`,
-                        `Welcome back! 🚀 I was hoping you'd return! There's so much more about Tariq's work that I think you'll find interesting.`,
-                        `Hello again! ☕ Ready for another dive into innovation? Tariq's projects continue to evolve, and I've got fresh insights!`
+                        `Welcome back! What else would you like to know about Tariq's work?`,
+                        `Good to see you again. Happy to continue where we left off.`,
+                        `Hello again! Is there another part of Tariq's background you'd like to explore?`
                     ],
                     afternoon: [
-                        `Welcome back, explorer! 💻 I'm excited to continue our journey through Tariq's tech achievements!`,
-                        `Great to see you again! ⚡ Ready to discover more about Tariq's innovative work? I've got plenty to share!`,
-                        `Hello again! 🌟 I'm thrilled to continue showing you around Tariq's professional portfolio!`
+                        `Welcome back! What would you like to look at next?`,
+                        `Good to see you again. Ask me anything else about Tariq's projects or experience.`,
+                        `Hello again! I'm happy to continue with any questions you have.`
                     ],
                     evening: [
-                        `Welcome back! 🌙 Perfect timing for more tech inspiration! Tariq's work never ceases to amaze me!`,
-                        `Good to see you again! ✨ Ready to continue our exploration? Tariq's projects have some fascinating details!`,
-                        `Evening greetings, return visitor! 🌟 I'm delighted to continue sharing Tariq's tech journey with you!`
+                        `Welcome back! What else can I tell you about Tariq?`,
+                        `Good to see you again. Let me know what you'd like to explore next.`,
+                        `Hello again! Happy to answer any further questions about Tariq's work.`
                     ]
                 }
             },
             skills: {
                 enthusiastic: [
-                    `Oh, you're asking about Tariq's skills? 🚀 This is where things get really exciting! His technical arsenal is seriously impressive!`,
-                    `Skills discussion! 💻 Let me tell you, Tariq's tech stack is like a superhero's utility belt - incredibly versatile and powerful!`,
-                    `Technical expertise! ⚡ Brace yourself, because Tariq's skill set is absolutely remarkable!`
+                    `Tariq's technical skill set is broad, with particular depth in full-stack development.`,
+                    `Here's an overview of Tariq's technology stack, from languages and frameworks to databases and tools.`,
+                    `Tariq works across the stack. Here are his main technical strengths.`
                 ],
                 professional: [
                     `Tariq has developed a comprehensive technical skill set throughout his academic and professional journey.`,
@@ -682,22 +679,22 @@ He's continuously learning and adapting to stay at the forefront of technologica
             },
             projects: {
                 storytelling: [
-                    `Let me tell you about one of Tariq's most exciting projects! 🎯 This is where his creativity really shines!`,
-                    `Project time! 🚀 I love sharing these stories because they show how Tariq turns ideas into reality!`,
-                    `Ah, projects! 💡 This is where the magic happens! Tariq's ability to solve real-world problems is incredible!`
+                    `Here's one of Tariq's projects that shows how he approaches a problem end to end.`,
+                    `This project is a good example of how Tariq turns an idea into a working product.`,
+                    `Here's a project that highlights Tariq's practical problem-solving.`
                 ]
             },
             humor: {
                 tech: [
-                    `Tariq's debugging skills are so good, even bugs surrender voluntarily! 🐛✨`,
-                    `His code is cleaner than a freshly formatted hard drive! 💫`,
-                    `Tariq turns coffee into code... and occasionally, bugs into features! ☕🔄`,
-                    `His Git commits are more organized than my binary thoughts! 🤖💭`
+                    `Tariq's projects span web, mobile and machine learning.`,
+                    `He builds with a mix of Python, Java, JavaScript and C#.`,
+                    `Version control and clean, maintainable code are part of how he works.`,
+                    `He has hands-on experience across research, internships and personal projects.`
                 ],
                 light: [
-                    `Prepare to be impressed! Tariq's work is seriously cool! 😎`,
-                    `Warning: May cause sudden inspiration to start coding! ⚡`,
-                    `Tariq's projects are like potato chips - you can't stop at just one! 🥔✨`
+                    `Tariq is open to full-time roles and freelance projects.`,
+                    `You can explore his work in the Projects section or on GitHub.`,
+                    `Feel free to ask about any project in more detail.`
                 ]
             }
         };
@@ -710,8 +707,8 @@ He's continuously learning and adapting to stay at the forefront of technologica
                 exclamations: ['🚀', '⚡', '✨', '💫', '🌟', '🎯'],
                 phrases: [
                     'I\'m genuinely excited to share...',
-                    'This is absolutely fascinating...',
-                    'Prepare to be impressed...',
+                    'This is worth highlighting...',
+                    'Here is an overview of...',
                     'What makes this special is...',
                     'I\'m particularly proud to show you...'
                 ]
@@ -767,7 +764,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
             },
             contextualAdditions: {
                 career: [
-                    'His career journey is quite inspiring!',
+                    'His career has grown steadily across research and development roles.',
                     'Each role has contributed uniquely to his growth.',
                     'His professional development shows remarkable progression.'
                 ],
@@ -792,21 +789,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
     getReturningUserGreetings(timeOfDay) {
         return this.responseVariations.greetings.returning[timeOfDay];
-    }
-
-    getContextualGreetingAddition() {
-        const hour = new Date().getHours();
-        let contextualMessage = '';
-
-        if (hour >= 9 && hour <= 17) {
-            contextualMessage = ' Perfect time to explore some innovative work! 💼';
-        } else if (hour >= 18 && hour <= 22) {
-            contextualMessage = ' Evening is ideal for discovering inspiring projects! 🌟';
-        } else {
-            contextualMessage = ' Late-night coding inspiration? I\'ve got you covered! 🚀';
-        }
-
-        return contextualMessage;
     }
 
     // Personality enhancement methods
@@ -1640,10 +1622,10 @@ He's continuously learning and adapting to stay at the forefront of technologica
 
         const emoji = techEmojis[tech] || '💻';
 
-        let response = `${emoji} Oh, ${techLabel(tech)}! This is a highlight of Tariq's work.${skills.length ? ` His skills include ${skills.join(', ')}.` : ''} `;
+        let response = `${emoji} ${techLabel(tech)} is a highlight of Tariq's work.${skills.length ? ` His skills include ${skills.join(', ')}.` : ''} `;
 
         if (projects.length > 0) {
-            response += `He's built ${projects.length} amazing projects with ${techLabel(tech)}, including ${projects.slice(0, 2).map(p => p.name).join(', ')} that showcase his brilliance! `;
+            response += `He's built ${projects.length} projects with ${techLabel(tech)}, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
         }
 
         if (experience.length > 0) {
@@ -1689,30 +1671,23 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Get enthusiastic skills response
      */
     getEnthusiasticSkillsResponse(kb) {
-        return `🚀 Oh, skills discussion! This is where things get seriously exciting! Tariq's technical arsenal is like a superhero's utility belt - absolutely incredible and incredibly versatile!
+        return `Here's an overview of Tariq's technical skills:
 
-**Programming Languages:** ${kb.skills.languages.join(', ')} ⚡
-*Each language is like a different superpower in his coding arsenal!*
+**Programming Languages:** ${kb.skills.languages.join(', ')}
 
-**Frameworks & Libraries:** ${kb.skills.frameworks.join(', ')} 🛠️
-*These frameworks let him build anything from simple websites to complex enterprise systems!*
+**Frameworks & Libraries:** ${kb.skills.frameworks.join(', ')}
 
-**Databases:** ${kb.skills.databases.join(', ')} 🗄️
-*He can organize data like a digital librarian on steroids!*
+**Databases:** ${kb.skills.databases.join(', ')}
 
-**Tools & Technologies:** ${kb.skills.tools.join(', ')} 🛠️
-*Modern tools that make development smooth and efficient!*
+**Tools & Technologies:** ${kb.skills.tools.join(', ')}
 
-**Networking:** ${kb.skills.networking.join(', ')} 🌐
-*Connecting systems and making them talk to each other!*
+**Networking:** ${kb.skills.networking.join(', ')}
 
-**Operating Systems:** ${kb.skills.os.join(', ')} 💻
-*Comfortable across different computing environments!*
+**Operating Systems:** ${kb.skills.os.join(', ')}
 
-**Markup Languages:** ${kb.skills.markup.join(', ')} 🌐
-*Building beautiful and responsive web interfaces!*
+**Markup Languages:** ${kb.skills.markup.join(', ')}
 
-His full-stack development skills with Python/Django and Java/Spring Boot are absolutely remarkable! 🎯 He can build entire applications from scratch - frontend, backend, database, everything! It's like watching a master craftsman at work!`;
+His strongest area is full-stack development, using Python/Django and Java/Spring Boot on the backend and React on the front end.`;
     }
     /**
      * Get professional skills response
@@ -1785,7 +1760,7 @@ ${this.getExperienceImpact(experience)}`;
             }
         }
 
-        return "I'd be absolutely delighted to tell you more about specific roles or companies! Tariq's professional journey is quite fascinating. Could you be more specific about which experience you'd like to know about?";
+        return "I'd be happy to tell you more about specific roles or companies. Which experience would you like to know about?";
     }
 
     /**
@@ -1793,7 +1768,7 @@ ${this.getExperienceImpact(experience)}`;
      */
     getPersonalityExperienceIntro(experience) {
         const intros = {
-            'researcher': "🔬 Oh, research experience! This is where Tariq's innovative spirit truly shines!",
+            'researcher': "🔬 Research experience: this is where Tariq's analytical and technical skills come together.",
             'developer': "💻 Development experience! This is where Tariq turns ideas into reality!",
             'intern': "🚀 Internship experience! This is where Tariq built his foundation and learned from the best!",
             'technician': "🔧 Technical experience! This is where Tariq developed his problem-solving mindset!"
@@ -1810,7 +1785,7 @@ ${this.getExperienceImpact(experience)}`;
         const userStyle = this.determineUserResponseStyle();
 
         if (userStyle === 'enthusiastic') {
-            return `This role was absolutely transformative for Tariq! He developed incredible expertise in ${experience.responsibilities.slice(0, 2).join(' and ').toLowerCase()}, and the experience shaped his approach to technology and innovation! 🌟`;
+            return `In this role Tariq developed expertise in ${experience.responsibilities.slice(0, 2).join(' and ').toLowerCase()}, which shaped his approach to technology and problem-solving.`;
         } else {
             return `This role allowed Tariq to develop expertise in ${experience.responsibilities.slice(0, 2).join(' and ').toLowerCase()}. The experience contributed significantly to his professional growth and technical capabilities.`;
         }
@@ -1820,7 +1795,7 @@ ${this.getExperienceImpact(experience)}`;
      * Handle specific project questions with enhanced personality
      */
     handleSpecificProject(kb, project) {
-        if (!project) return "I'd absolutely love to tell you about a specific project! Tariq's work is seriously impressive! Which one catches your interest?";
+        if (!project) return "I'd be happy to tell you about a specific project. Which one are you interested in?";
 
         const personalityIntro = this.getProjectPersonalityIntro(project);
 
@@ -1869,7 +1844,7 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
         const userStyle = this.determineUserResponseStyle();
 
         if (userStyle === 'enthusiastic') {
-            return `This project is absolutely brilliant! It showcases Tariq's ability to turn complex requirements into elegant solutions. The way he combines ${project.technologies.slice(0, 2).join(' and ')} is seriously impressive! ✨`;
+            return `This project is a good example of Tariq's ability to turn requirements into working solutions, combining ${project.technologies.slice(0, 2).join(' and ')} effectively.`;
         } else {
             return `This project reflects Tariq's commitment to quality and innovation. His use of ${project.technologies.slice(0, 2).join(' and ')} demonstrates his versatility and technical competence.`;
         }
@@ -1931,7 +1906,7 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
         const userStyle = this.determineUserResponseStyle();
 
         if (userStyle === 'enthusiastic') {
-            return `Tariq's work with ${techLabel(tech)} is absolutely impressive! He's created ${projects.length} amazing projects that showcase his versatility and technical prowess. Each project demonstrates his ability to solve real-world problems with elegant solutions! ✨`;
+            return `Tariq has worked with ${techLabel(tech)} on ${projects.length === 1 ? 'one project' : projects.length + ' projects'}, which reflects his versatility and his ability to solve practical problems.`;
         } else {
             return `These ${projects.length} projects highlight Tariq's experience with ${techLabel(tech)} and his ability to deliver practical solutions using this technology.`;
         }
@@ -1944,15 +1919,14 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
         const currentRole = kb.experience[0];
         const previousRoles = kb.experience.slice(1).map(exp => `• ${exp.title} at ${exp.company} ${this.getRoleEmoji(exp.title)}`).join('\n');
 
-        return `🚀 Oh, Tariq's professional journey is absolutely inspiring! His career path shows incredible growth and diverse experiences:
+        return `Here's an overview of Tariq's professional experience:
 
-**Most Recent Role:** ${currentRole.title} at ${currentRole.company} 🏭
-*He's working on cutting-edge technology that's shaping the future!*
+**Most Recent Role:** ${currentRole.title} at ${currentRole.company}
 
 **Previous Experience:**
 ${previousRoles}
 
-**What's amazing:** Each role has built upon the previous one, creating a perfect blend of technical expertise, research skills, and practical problem-solving abilities! His journey from network fundamentals to advanced research is absolutely remarkable! 🌟`;
+Each role built on the previous one, combining technical skills, research experience and practical problem-solving.`;
     }
     /**
      * Get professional experience response
@@ -1978,14 +1952,14 @@ ${previousRoles}
      */
     getEnthusiasticProjectsResponse(kb) {
         const featuredProjects = kb.projects.slice(0, 5);
-        const projectList = featuredProjects.map(project => `• **${project.name}** - ${project.description.split('.')[0]}!`).join('\n');
+        const projectList = featuredProjects.map(project => `• **${project.name}** - ${project.description.split('.')[0]}.`).join('\n');
 
-        return `🚀 Oh, Tariq's projects are absolutely fantastic! His creativity and technical skills combine to create some truly impressive applications:
+        return `Here are some of Tariq's featured projects:
 
 **Featured Projects:**
 ${projectList}
 
-**What's incredible:** Each project solves real-world problems with elegant solutions! Tariq doesn't just code - he creates applications that make a genuine difference! His attention to detail and user experience is absolutely remarkable! ✨`;
+Each project addresses a practical problem, across web, mobile and machine learning.`;
     }
     /**
      * Get professional projects response
@@ -2094,7 +2068,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         const lowerMessage = message.toLowerCase();
 
         if (lowerMessage.includes('graduate') || lowerMessage.includes('finish') || lowerMessage.includes('complete')) {
-            return `Tariq graduated from ${kb.personal.university} in ${kb.personal.graduationYear.split('-')[1]} with a ${kb.personal.degree} degree in Computer Engineering. He achieved a CGPA of ${kb.personal.cgpa} in his studies.`;
+            return `Tariq graduated from ${kb.personal.university} in ${kb.personal.graduationYear.split('-')[1]} with a ${kb.personal.degree}. He achieved a CGPA of ${kb.personal.cgpa} in his studies.`;
         }
 
         if (lowerMessage.includes('start') && lowerMessage.includes('work')) {
@@ -2395,7 +2369,7 @@ His projects demonstrate both technical proficiency and practical application of
      */
     handleHelpRequest() {
         const contextualHelp = this.getContextualHelpSuggestions();
-        return `🤝 I'm absolutely here to help! I'm Tariq's enthusiastic AI assistant, and I'd love to guide you through his professional world! I can share insights about:\n\n${contextualHelp}\n\nWhat sparks your curiosity the most?`;
+        return `🤝 I'm Tariq's portfolio assistant and I can help with questions about his background. I can share details about:\n\n${contextualHelp}\n\nWhat would you like to know?`;
     }
 
     /**
@@ -2404,7 +2378,7 @@ His projects demonstrate both technical proficiency and practical application of
     handleGratitudeResponse() {
         const gratitudeResponses = [
             "You're welcome! I'm glad I could help you learn about Tariq's work. Feel free to ask if you'd like to explore anything else!",
-            "My pleasure! Tariq's dedication to technology and innovation is genuinely inspiring. If you have more questions, I'm always here to help!",
+            "My pleasure! Glad I could help. If you have more questions about Tariq's work, just ask.",
             "Glad I could assist! Tariq is building some impressive things in tech. Don't hesitate to ask if you want to know more!"
         ];
         return this.getRandomResponse(gratitudeResponses);

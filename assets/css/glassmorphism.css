@@ -428,8 +428,8 @@
   transform: scale(1.05);
 }
 
-.count-card.glass-projects h4,
-.skill-card.glass-projects h4 {
+.count-card.glass-projects h3,
+.skill-card.glass-projects h3 {
   font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
@@ -440,8 +440,8 @@
   z-index: 2;
 }
 
-.count-card.glass-projects:hover h4,
-.skill-card.glass-projects:hover h4 {
+.count-card.glass-projects:hover h3,
+.skill-card.glass-projects:hover h3 {
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
   transform: translateY(-1px);

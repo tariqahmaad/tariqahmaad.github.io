@@ -122,6 +122,35 @@
     });
   }
 
+  /**
+   * Keep the address bar in sync with the visible section so the Back button,
+   * bookmarks and shared links work. An empty hash means the home view.
+   */
+  const updateUrl = (hash) => {
+    if (hash === window.location.hash) return
+    try {
+      window.history.pushState(null, '', hash || window.location.pathname + window.location.search)
+    } catch {
+      // History API unavailable (sandboxed frame): navigation still works without it.
+    }
+  }
+
+  /** Show whatever the current URL points at (used for Back/Forward). */
+  const syncFromLocation = () => {
+    const hash = window.location.hash
+    const target = safeSelect(hash)
+    if (target && target.tagName === 'SECTION') {
+      setActiveNav(hash)
+      openSection(target)
+      scrollto(hash)
+    } else {
+      setActiveNav('#header')
+      navigateHome()
+    }
+  }
+
+  window.addEventListener('popstate', syncFromLocation)
+
   // Hidden sections must not be reachable before the first navigation either.
   showSection(null)
   /**
@@ -195,10 +224,12 @@
     }
 
     if (this.hash === '#header') {
+      updateUrl('')
       navigateHome();
       return;
     }
 
+    updateUrl(this.hash)
     openSection(section, { focus: true })
     scrollto(this.hash)
   }, true)
@@ -212,6 +243,7 @@
       e.preventDefault();
 
       setActiveNav('#header');
+      updateUrl('')
       navigateHome();
     }
   }, true)
@@ -229,42 +261,85 @@
     scrollto(hash)
   });
 
-  // Initialize common components
-  // Testimonials slider
-  if (typeof Swiper !== 'undefined' && select('.testimonials-slider')) new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    autoHeight: false,
-    spaceBetween: 16,
-    // No auto-advancing content for users who asked for reduced motion
-    autoplay: reducedMotionQuery.matches ? false : {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    },
-    breakpoints: {
-      576: {
-        slidesPerView: 1
-      },
-      768: {
-        slidesPerView: 2
-      },
-      992: {
-        slidesPerView: 2
-      },
-      1200: {
-        slidesPerView: 3
-      },
-      1400: {
-        slidesPerView: 3
-      }
+  /**
+   * References carousel: a native scroll-snap track (see testimonials CSS) plus
+   * dots and a gentle autoplay. No library; the browser does the scrolling.
+   */
+  const initCarousel = (root) => {
+    const track = root.querySelector('.testimonials-track')
+    const dotsEl = root.querySelector('.testimonials-dots')
+    const slides = track ? [...track.children] : []
+    if (slides.length < 2 || !dotsEl) return
+
+    const AUTOPLAY_MS = 5000
+    const PAUSE_AFTER_INTERACTION_MS = 10000
+    let dots = []
+    let pausedUntil = 0
+    let hovering = false
+    let onScreen = false
+
+    // Distance between the start of two neighbouring slides (includes the gap).
+    const step = () => slides[1].offsetLeft - slides[0].offsetLeft
+    const perView = () => (slides[0].offsetWidth ? Math.max(1, Math.round(track.clientWidth / slides[0].offsetWidth)) : 1)
+    const positions = () => Math.max(1, slides.length - perView() + 1)
+    const current = () => (step() ? Math.min(positions() - 1, Math.round(track.scrollLeft / step())) : 0)
+
+    const goTo = (index, behavior = scrollBehavior()) => {
+      track.scrollTo({ left: index * step(), behavior })
     }
-  });
+
+    const markActive = () => {
+      const active = current()
+      dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === active)))
+    }
+
+    const buildDots = () => {
+      const count = positions()
+      if (count === dots.length) return
+      dotsEl.replaceChildren(...Array.from({ length: count }, (_, i) => {
+        const dot = document.createElement('button')
+        dot.type = 'button'
+        dot.className = 'testimonials-dot'
+        dot.setAttribute('aria-label', `Go to reference ${i + 1}`)
+        dot.addEventListener('click', () => {
+          pausedUntil = Date.now() + PAUSE_AFTER_INTERACTION_MS
+          goTo(i)
+        })
+        return dot
+      }))
+      dots = [...dotsEl.children]
+      markActive()
+    }
+
+    let scrollFrame = 0
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(scrollFrame)
+      scrollFrame = requestAnimationFrame(markActive)
+    }, { passive: true })
+
+    // Any manual interaction pauses autoplay for a while.
+    const userPause = () => { pausedUntil = Date.now() + PAUSE_AFTER_INTERACTION_MS }
+    track.addEventListener('pointerdown', userPause)
+    track.addEventListener('keydown', userPause)
+    root.addEventListener('pointerenter', () => { hovering = true })
+    root.addEventListener('pointerleave', () => { hovering = false })
+
+    if ('ResizeObserver' in window) new ResizeObserver(buildDots).observe(track)
+    buildDots()
+
+    // Autoplay runs only while the carousel is on screen (the section is hidden
+    // until visited) and never for users who asked for reduced motion.
+    if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) return
+    new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting }, { threshold: 0.3 }).observe(root)
+    setInterval(() => {
+      if (!onScreen || hovering || document.hidden || Date.now() < pausedUntil) return
+      if (root.contains(document.activeElement)) return
+      goTo((current() + 1) % positions())
+    }, AUTOPLAY_MS)
+  }
+
+  const referencesSlider = select('.testimonials-slider')
+  if (referencesSlider) initCarousel(referencesSlider)
 
   // Initialize Pure Counter (disabled on mobile and iPad)
   const isMobileOrTablet = () => {

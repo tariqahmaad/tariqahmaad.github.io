@@ -1,0 +1,9 @@
+/*
+ * Render-blocking stylesheet bundle (built into critical.min.css by `npm run build`).
+ * Order matters: it is the cascade order. Edit the individual files, not the bundle.
+ */
+@import "../vendor/bootstrap/css/bootstrap.subset.min.css";
+@import "fonts.css";
+@import "style.css";
+@import "branding.css";
+@import "glassmorphism.css";
