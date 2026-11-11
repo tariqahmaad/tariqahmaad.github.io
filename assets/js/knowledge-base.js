@@ -38,7 +38,6 @@ export const knowledgeBase = {
         {
             title: "Researcher Intern",
             company: "Industrial 4.0 Research Center",
-            location: "Istanbul, Turkey",
             duration: "Oct 2024 - Jul 2025",
             responsibilities: [
                 "Systematic Literature Reviews",
@@ -51,7 +50,6 @@ export const knowledgeBase = {
         {
             title: "Engineering Researcher Intern",
             company: "Industrial 4.0 Research Center",
-            location: "Istanbul, Turkey",
             duration: "March 2024 - June 2024",
             responsibilities: [
                 "Literature Review",
@@ -64,7 +62,6 @@ export const knowledgeBase = {
         {
             title: "Frontend Developer (Angular) Intern",
             company: "Caretta Software Company",
-            location: "Istanbul, Turkey",
             duration: "Nov 2023 - Jan 2024",
             responsibilities: [
                 "User Interface Development",
@@ -77,7 +74,6 @@ export const knowledgeBase = {
         {
             title: "Research Assistant Intern",
             company: "Industrial 4.0 Research Center",
-            location: "Istanbul, Turkey",
             duration: "Oct 2023 - Jan 2024",
             responsibilities: [
                 "Data Collection and Analysis",
@@ -90,7 +86,6 @@ export const knowledgeBase = {
         {
             title: "Network Technician",
             company: "Tawhid Almas Logistics Company",
-            location: "Istanbul, Turkey",
             duration: "July 2023 – Sept 2023",
             responsibilities: [
                 "Installed and troubleshot networks",

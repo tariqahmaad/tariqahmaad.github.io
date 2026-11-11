@@ -46,33 +46,33 @@
 
   <!-- Render-blocking CSS, one request: Bootstrap subset + self-hosted fonts + style + branding + glass (npm run build).
        Fonts are deliberately NOT preloaded: measured under throttling, preloading delayed first paint. -->
-  <link href="assets/css/critical.min.css?v=20261112e" rel="stylesheet">
+  <link href="assets/css/critical.min.css?v=20261112f" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
-  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261112e" as="style"
+  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261112f" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261112e" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261112f" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261112e" as="style"
+  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261112f" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261112e" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261112f" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261112e" as="style"
+  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261112f" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261112e" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261112f" rel="stylesheet">
   </noscript>
 
 
   <!-- Below-the-fold CSS (testimonials, projects, assistant), one async request -->
-  <link rel="preload" href="assets/css/deferred.min.css?v=20261112e" as="style"
+  <link rel="preload" href="assets/css/deferred.min.css?v=20261112f" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/deferred.min.css?v=20261112e" rel="stylesheet">
+    <link href="assets/css/deferred.min.css?v=20261112f" rel="stylesheet">
   </noscript>
 
   <!-- Particles.js - Self-hosted, deferred for faster LCP -->
@@ -841,7 +841,7 @@
             <div class="resume-item">
               <h4>Researcher Intern</h4>
               <h5>Oct 2024 - Jul 2025</h5>
-              <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
+              <p><em>Industrial 4.0 Research Center</em></p>
               <ul>
                 <li>Systematic Literature Reviews</li>
                 <li>Mixed Methods Data Analysis</li>
@@ -853,7 +853,7 @@
             <div class="resume-item">
               <h4>Engineering Researcher Intern</h4>
               <h5>March 2024 - June 2024</h5>
-              <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
+              <p><em>Industrial 4.0 Research Center</em></p>
               <ul>
                 <li>Literature Review</li>
                 <li>Data Collection & Analysis</li>
@@ -865,7 +865,7 @@
             <div class="resume-item">
               <h4>Frontend Developer (Angular) Intern</h4>
               <h5>Nov 2023 - Jan 2024</h5>
-              <p><em>Caretta Software Company, Istanbul, Turkey </em></p>
+              <p><em>Caretta Software Company</em></p>
               <ul>
                 <li>User Interface Development</li>
                 <li>Application Structure</li>
@@ -877,7 +877,7 @@
             <div class="resume-item">
               <h4>Research Assistant Intern</h4>
               <h5>Oct 2023 - Jan 2024</h5>
-              <p><em>Industrial 4.0 Research Center, Istanbul, Turkey</em></p>
+              <p><em>Industrial 4.0 Research Center</em></p>
               <ul>
                 <li>Data Collection and Analysis.</li>
                 <li>Literature review, Report writing and Documentation.</li>
@@ -1328,11 +1328,11 @@
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Site scripts: contact form + particles + navigation, bundled from assets/js/site.js (npm run build) -->
-  <script src="assets/js/site.min.js?v=20261112e" defer></script>
+  <script src="assets/js/site.min.js?v=20261112f" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
     // Command palette: loaded on first use (Ctrl/Cmd+K or the Menu button), prefetched when idle.
-    const loadPalette = () => import('./assets/js/command-palette.min.js?v=20261112e');
+    const loadPalette = () => import('./assets/js/command-palette.min.js?v=20261112f');
     const openPalette = () => loadPalette().then((m) => m.openPalette());
     const isApple = /Mac|iPhone|iPad/.test(navigator.platform);
     document.querySelectorAll('[data-palette-key]').forEach((el) => { el.textContent = isApple ? '⌘ K' : 'Ctrl K'; });
@@ -1347,7 +1347,7 @@
     });
     if ('requestIdleCallback' in window) requestIdleCallback(loadPalette, { timeout: 8000 });
 
-    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261112e');
+    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261112f');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

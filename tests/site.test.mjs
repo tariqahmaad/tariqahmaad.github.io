@@ -215,3 +215,12 @@ test('print stylesheet is bundled last and hides effects and widgets', () => {
         assert.ok(print.includes(hidden), `print.css should hide ${hidden}`);
     }
 });
+
+test('privacy: the page and knowledge base never state the city or country as a location', () => {
+    for (const [name, text] of [['index.html', html], ['knowledge-base.js', kbSource]]) {
+        assert.doesNotMatch(text, /Istanbul,\s*Turkey/i, `${name} states a location`);
+        assert.doesNotMatch(text, /location:\s*"Istanbul/i, `${name} has an Istanbul location field`);
+    }
+    // The university name is a credential and stays.
+    assert.match(html, /Istanbul Aydin University/);
+});

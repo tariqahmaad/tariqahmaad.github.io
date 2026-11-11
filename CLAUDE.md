@@ -152,10 +152,10 @@ There is **no `projects/` directory** — all project info lives in the index.ht
 ### Branding Rules
 
 - Career positioning: **Full-Stack Developer / Software Engineer / Computer Engineer** (hero rotator, title tag, About must agree — no security-focused titles)
-- **Location privacy (2026-09-20)**: the contact page has no address — its first box is "Work Availability" (remote/on-site). The chatbot's `personal.location` is "Details available on request" and the JSON-LD has no PostalAddress. NOTE: the About section's Location card, resume entry cities, and `alumniOf` still mention Istanbul — those are credentials the owner chose to keep; ask before scrubbing them.
+- **Location privacy (2026-11-11)**: the owner does not want to reveal where they live. The contact page has no address (its first box is "Work Availability"), the About grid shows a "Languages" card instead of Location, resume entries and KB experience entries carry no city, the chatbot's `personal.location` is "Details available on request" and the JSON-LD has no PostalAddress. Never state a city or country as a location (a test enforces `Istanbul, Turkey` is absent). The university name "Istanbul Aydin University" is a credential and stays (`alumniOf`, About, education).
 - Social presence: **LinkedIn + GitHub only** — X/Twitter, Facebook, and Instagram profiles are removed from the site, structured data, and chatbot (do not re-add). The twitter:card meta tags stay: they control link previews, not a profile link.
 - References section shows quotes with photos + "Full references available upon request"
-- **Résumé PDF** (`assets/Tariq_Ahmad_Resume.pdf`, built by `npm run build:resume`): contact is email, LinkedIn and GitHub only; no phone, and it deliberately omits cities (the on-site resume entries still show them, owner's choice).
+- **Résumé PDF** (`assets/Tariq_Ahmad_Resume.pdf`, built by `npm run build:resume`): contact is email, LinkedIn and GitHub only; no phone, and it omits cities, as does the on-site resume.
 - **Contact privacy**: phone number is NOT published anywhere (site or chatbot) — the contact box shows "Prefer to Talk?" with an "Email Me Instead" mailto button. The public email is **me@tariqahmad.dev** (hero Hire Me, contact box, form to_email, chatbot knowledge base). Do not reintroduce the old address or phone.
 - Structured data (JSON-LD) is **inline** in index.html; keep `numberOfItems` in sync with the ItemList
 
