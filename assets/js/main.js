@@ -260,8 +260,25 @@
     // until visited) and never for users who asked for reduced motion.
     if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) return
     new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting }, { threshold: 0.3 }).observe(root)
+
+    // Persistent pause/play control (WCAG 2.2.2): only exists when autoplay does.
+    let userPaused = false
+    const controls = document.createElement('div')
+    controls.className = 'testimonials-controls'
+    const toggle = document.createElement('button')
+    toggle.type = 'button'
+    toggle.className = 'testimonials-toggle'
+    const syncToggle = () => {
+      toggle.setAttribute('aria-pressed', String(userPaused))
+      toggle.setAttribute('aria-label', userPaused ? 'Resume automatic rotation of references' : 'Pause automatic rotation of references')
+    }
+    toggle.addEventListener('click', () => { userPaused = !userPaused; syncToggle() })
+    syncToggle()
+    dotsEl.replaceWith(controls)
+    controls.append(toggle, dotsEl)
+
     setInterval(() => {
-      if (!onScreen || hovering || document.hidden || Date.now() < pausedUntil) return
+      if (userPaused || !onScreen || hovering || document.hidden || Date.now() < pausedUntil) return
       if (root.contains(document.activeElement)) return
       goTo((current() + 1) % positions())
     }, AUTOPLAY_MS)

@@ -32,6 +32,9 @@
       clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
     }
     a:hover, a:focus-visible { background: var(--primary); color: #000; outline: none; }
+    a:focus-visible { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px #fff; }
+    .paths { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; }
+    .paths a { padding: 10px 16px; border-color: rgba(24, 210, 110, 0.45); }
   </style>
 </head>
 <body>
@@ -40,9 +43,14 @@
     <p class="term" role="status">
       <b>$</b> cd <i id="path">/requested-page</i><br>
       bash: no such directory<br>
-      <b>$</b> ls /portfolio<br>
-      about&nbsp;&nbsp;resume&nbsp;&nbsp;projects&nbsp;&nbsp;contact
+      <b>$</b> ls /portfolio
     </p>
+    <nav class="paths" aria-label="Portfolio sections">
+      <a href="/#about">About</a>
+      <a href="/#resume">Resume</a>
+      <a href="/#projects">Projects</a>
+      <a href="/#contact">Contact</a>
+    </nav>
     <a href="/">Back to the portfolio</a>
   </main>
   <script>

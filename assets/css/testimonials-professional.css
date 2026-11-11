@@ -242,6 +242,63 @@
   margin-top: 1.5rem;
 }
 
+/* Pause/play + dots row (the wrapper is added by main.js only when autoplay runs) */
+.testimonials-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 1.5rem;
+}
+
+.testimonials-controls .testimonials-dots {
+  margin-top: 0;
+}
+
+.testimonials-toggle {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* Pause glyph (two bars) drawn in CSS so the icon font subset stays untouched */
+.testimonials-toggle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(90deg, currentColor 0 4px, transparent 4px 8px, currentColor 8px 12px);
+}
+
+/* Play glyph (triangle) while paused */
+.testimonials-toggle[aria-pressed="true"]::before {
+  width: 0;
+  height: 0;
+  background: none;
+  border-style: solid;
+  border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent currentColor;
+}
+
+.testimonials-toggle:hover {
+  border-color: var(--primary-color);
+}
+
+.testimonials-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
 .testimonials-dot {
   position: relative;
   width: 8px;

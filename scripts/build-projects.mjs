@@ -190,7 +190,7 @@ ${JSON.stringify(jsonLd, null, 2)}
 
 <body class="case-page">
   <a class="skip-link" href="#main-content">Skip to main content</a>
-  <div id="particles-js"></div>
+  <div id="particles-js" aria-hidden="true"></div>
 
 ${header()}
 

@@ -1,0 +1,106 @@
+/*
+ * Print styles (Ctrl+P on the home page): a clean black-on-white document.
+ * Imported last in deferred.css so it wins over the screen styles. Effects,
+ * navigation and widgets are hidden; external link targets are spelled out.
+ */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Effects, navigation and widgets have no place on paper */
+  .boot,
+  #particles-js,
+  .cursor-ring,
+  .skip-link,
+  .site-nav,
+  .site-nav-toggle,
+  .nav-palette,
+  .palette-trigger,
+  .chat-fab,
+  .chat-widget,
+  dialog,
+  .testimonials-controls,
+  #contact form {
+    display: none !important;
+  }
+
+  /* The hero portrait lives on body::before */
+  body::before,
+  body::after,
+  .hero::before {
+    display: none !important;
+  }
+
+  /* The hero is a full-screen block on screen; on paper it should only be as tall as its content */
+  .hero {
+    min-height: 0 !important;
+    padding-top: 8mm !important;
+  }
+
+  .site-header {
+    position: static !important;
+  }
+
+  .site-header::before {
+    display: none !important;
+  }
+
+  /* Flatten the HUD cards: no glass, glow, brackets or animation */
+  *,
+  *::before,
+  *::after {
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  main *,
+  .site-footer * {
+    color: #000 !important;
+    background-color: transparent !important;
+    border-color: #999 !important;
+  }
+
+  main a {
+    text-decoration: underline;
+  }
+
+  /* Show where external links point */
+  main a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+
+  /* Scroll reveals must not leave content invisible */
+  [data-reveal],
+  .reveal,
+  .reveal-ready * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .resume-item,
+  .project-tile,
+  .testimonial-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}

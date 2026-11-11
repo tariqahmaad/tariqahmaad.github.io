@@ -168,3 +168,50 @@ test('testimonial cards keep square corners and visible overflow so the corner b
 test('the hero title is ready for the glitch (data-text for the colour layers)', () => {
     assert.match(html, /<h1 id="hero-title" class="hero__title" data-text="Tariq Ahmad">Tariq Ahmad<\/h1>/);
 });
+
+test('a11y: the References carousel builds a pause/play toggle with aria-pressed, and autoplay honours it', () => {
+    const main = read('assets/js/main.js');
+    assert.match(main, /testimonials-toggle/);
+    assert.match(main, /setAttribute\('aria-pressed'/);
+    assert.match(main, /userPaused \|\| !onScreen/);
+});
+
+test('a11y: the pause toggle is at least 44px and keeps a visible focus ring', () => {
+    const css = read('assets/css/testimonials-professional.css');
+    const rule = css.match(/\.testimonials-toggle \{([^}]*)\}/)?.[1] ?? '';
+    assert.match(rule, /width:\s*44px/);
+    assert.match(rule, /height:\s*44px/);
+    assert.match(css, /\.testimonials-toggle:focus-visible \{[^}]*outline:\s*2px solid/);
+});
+
+test('a11y: every source rule that removes the outline on :focus-visible supplies a replacement', () => {
+    const files = ['style', 'branding', 'shell', 'hud', 'fx', 'case', 'palette', 'ai-assistant', 'assistant-hud',
+        'testimonials-professional', 'projects-custom', 'glassmorphism'];
+    for (const name of files) {
+        const css = read(`assets/css/${name}.css`).replace(/\/\*[\s\S]*?\*\//g, '');
+        for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+            if (!/:focus-visible/.test(selector) || !/outline:\s*(none|0)\b/.test(body)) continue;
+            assert.match(body, /box-shadow|background|border|text-decoration/,
+                `${name}.css: "${selector.trim()}" removes the outline without a replacement`);
+        }
+    }
+});
+
+test('404 page links to every home section and keeps noindex', () => {
+    const page = read('404.html');
+    for (const id of ['about', 'resume', 'projects', 'contact']) {
+        assert.ok(page.includes(`href="/#${id}"`), `missing link to /#${id}`);
+    }
+    assert.match(page, /<meta name="robots" content="noindex">/);
+});
+
+test('print stylesheet is bundled last and hides effects and widgets', () => {
+    const deferred = read('assets/css/deferred.css');
+    const imports = [...deferred.matchAll(/@import "([^"]+)"/g)].map(m => m[1]);
+    assert.equal(imports.at(-1), 'print.css');
+    const print = read('assets/css/print.css');
+    assert.match(print, /@media print/);
+    for (const hidden of ['.boot', '#particles-js', '.chat-fab', '.chat-widget', '.testimonials-controls']) {
+        assert.ok(print.includes(hidden), `print.css should hide ${hidden}`);
+    }
+});
