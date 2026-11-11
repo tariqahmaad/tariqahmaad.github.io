@@ -1,0 +1,241 @@
+/*--------------------------------------------------------------
+# Effects: boot sequence, title glitch, cursor ring, scroll reveals
+# and hero stats. Everything here is decoration: it is
+# disabled for reduced motion and never required to read the page.
+--------------------------------------------------------------*/
+
+/* ---------- Boot sequence ---------- */
+.boot {
+  display: none;
+}
+
+html.boot-pending {
+  overflow: hidden;
+}
+
+html.boot-pending .boot {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+}
+
+.boot__slats {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.boot__slats i {
+  flex: 1;
+  background: #040404;
+  transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+.boot__slats i:nth-child(1) { --i: 0; }
+.boot__slats i:nth-child(2) { --i: 1; }
+.boot__slats i:nth-child(3) { --i: 2; }
+.boot__slats i:nth-child(4) { --i: 3; }
+.boot__slats i:nth-child(5) { --i: 3; }
+.boot__slats i:nth-child(6) { --i: 2; }
+.boot__slats i:nth-child(7) { --i: 1; }
+.boot__slats i:nth-child(8) { --i: 0; }
+
+.boot__slats i:nth-child(odd) { transform-origin: top; }
+.boot__slats i:nth-child(even) { transform-origin: bottom; }
+
+.boot.is-done .boot__slats i {
+  transform: scaleY(0);
+}
+
+.boot__panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(420px, calc(100vw - 48px));
+  transform: translate(-50%, -50%);
+  transition: opacity 0.25s ease;
+}
+
+.boot.is-done .boot__panel {
+  opacity: 0;
+}
+
+.boot__log {
+  min-height: 7.5em;
+  margin: 0 0 16px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.boot__gauge {
+  height: 6px;
+  border: 1px solid var(--hud-line-strong);
+}
+
+.boot__gauge span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.25s ease;
+}
+
+.boot__hint {
+  margin: 14px 0 0;
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- Title glitch ----------
+   hero-fx.js sets the --g-* numbers (unitless) every ~55ms while `.is-glitching`
+   is on, so every burst has different slices, offsets and skew. Two copies of the
+   text (::before cyan, ::after red) are clipped to horizontal bands and shifted;
+   the main text gets a matching chromatic split, a jitter and a quick flash. */
+.hero__title {
+  position: relative;
+}
+
+/* While the name decodes, glyph widths change: never let it wrap and shift the page. */
+.hero__title.is-decoding {
+  white-space: nowrap;
+}
+
+.hero__title::before,
+.hero__title::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.hero__title::before {
+  color: var(--secondary-color);
+}
+
+.hero__title::after {
+  color: #ff2d55;
+}
+
+.hero__title.is-glitching {
+  text-shadow:
+    calc(var(--g-dx1, 0) * 0.3px) 0 rgba(24, 200, 255, 0.55),
+    calc(var(--g-dx2, 0) * -0.3px) 0 rgba(255, 45, 85, 0.5);
+  transform: translateX(calc(var(--g-shift, 0) * 1px)) skewX(calc(var(--g-skew, 0) * 1deg));
+  filter: brightness(var(--g-bright, 1));
+}
+
+.hero__title.is-glitching::before {
+  opacity: 0.9;
+  clip-path: inset(calc(var(--g-y1, 10) * 1%) 0 calc(100% - (var(--g-y1, 10) + var(--g-h1, 15)) * 1%) 0);
+  transform: translateX(calc(var(--g-dx1, 0) * 1px));
+}
+
+.hero__title.is-glitching::after {
+  opacity: 0.9;
+  clip-path: inset(calc(var(--g-y2, 55) * 1%) 0 calc(100% - (var(--g-y2, 55) + var(--g-h2, 15)) * 1%) 0);
+  transform: translateX(calc(var(--g-dx2, 0) * 1px));
+}
+
+/* ---------- Hero highlight numbers ---------- */
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero__stats li {
+  display: flex;
+  flex-direction: column;
+  min-width: 4.5rem;
+}
+
+.hero__stats strong {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero__stats span {
+  margin-top: 6px;
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---------- Cursor ring ---------- */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--primary-color);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+}
+
+.cursor-ring.is-visible {
+  opacity: 0.85;
+}
+
+.cursor-ring.is-active {
+  width: 56px;
+  height: 56px;
+  background: rgba(24, 210, 110, 0.12);
+}
+
+.cursor-ring.is-pressed {
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- Scroll reveals ---------- */
+html.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+html.reveal-ready .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot,
+  .cursor-ring {
+    display: none !important;
+  }
+
+  html.reveal-ready .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,165 @@
+/*--------------------------------------------------------------
+# Assistant in the HUD style. Imported after ai-assistant.css so it
+# only overrides shape and typography; behaviour is untouched.
+--------------------------------------------------------------*/
+
+/* ---------- Panel ---------- */
+.chat-widget {
+  position: relative;
+  border-radius: 2px;
+  border: 1px solid var(--hud-line-strong, rgba(24, 210, 110, 0.45));
+  background: #070909;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+}
+
+/* Corner brackets */
+.chat-widget::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) top left / 16px 2px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) top left / 2px 16px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) top right / 16px 2px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) top right / 2px 16px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) bottom left / 16px 2px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) bottom left / 2px 16px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) bottom right / 16px 2px no-repeat,
+    linear-gradient(var(--assistant-primary), var(--assistant-primary)) bottom right / 2px 16px no-repeat;
+}
+
+/* ---------- Header ---------- */
+.chat-header {
+  background: #0a0e0c;
+  border-bottom: 1px solid var(--hud-line, rgba(255, 255, 255, 0.13));
+}
+
+.chat-header:hover {
+  background: #0d130f;
+}
+
+.assistant-avatar {
+  border-radius: 2px;
+  background: rgba(var(--assistant-primary-rgb), 0.12);
+  border: 1px solid var(--hud-line-strong, rgba(24, 210, 110, 0.45));
+  color: var(--assistant-primary);
+  box-shadow: none;
+}
+
+.assistant-details h4 {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.assistant-details span {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.status-dot {
+  border-radius: 0;
+}
+
+.control-btn {
+  border-radius: 2px;
+}
+
+/* ---------- Messages ---------- */
+.message-avatar {
+  border-radius: 2px;
+}
+
+.message-content {
+  border-radius: 2px;
+}
+
+.message.assistant .message-content {
+  border-radius: 2px;
+  border-left: 2px solid var(--assistant-primary);
+  background: #0e1211;
+}
+
+.message.user .message-content {
+  border-radius: 2px;
+  background: rgba(var(--assistant-primary-rgb), 0.14);
+  border: 1px solid var(--hud-line-strong, rgba(24, 210, 110, 0.45));
+  color: #fff;
+  box-shadow: none;
+}
+
+.message.user .message-content a {
+  color: var(--assistant-primary);
+}
+
+.message-timestamp,
+.message-time {
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.06em;
+}
+
+.welcome-message {
+  border-radius: 2px;
+}
+
+/* ---------- Quick actions ---------- */
+.quick-actions-title {
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.quick-action {
+  border-radius: 2px;
+  background: transparent;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Input ---------- */
+.chat-input {
+  border-top: 1px solid var(--hud-line, rgba(255, 255, 255, 0.13));
+}
+
+.input-container {
+  border-radius: 2px;
+  background: #0a0c0b;
+}
+
+.input-container:focus-within {
+  box-shadow: 0 0 0 1px var(--assistant-primary);
+}
+
+.send-btn {
+  border-radius: 2px;
+}
+
+/* ---------- Launcher ---------- */
+.chat-fab {
+  border-radius: 2px;
+  border: 1px solid var(--assistant-primary);
+  background: #0a0c0b;
+  color: var(--assistant-primary);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+}
+
+.chat-fab::before {
+  border-radius: 2px;
+  border: 1px solid rgba(var(--assistant-primary-rgb), 0.5);
+}
+
+.chat-fab:hover {
+  background: var(--assistant-primary);
+  color: #040404;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6), 0 0 24px rgba(var(--assistant-primary-rgb), 0.35);
+}
+
+.notification-badge {
+  border-radius: 2px;
+}

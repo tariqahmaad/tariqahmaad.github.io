@@ -8,27 +8,46 @@
   <title>Page not found | Tariq Ahmad</title>
   <link href="/favicon.ico" rel="icon" sizes="any">
   <style>
-    :root { --primary: #18d26e; --bg: #040404; --text: #fff; }
+    @font-face { font-family: "Anton"; font-style: normal; font-weight: 400; font-display: swap;
+      src: url("/assets/fonts/anton-latin.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+    :root { --primary: #18d26e; --cyan: #18c8ff; --bg: #040404; --text: #fff; --muted: rgba(255, 255, 255, 0.78); }
     * { box-sizing: border-box; }
     body {
-      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px;
+      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px;
       background: var(--bg); color: var(--text);
-      font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     }
-    h1 { margin: 0; font-size: clamp(4rem, 20vw, 8rem); line-height: 1; color: var(--primary); }
-    p { margin: 12px 0 28px; color: rgba(255, 255, 255, 0.8); }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 3px);
+    }
+    main { position: relative; width: min(640px, 100%); }
+    .code { margin: 0; font-family: "Anton", Impact, sans-serif; font-weight: 400; font-size: clamp(5rem, 24vw, 11rem); line-height: 0.95; color: var(--primary); }
+    .term { margin: 24px 0 32px; padding: 18px 20px; border: 1px solid rgba(24, 210, 110, 0.45); background: #0a0c0b; font-size: 0.9rem; line-height: 1.7; color: var(--muted); overflow-wrap: anywhere; }
+    .term b { color: var(--primary); font-weight: 700; }
+    .term i { color: var(--cyan); font-style: normal; }
     a {
-      display: inline-block; padding: 12px 28px; border-radius: 999px; border: 2px solid var(--primary);
-      color: var(--primary); text-decoration: none; font-weight: 600;
+      display: inline-block; padding: 12px 22px; border: 1px solid var(--primary); color: var(--primary);
+      text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
     }
     a:hover, a:focus-visible { background: var(--primary); color: #000; outline: none; }
   </style>
 </head>
 <body>
   <main>
-    <h1>404</h1>
-    <p>This page doesn't exist or has moved.</p>
+    <h1 class="code">404</h1>
+    <p class="term" role="status">
+      <b>$</b> cd <i id="path">/requested-page</i><br>
+      bash: no such directory<br>
+      <b>$</b> ls /portfolio<br>
+      about&nbsp;&nbsp;resume&nbsp;&nbsp;projects&nbsp;&nbsp;contact
+    </p>
     <a href="/">Back to the portfolio</a>
   </main>
+  <script>
+    // Show the path that was requested (set as text, never as HTML).
+    document.getElementById('path').textContent = location.pathname.slice(0, 80);
+  </script>
 </body>
 </html>

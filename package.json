@@ -8,10 +8,11 @@
   },
   "scripts": {
     "build": "bash scripts/minify.sh",
-    "check:build": "bash scripts/minify.sh && git diff --exit-code -- '*.min.css' '*.min.js'",
+    "check:build": "bash scripts/minify.sh && git diff --exit-code -- '*.min.css' '*.min.js' projects",
     "test": "node --test \"tests/*.test.mjs\"",
     "lint": "eslint assets/js tests",
-    "serve": "python -m http.server 8000"
+    "serve": "python -m http.server 8000",
+    "build:resume": "node scripts/build-resume.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.2",

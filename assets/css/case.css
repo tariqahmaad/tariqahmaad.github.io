@@ -1,0 +1,270 @@
+/*--------------------------------------------------------------
+# Case-study pages (projects/<slug>/index.html). Deferred bundle.
+--------------------------------------------------------------*/
+.case-page main {
+  min-height: 70vh;
+}
+
+.case {
+  max-width: 880px;
+  padding: calc(var(--header-h) + clamp(32px, 6vw, 72px)) 16px clamp(48px, 8vw, 96px);
+}
+
+.case__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.case__crumbs a {
+  color: var(--primary-color);
+}
+
+.case__eyebrow {
+  margin: 0 0 12px;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.case__eyebrow::before {
+  content: "> ";
+  color: var(--secondary-color);
+}
+
+.case__title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.case__lead {
+  max-width: 44rem;
+  margin: 24px 0 0;
+  color: var(--muted-text);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.case__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.case__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  margin: 40px 0 0;
+  border: 1px solid var(--hud-line);
+  background: var(--hud-line);
+}
+
+.case__facts > div {
+  padding: 16px 18px;
+  background: var(--hud-surface);
+}
+
+.case__facts dt {
+  margin: 0 0 6px;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.case__facts dd {
+  margin: 0;
+  color: #fff;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.case__block {
+  position: relative;
+  margin-top: 28px;
+  padding: 24px 26px;
+  border: 1px solid var(--hud-line);
+  background: linear-gradient(180deg, var(--hud-surface-2) 0%, var(--hud-surface) 100%);
+}
+
+.case__block::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 22px;
+  height: 22px;
+  border-top: 2px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+  pointer-events: none;
+}
+
+.case__block h2 {
+  margin: 0 0 10px;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.case__block p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.case__pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: clamp(40px, 6vw, 72px);
+  padding-top: 24px;
+  border-top: 1px solid var(--hud-line);
+}
+
+.case__pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 48%;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.case__pager-link--next {
+  align-items: flex-end;
+  margin-left: auto;
+  text-align: right;
+}
+
+.case__pager-link span {
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.case__pager-link:hover,
+.case__pager-link:focus-visible {
+  color: var(--primary-color);
+}
+
+/* No hero on case pages: drop the portrait artwork so the title stays legible. */
+body.case-page::before {
+  display: none;
+}
+
+/* Back to projects: a real, prominent button (top and bottom of every case study) */
+.case__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin: 0 0 24px;
+  padding: 0 18px 0 14px;
+  border: 1px solid var(--hud-line-strong);
+  background: rgba(24, 210, 110, 0.06);
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.case__back-icon {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-left: 4px;
+  border-bottom: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.case__back:hover,
+.case__back:focus-visible {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.case__back:hover .case__back-icon,
+.case__back:focus-visible .case__back-icon {
+  transform: translateX(-3px) rotate(45deg);
+}
+
+.case__back--bottom {
+  margin: 28px 0 0;
+}
+
+@media (max-width: 575.98px) {
+  .case__back {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .case__back--bottom {
+    margin-top: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case__back,
+  .case__back-icon {
+    transition: none;
+  }
+}
+
+/* Breadcrumb link: a real tap target on phones */
+@media (max-width: 767.98px) {
+  .case__crumbs {
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .case__crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}

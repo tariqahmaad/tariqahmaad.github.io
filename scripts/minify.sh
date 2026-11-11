@@ -6,6 +6,7 @@
 #   assets/css/deferred.min.css    below-the-fold CSS    (from deferred.css)
 #   assets/js/site.min.js          classic script bundle (from site.js)
 #   assets/js/ai-assistant.min.js  lazy ES module bundle (from ai-assistant.js)
+#   assets/js/command-palette.min.js lazy ES module bundle (from command-palette.js)
 #   *.subset.min.css               Bootstrap + icon-font subsets
 # Uses the pinned esbuild from devDependencies when `npm install` has been run,
 # otherwise falls back to the same version through npx.
@@ -44,5 +45,11 @@ esbuild assets/js/site.js --bundle --minify --format=iife --target=es2020 \
   --legal-comments=none --outfile=assets/js/site.min.js
 esbuild assets/js/ai-assistant.js --bundle --minify --format=esm --target=es2020 \
   --legal-comments=none --outfile=assets/js/ai-assistant.min.js
+esbuild assets/js/command-palette.js --bundle --minify --format=esm --target=es2020 \
+  --legal-comments=none --outfile=assets/js/command-palette.min.js
+
+# 4. Static case-study pages (projects/<slug>/index.html) from knowledge-base.js.
+#    They copy the ?v= version from index.html, so bump it BEFORE running this.
+node scripts/build-projects.mjs
 
 echo "Done. Bump the ?v= version in index.html so visitors' caches pick up the new files."

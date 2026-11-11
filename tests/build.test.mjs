@@ -33,6 +33,7 @@ const CSS_EXTERNALS = ['*.woff2', '*.jpg', '*.png', '*.svg', '*.webp'];
 const BUILT = [
     ['assets/js/site.min.js', 'assets/js/site.js', { format: 'iife', target: 'es2020' }],
     ['assets/js/ai-assistant.min.js', 'assets/js/ai-assistant.js', { format: 'esm', target: 'es2020' }],
+    ['assets/js/command-palette.min.js', 'assets/js/command-palette.js', { format: 'esm', target: 'es2020' }],
     ['assets/css/critical.min.css', 'assets/css/critical.css', { external: CSS_EXTERNALS }],
     ['assets/css/deferred.min.css', 'assets/css/deferred.css', { external: CSS_EXTERNALS }]
 ];

@@ -28,10 +28,10 @@ jobs:
       - name: Tests (assistant logic, content and privacy rules)
         run: npm test
 
-      - name: Built assets (minified CSS/JS, icon and Bootstrap subsets) are up to date
+      - name: Built assets (minified CSS/JS, subsets, generated project pages) are up to date
         run: |
           npm run build
-          git diff --exit-code -- '*.min.css' '*.min.js' || {
+          git diff --exit-code -- '*.min.css' '*.min.js' 'projects' || {
             echo "::error::Built assets are out of date. Run 'bash scripts/minify.sh' and commit the result."
             exit 1
           }

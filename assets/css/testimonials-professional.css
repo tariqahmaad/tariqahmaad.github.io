@@ -29,7 +29,6 @@
   transition: var(--glass-transition);
   padding: 1.8rem 2rem 1.6rem;
   margin: 6px 0;
-  height: 380px;
   cursor: default;
   display: flex;
   flex-direction: column;
@@ -238,7 +237,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
   min-height: 24px;
   margin-top: 1.5rem;
 }
@@ -259,7 +258,7 @@
 .testimonials-dot::after {
   content: "";
   position: absolute;
-  inset: -8px -3px;
+  inset: -18px -8px;
 }
 
 .testimonials-dot:focus-visible {
@@ -281,14 +280,12 @@
 @media (max-width: 1200px) {
   .testimonials .testimonial-item {
     padding: 1.6rem 1.8rem 1.4rem;
-    height: 360px;
   }
 }
 
 @media (max-width: 992px) {
   .testimonials .testimonial-item {
     padding: 1.5rem 1.6rem 1.3rem;
-    height: 350px;
   }
 
   .testimonials .testimonial-quote p {
@@ -300,7 +297,6 @@
 @media (max-width: 768px) {
   .testimonials .testimonial-item {
     padding: 1.3rem 1.4rem 1.2rem;
-    height: 340px;
   }
 
   .testimonials .testimonial-avatar,
@@ -334,8 +330,6 @@
 @media (max-width: 576px) {
   .testimonials .testimonial-item {
     padding: 1.2rem 1.2rem 1rem;
-    height: auto;
-    min-height: 310px;
     border-radius: var(--glass-radius-md);
   }
 

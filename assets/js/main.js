@@ -14,21 +14,6 @@
   }
 
   /**
-   * Easy event listener function
-   */
-  const on = (type, el, listener, all = false) => {
-    let selectEl = select(el, all)
-
-    if (selectEl) {
-      if (all) {
-        selectEl.forEach(e => e.addEventListener(type, listener))
-      } else {
-        selectEl.addEventListener(type, listener)
-      }
-    }
-  }
-
-  /**
    * Selector lookup that tolerates invalid selectors (e.g. location.hash "#1")
    */
   const safeSelect = (selector) => {
@@ -42,44 +27,40 @@
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
   const scrollBehavior = () => (reducedMotionQuery.matches ? 'auto' : 'smooth')
 
-  /** Fade-out duration of a section; header collapse/expand waits for it. */
-  const SECTION_FADE_MS = 200
-  /** Extra space between the collapsed header and the section top. */
-  const SCROLL_BUFFER_PX = 60
-
   /**
-   * Scrolls to an element with header offset
+   * One scrolling page. Sections are always in the flow (so the page works
+   * without JS, indexes well and deep links just work); JS adds smooth scroll,
+   * scroll-spy, a header that firms up on scroll and the mobile menu.
    */
-  const scrollto = (el) => {
-    const element = safeSelect(el);
-    if (element) {
-      const headerOffset = select('#header').offsetHeight;
-      window.scrollTo({
-        top: element.offsetTop - headerOffset - SCROLL_BUFFER_PX,
-        behavior: scrollBehavior()
-      });
+  const header = select('#site-header')
+  const siteNav = select('#site-nav')
+  const navToggle = select('.site-nav-toggle')
+  const mainEl = select('#main-content')
+  const siteFooter = select('.site-footer')
+  const headerHeight = () => (header ? header.offsetHeight : 0)
+
+  // Lenis smooth scroll (self-hosted). Skipped for reduced motion and when the
+  // vendor script failed to load; native scrolling then takes over.
+  let lenis = null
+  if (typeof Lenis !== 'undefined' && !reducedMotionQuery.matches) {
+    lenis = new Lenis({ lerp: 0.1 })
+    const raf = (time) => {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
     }
+    requestAnimationFrame(raf)
   }
 
-  /**
-   * Single owner of the "which section is visible" state. Hidden sections are
-   * made `inert` so they stay out of the tab order and accessibility tree.
-   */
-  let pendingSectionTimer = null
-
-  const showSection = (target, { focus = false } = {}) => {
-    select('section', true).forEach((section) => {
-      const visible = section === target
-      section.classList.toggle('section-show', visible)
-      section.inert = !visible
-      section.setAttribute('aria-hidden', String(!visible))
-      if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1')
-    })
-    if (target && focus) target.focus({ preventScroll: true })
+  const scrollToSection = (target, { instant = false } = {}) => {
+    const top = target.id === 'home'
+      ? 0
+      : Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight())
+    if (lenis) lenis.scrollTo(top, { immediate: instant })
+    else window.scrollTo({ top, behavior: instant ? 'auto' : scrollBehavior() })
   }
 
   const setActiveNav = (hash) => {
-    select('#navbar .nav-link', true).forEach((link) => {
+    select('#site-nav .nav-link', true).forEach((link) => {
       const isActive = link.getAttribute('href') === hash
       link.classList.toggle('active', isActive)
       if (isActive) link.setAttribute('aria-current', 'page')
@@ -88,43 +69,8 @@
   }
 
   /**
-   * Open a section: collapse the header into its compact "top" form first (if
-   * needed), then fade the section in. Cancels any pending transition so rapid
-   * clicks can't leave an older section on top.
-   */
-  const openSection = (target, options) => {
-    clearTimeout(pendingSectionTimer)
-    const header = select('#header')
-    if (!header.classList.contains('header-top')) {
-      header.classList.add('header-top')
-      pendingSectionTimer = setTimeout(() => showSection(target, options), SECTION_FADE_MS)
-    } else {
-      showSection(target, options)
-    }
-  }
-
-  /**
-   * Navigate back to the home/header view.
-   * Hides all sections, expands the header, and scrolls to top.
-   */
-  const navigateHome = () => {
-    clearTimeout(pendingSectionTimer)
-    showSection(null)
-
-    // Wait for section fade out animation to complete
-    pendingSectionTimer = setTimeout(() => {
-      select('#header').classList.remove('header-top')
-    }, SECTION_FADE_MS);
-
-    window.scrollTo({
-      top: 0,
-      behavior: scrollBehavior()
-    });
-  }
-
-  /**
-   * Keep the address bar in sync with the visible section so the Back button,
-   * bookmarks and shared links work. An empty hash means the home view.
+   * Keep the address bar in sync so the Back button, bookmarks and shared
+   * links work. An empty hash means the top of the page.
    */
   const updateUrl = (hash) => {
     if (hash === window.location.hash) return
@@ -135,131 +81,114 @@
     }
   }
 
-  /** Show whatever the current URL points at (used for Back/Forward). */
-  const syncFromLocation = () => {
-    const hash = window.location.hash
-    const target = safeSelect(hash)
-    if (target && target.tagName === 'SECTION') {
-      setActiveNav(hash)
-      openSection(target)
-      scrollto(hash)
-    } else {
-      setActiveNav('#header')
-      navigateHome()
+  const pageSections = select('main > section', true)
+  pageSections.forEach((section) => {
+    if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1')
+  })
+
+  // Scroll-spy: the section crossing the middle of the viewport is the active one.
+  if ('IntersectionObserver' in window) {
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActiveNav('#' + entry.target.id)
+      })
+    }, { rootMargin: '-45% 0px -50% 0px' })
+    pageSections.forEach((section) => spy.observe(section))
+  }
+
+  // Header gets a solid, blurred background once the page has scrolled.
+  const syncHeader = () => {
+    if (header) header.classList.toggle('is-scrolled', window.scrollY > 8)
+  }
+  window.addEventListener('scroll', syncHeader, { passive: true })
+  syncHeader()
+
+  /**
+   * Mobile menu: a full-screen overlay. While open the page behind it is
+   * inert (not tabbable) and scrolling is locked.
+   */
+  const setMobileNav = (open) => {
+    if (!siteNav || !navToggle) return
+    siteNav.classList.toggle('is-open', open)
+    const icon = navToggle.querySelector('i')
+    if (icon) {
+      icon.classList.toggle('bi-list', !open)
+      icon.classList.toggle('bi-x', open)
+    }
+    navToggle.setAttribute('aria-expanded', String(open))
+    navToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu')
+    // `nav-open` locks page scroll and hides the assistant button (see shell.css).
+    document.documentElement.classList.toggle('nav-open', open)
+    if (mainEl) mainEl.inert = open
+    if (siteFooter) siteFooter.inert = open
+    if (lenis) {
+      if (open) lenis.stop()
+      else lenis.start()
     }
   }
 
-  window.addEventListener('popstate', syncFromLocation)
+  const isMobileNavOpen = () => !!siteNav && siteNav.classList.contains('is-open')
 
-  // Hidden sections must not be reachable before the first navigation either.
-  showSection(null)
-  /**
-   * Mobile nav toggle
-   */
-  const setMobileNav = (open) => {
-    const navbar = select('#navbar');
-    const toggle = select('.mobile-nav-toggle');
-    if (!navbar || !toggle) return;
+  if (navToggle) navToggle.addEventListener('click', () => setMobileNav(!isMobileNavOpen()))
 
-    navbar.classList.toggle('navbar-mobile', open);
-    toggle.classList.toggle('bi-list', !open);
-    toggle.classList.toggle('bi-x', open);
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-    document.body.style.overflow = open ? 'hidden' : '';
-  };
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !isMobileNavOpen()) return
+    setMobileNav(false)
+    if (navToggle) navToggle.focus()
+  })
 
-  on('click', '.mobile-nav-toggle', function () {
-    setMobileNav(!select('#navbar').classList.contains('navbar-mobile'));
+  // Leaving the mobile layout must never leave the page locked.
+  window.matchMedia('(min-width: 992px)').addEventListener('change', (e) => {
+    if (e.matches && isMobileNavOpen()) setMobileNav(false)
   })
 
   /**
-   * Close mobile menu with Escape key and restore focus to the toggle
+   * In-page links (#about, #projects...): smooth-scroll, update the URL and move
+   * focus to the section so keyboard and screen-reader users land there too.
    */
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    const navbar = select('#navbar');
-    if (navbar && navbar.classList.contains('navbar-mobile')) {
-      setMobileNav(false);
-      const toggle = select('.mobile-nav-toggle');
-      if (toggle) toggle.focus();
-    }
-  })
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]')
+    if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    const target = safeSelect(link.hash)
+    if (!target || !pageSections.includes(target)) return
 
-  /**
-   * Close mobile menu when clicking outside
-   */
-  document.addEventListener('click', function (e) {
-    const navbar = select('#navbar');
-    const toggle = select('.mobile-nav-toggle');
-
-    if (!navbar || !toggle) return;
-
-    // Check if menu is open
-    if (navbar.classList.contains('navbar-mobile')) {
-      const clickedInsideNavbar = navbar.contains(e.target);
-      const clickedToggle = toggle.contains(e.target);
-      const clickedSocialLink = e.target.closest('.mobile-social-links a');
-
-      // Close if: outside navbar AND not on toggle
-      // OR clicked on social links (even though they're in navbar)
-      if ((!clickedInsideNavbar && !clickedToggle) || clickedSocialLink) {
-        setMobileNav(false);
-      }
-    }
-  })
-
-  /**
-   * Scroll with offset on links with a class name .scrollto
-   */
-  on('click', '#navbar .nav-link', function (e) {
-    const section = safeSelect(this.hash)
-    if (!section) return
     e.preventDefault()
+    if (isMobileNavOpen()) setMobileNav(false)
+    updateUrl(target.id === 'home' ? '' : link.hash)
+    setActiveNav('#' + target.id)
+    scrollToSection(target)
+    target.focus({ preventScroll: true })
+  })
 
-    setActiveNav(this.hash)
+  // Opening the command menu from the mobile overlay closes the overlay first.
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-open-palette]') && isMobileNavOpen()) setMobileNav(false)
+  })
 
-    if (select('#navbar').classList.contains('navbar-mobile')) {
-      setMobileNav(false); // Also re-enables scrolling
-    }
+  // The command palette asks the page to scroll to any element by id.
+  document.addEventListener('nav:goto', (e) => {
+    const target = document.getElementById(e.detail && e.detail.id)
+    if (!target) return
+    const isSection = pageSections.includes(target)
+    updateUrl(target.id === 'home' ? '' : '#' + target.id)
+    if (isSection) setActiveNav('#' + target.id)
+    scrollToSection(target)
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
+    target.focus({ preventScroll: true })
+  })
 
-    if (this.hash === '#header') {
-      updateUrl('')
-      navigateHome();
-      return;
-    }
+  // Modals ask for the smooth-scroll engine to pause while they are open.
+  document.addEventListener('ui:scroll-lock', (e) => {
+    if (!lenis) return
+    if (e.detail && e.detail.locked) lenis.stop()
+    else if (!isMobileNavOpen()) lenis.start()
+  })
 
-    updateUrl(this.hash)
-    openSection(section, { focus: true })
-    scrollto(this.hash)
-  }, true)
-
-  /**
-   * Handle clicks on "Tariq Ahmad" name and logo to return home smoothly
-   */
-  on('click', '#header h1 a, #header a.mr-auto', function (e) {
-    // Only if we are currently looking at a section (header is in top mode)
-    if (select('#header').classList.contains('header-top')) {
-      e.preventDefault();
-
-      setActiveNav('#header');
-      updateUrl('')
-      navigateHome();
-    }
-  }, true)
-
-  /**
-   * Activate/show sections on load with hash links
-   */
-  window.addEventListener('load', () => {
-    const hash = window.location.hash
-    const initial = safeSelect(hash)
-    if (!initial || initial.tagName !== 'SECTION') return
-
-    setActiveNav(hash)
-    openSection(initial)
-    scrollto(hash)
-  });
+  // Back/Forward restores the position that matches the URL.
+  window.addEventListener('popstate', () => {
+    const target = safeSelect(window.location.hash)
+    scrollToSection(target && pageSections.includes(target) ? target : select('#home'), { instant: true })
+  })
 
   /**
    * References carousel: a native scroll-snap track (see testimonials CSS) plus
@@ -614,19 +543,5 @@
         }, 1500);
       }
     }
-
-    // Scroll animations
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    const scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    elements.forEach(element => {
-      scrollObserver.observe(element);
-    });
   });
 })();

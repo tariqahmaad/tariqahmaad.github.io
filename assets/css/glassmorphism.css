@@ -131,7 +131,6 @@
   -webkit-backdrop-filter: var(--glass-blur-lg);
   box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
   padding: 1.8rem 2rem 1.6rem;
-  height: 380px;
   cursor: default;
 }
 
@@ -157,7 +156,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 380px;
 }
 
 .about-info-card.glass-projects {
@@ -621,31 +619,6 @@
   color: var(--primary-color);
 }
 
-/* Header social links */
-#header .social-links.glass-social {
-  margin-top: 40px;
-  display: flex;
-  gap: 8px;
-}
-
-#header.header-top .social-links.glass-social {
-  display: none !important;
-}
-
-/* Mobile social links */
-.navbar-mobile .mobile-social-links.glass-social {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  gap: 12px;
-}
-
-.navbar-mobile .mobile-social-links.glass-social a {
-  width: 40px;
-  height: 40px;
-  font-size: 14px;
-}
-
 /* Contact section social links */
 .contact .info-box .contact-social-links.glass-social {
   margin: 10px 0 0 0 !important;
@@ -823,18 +796,6 @@
   }
 
   .contact .info-box .social-links.glass-social a {
-    width: 38px;
-    height: 38px;
-    font-size: 16px;
-  }
-
-  #header .social-links.glass-social {
-    margin-top: 0 !important;
-    display: flex;
-    gap: 8px;
-  }
-
-  #header .social-links.glass-social a {
     width: 38px;
     height: 38px;
     font-size: 16px;

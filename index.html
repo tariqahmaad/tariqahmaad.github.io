@@ -10,6 +10,7 @@
     content="Computer Engineer specializing in Full-Stack Development with Python, React, Django, and Spring Boot. Open to full-time roles and freelance projects."
     name="description">
   <meta name="author" content="Tariq Ahmad">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="theme-color" content="#18d26e">
   <meta name="google-site-verification" content="geLpufK_dlELVa0MzvHuTVrULt-Ml6grrN9XzVVdP_8" />
 
@@ -45,40 +46,52 @@
 
   <!-- Render-blocking CSS, one request: Bootstrap subset + self-hosted fonts + style + branding + glass (npm run build).
        Fonts are deliberately NOT preloaded: measured under throttling, preloading delayed first paint. -->
-  <link href="assets/css/critical.min.css?v=20261109a" rel="stylesheet">
+  <link href="assets/css/critical.min.css?v=20261112d" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
-  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261109a" as="style"
+  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261112d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261109a" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261112d" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261109a" as="style"
+  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261112d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261109a" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261112d" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261109a" as="style"
+  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261112d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261109a" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261112d" rel="stylesheet">
   </noscript>
 
 
   <!-- Below-the-fold CSS (testimonials, projects, assistant), one async request -->
-  <link rel="preload" href="assets/css/deferred.min.css?v=20261109a" as="style"
+  <link rel="preload" href="assets/css/deferred.min.css?v=20261112d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/deferred.min.css?v=20261109a" rel="stylesheet">
+    <link href="assets/css/deferred.min.css?v=20261112d" rel="stylesheet">
   </noscript>
 
   <!-- Particles.js - Self-hosted, deferred for faster LCP -->
   <script src="assets/vendor/particles.js/particles.min.js" defer></script>
 
   <!-- Mark JS availability early so CSS can hide SPA-style sections only when JS runs -->
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    // `js` lets CSS enhance the page; `boot-pending` shows the boot sequence once per session
+    // (skipped for reduced motion) and is always cleared after 4.5s so it can never trap a visitor.
+    (function (root) {
+      root.classList.add('js');
+      try {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('booted')) {
+          root.classList.add('boot-pending');
+          setTimeout(function () { root.classList.remove('boot-pending'); }, 4500);
+        }
+      } catch (e) { /* storage blocked: skip the boot sequence */ }
+    })(document.documentElement);
+  </script>
 
   <!-- Structured data (inline so search engines can read it) -->
   <script type="application/ld+json">
@@ -139,6 +152,7 @@
             "position": 1,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/cv-builder/",
               "name": "CV Builder",
               "description": "Privacy-first resume builder with real-time preview, ATS-friendly templates, PDF export, and version control, built with Next.js and Firebase",
               "author": {
@@ -152,6 +166,7 @@
             "position": 2,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/quizlet/",
               "name": "Quizlet - Interactive University Quiz Platform",
               "description": "Interactive quiz platform built with HTML, CSS, and JavaScript for university students",
               "author": {
@@ -170,6 +185,7 @@
             "position": 3,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/budgetwise/",
               "name": "BudgetWise - React Native Expense Tracker",
               "description": "Mobile expense tracking app built with React Native, Node.js, and Firebase",
               "author": {
@@ -188,6 +204,7 @@
             "position": 4,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/graduation-presentation/",
               "name": "Graduation Project Presentation",
               "description": "Interactive presentation showcasing the graduation project, built with HTML, CSS, and JavaScript",
               "author": {
@@ -206,6 +223,7 @@
             "position": 5,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/note-taking-app/",
               "name": "Note-Taking Web Application",
               "description": "Web-based note-taking application with PHP, MySQL, and JavaScript",
               "author": {
@@ -224,6 +242,7 @@
             "position": 6,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/hospital-management/",
               "name": "Hospital Management System",
               "description": "Hospital management system built with Java, Spring Boot, and MySQL",
               "author": {
@@ -242,6 +261,7 @@
             "position": 7,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/digit-classifier/",
               "name": "Hand-Written Digit Classifier",
               "description": "Machine learning project for classifying handwritten digits using Neural Networks and TensorFlow",
               "author": {
@@ -257,6 +277,7 @@
             "position": 8,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/hotel-management/",
               "name": "Hotel Management System",
               "description": "Hotel management system with CRUD operations built with C# and MySQL",
               "author": {
@@ -274,6 +295,7 @@
             "position": 9,
             "item": {
               "@type": "SoftwareSourceCode",
+              "mainEntityOfPage": "https://tariqahmaad.github.io/projects/banking-management/",
               "name": "Banking Management System",
               "description": "Banking management system with account management built with Java Swing",
               "author": {
@@ -293,52 +315,82 @@
 
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- Boot sequence: shown by the inline head script only; decorative and skippable -->
+  <div id="boot" class="boot" aria-hidden="true">
+    <div class="boot__slats"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="boot__panel">
+      <pre id="boot-log" class="boot__log"></pre>
+      <div class="boot__gauge"><span id="boot-bar"></span></div>
+      <p class="boot__hint">click or press any key to skip</p>
+    </div>
+  </div>
+
   <!-- Particles background -->
   <div id="particles-js"></div>
 
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="container">
+  <!-- ======= Fixed header + primary navigation ======= -->
+  <header id="site-header" class="site-header">
+    <div class="site-header__bar">
+      <a href="#home" class="site-logo" aria-label="Tariq Ahmad, back to top">
+        <i class="ri-code-s-slash-fill" aria-hidden="true"></i>
+        <span class="site-logo__name">Tariq Ahmad</span>
+      </a>
 
-      <a href="index.html" class="mr-auto" aria-label="Home"><i class="ri-code-s-slash-fill" aria-hidden="true"></i></a>
-      <h1><a href="index.html" class="stylish-name">Tariq Ahmad</a></h1>
-      <p class="header-subtitle">I'm a passionate</p>
-      <p class="header-subtitle role-h2"><span id="role">Full-Stack Developer</span></p><br>
+      <button type="button" class="site-nav-toggle mobile-nav-toggle" aria-label="Open navigation menu"
+        aria-expanded="false" aria-controls="site-nav">
+        <i class="bi bi-list" aria-hidden="true"></i>
+      </button>
 
-      <div class="hire-me-btn">
-        <a href="mailto:me@tariqahmad.dev?subject=Job%20Opportunity%20for%20You" class="btn-hire">
-          <i class="bi bi-briefcase" aria-hidden="true"></i> Hire Me
-        </a>
-      </div>
-
-      <button type="button" class="bi bi-list mobile-nav-toggle" aria-label="Open navigation menu"
-        aria-expanded="false" aria-controls="navbar"></button>
-      <nav id="navbar" class="navbar">
+      <nav id="site-nav" class="site-nav" aria-label="Primary">
         <ul>
-          <li><a class="nav-link active" href="#header">Home</a></li>
+          <li><a class="nav-link active" href="#home">Home</a></li>
           <li><a class="nav-link" href="#about">About</a></li>
           <li><a class="nav-link" href="#resume">Resume</a></li>
           <li><a class="nav-link" href="#projects">Projects</a></li>
           <li><a class="nav-link" href="#contact">Contact</a></li>
-          <li class="mobile-social-links glass-social">
+          <li class="nav-palette">
+            <button type="button" class="palette-trigger" data-open-palette aria-haspopup="dialog"
+              aria-label="Open search and commands"><span>Search</span><kbd data-palette-key>Ctrl K</kbd></button>
+          </li>
+          <li class="nav-social">
             <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
-                class="bi bi-linkedin"></i></a>
+                class="bi bi-linkedin" aria-hidden="true"></i></a>
             <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
-                class="ri-github-fill"></i></a>
+                class="ri-github-fill" aria-hidden="true"></i></a>
           </li>
         </ul>
-      </nav><!-- .navbar -->
-
-      <div class="social-links glass-social">
-        <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
-            class="bi bi-linkedin"></i></a>
-        <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i class="ri-github-fill" aria-hidden="true"></i></a>
-      </div>
-
+      </nav>
     </div>
   </header><!-- End Header -->
 
   <main id="main-content" tabindex="-1">
+
+  <!-- ======= Hero ======= -->
+  <section id="home" class="hero" aria-labelledby="hero-title">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Computer Engineer &amp; Full-Stack Developer</p>
+      <h1 id="hero-title" class="hero__title" data-text="Tariq Ahmad">Tariq Ahmad</h1>
+      <p class="hero__role"><span class="hero__role-prefix">I build as a </span><span id="role">Full-Stack Developer</span></p>
+      <p class="hero__lead">
+        I design and ship reliable web and mobile products, from the database to the interface,
+        with Python, React, Django and Spring Boot.
+      </p>
+      <ul class="hero__stats" aria-label="Highlights">
+        <li><strong data-count="9">9</strong><span>Projects</span></li>
+        <li><strong data-count="7">7</strong><span>Certifications</span></li>
+        <li><strong data-count="5">5</strong><span>Roles</span></li>
+        <li><strong data-count="3">3</strong><span>Awards</span></li>
+      </ul>
+      <div class="hero__cta">
+        <a href="#projects" class="btn-brand"><i class="bi bi-journal-richtext" aria-hidden="true"></i> View Projects</a>
+        <a href="mailto:me@tariqahmad.dev?subject=Job%20Opportunity%20for%20You" class="btn-ghost"><i
+            class="bi bi-briefcase" aria-hidden="true"></i> Hire Me</a>
+        <a href="assets/Tariq_Ahmad_Resume.pdf" class="btn-ghost" download data-resume-pdf><i
+            class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> R&eacute;sum&eacute; PDF</a>
+      </div>
+    </div>
+  </section><!-- End Hero -->
 
   <!-- ======= About Section ======= -->
   <section id="about" class="about">
@@ -346,13 +398,13 @@
     <!-- ======= About Me ======= -->
     <div class="about-me container">
 
-      <div class="section-title animate-on-scroll">
+      <div class="section-title">
         <h2>About</h2>
         <p>Professional Summary</p>
       </div>
 
       <div class="row">
-        <div class="col-lg-4 animate-on-scroll">
+        <div class="col-lg-4">
           <img src="assets/img/me.jpg" class="img-fluid" alt="Tariq Ahmad portrait" width="400" height="400" decoding="async">
         </div>
         <div class="col-lg-8 pt-4 pt-lg-0 content">
@@ -759,29 +811,95 @@
           <h2>Resume</h2>
           <p class="mb-0">Background and Experience</p>
         </div>
-        <a href="https://cv.tariqahmad.dev/share/SrQUaAO1?download=1" target="_blank" rel="noopener noreferrer" class="btn-cv btn-brand glass-btn mt-2 mt-md-0">
-          <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> Download CV<span class="sr-only"> (opens in new tab)</span></a>
+        <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+          <a href="assets/Tariq_Ahmad_Resume.pdf" download data-resume-pdf class="btn-brand glass-btn">
+            <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> R&eacute;sum&eacute; PDF</a>
+          <a href="https://cv.tariqahmad.dev/share/SrQUaAO1?download=1" target="_blank" rel="noopener noreferrer" class="btn-cv btn-brand glass-btn">
+            <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> Download CV<span class="sr-only"> (opens in new tab)</span></a>
+        </div>
       </div>
 
-      <div class="row">
-        <div class="col-lg-6">
+      <div class="resume-columns">
+        <div class="resume-col">
           <h3 class="resume-title">Summary</h3>
-
-          <div class="resume-item pb-0">
+          <div class="resume-summary">
             <h4>Tariq Ahmad</h4>
             <p><em>Dynamic and innovative Computer Engineering Graduate with a strong foundation in software
-                development, system
-                design, and project management. Passionate about leveraging technical skills and creative
-                problem-solving abilities to
-                develop efficient and scalable solutions. Proven aptitude for collaborative teamwork, bolstered by a
-                commitment to
-                continuous learning and professional development. Ready to apply theoretical knowledge in practical,
-                real-world
-                situations, aiming to contribute effectively in a technologically-driven environment.</em>
+              development, system
+              design, and project management. Passionate about leveraging technical skills and creative
+              problem-solving abilities to
+              develop efficient and scalable solutions. Proven aptitude for collaborative teamwork, bolstered by a
+              commitment to
+              continuous learning and professional development. Ready to apply theoretical knowledge in practical,
+              real-world
+              situations, aiming to contribute effectively in a technologically-driven environment.</em>
             </p>
           </div>
 
+          <h3 class="resume-title">Professional Experience</h3>
+          <div class="resume-timeline">
+            <div class="resume-item">
+              <h4>Researcher Intern</h4>
+              <h5>Oct 2024 - Jul 2025</h5>
+              <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
+              <ul>
+                <li>Systematic Literature Reviews</li>
+                <li>Mixed Methods Data Analysis</li>
+                <li>Experimental Design & Prototyping</li>
+                <li>Technical Writing & Presentations</li>
+                <li>Analytical Problem-Solving</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Engineering Researcher Intern</h4>
+              <h5>March 2024 - June 2024</h5>
+              <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
+              <ul>
+                <li>Literature Review</li>
+                <li>Data Collection & Analysis</li>
+                <li>Experimentations & Prototyping Collaboration</li>
+                <li>Report Writing and Presentation</li>
+                <li>Problem Solving</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Frontend Developer (Angular) Intern</h4>
+              <h5>Nov 2023 - Jan 2024</h5>
+              <p><em>Caretta Software Company, Istanbul, Turkey </em></p>
+              <ul>
+                <li>User Interface Development</li>
+                <li>Application Structure</li>
+                <li>Angular Framework Expertise</li>
+                <li>Responsive Design</li>
+                <li>API Integration</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Research Assistant Intern</h4>
+              <h5>Oct 2023 - Jan 2024</h5>
+              <p><em>Industrial 4.0 Research Center, Istanbul, Turkey</em></p>
+              <ul>
+                <li>Data Collection and Analysis.</li>
+                <li>Literature review, Report writing and Documentation.</li>
+                <li>Data entry.</li>
+                <li>Collaboration and Presentation.</li>
+                <li>Critical thinking.</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Network Technician</h4>
+              <h5>July 2023 – Sept 2023</h5>
+              <p><em>Tawhid Almas Logistics Company</em></p>
+              <ul>
+                <li>Installed and troubleshot networks</li>
+                <li>Monitored network performance</li>
+                <li>Managed backup and recovery</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
+        <div class="resume-col">
           <h3 class="resume-title">Education</h3>
           <div class="resume-item">
             <h4>Bachelor Of Computer Engineering</h4>
@@ -795,143 +913,68 @@
               web development basics.</p>
           </div>
 
-
           <h3 class="resume-title">Achievements</h3>
-
-          <div class="resume-item">
-            <h4>Oxford ELLT – Overall Level: 8</h4>
-            <h5>Nov 2025</h5>
-            <p><em>Oxford English Language Level Test</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>IELTS – Overall Band: 6.0</h4>
-            <h5>Feb 2025</h5>
-            <p><em>IDP Education</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>3<sup>rd</sup> Coding Competition</h4>
-            <h5>May 2023</h5>
-            <p><em>Istanbul Aydin University</em></p>
-            <ul>
-              <li>Got a 2<sup>nd</sup> position with my team.</li>
-              <li>Organized by Caretta Software Company.</li>
-            </ul>
+          <div class="resume-group">
+            <div class="resume-item">
+              <h4>Oxford ELLT – Overall Level: 8</h4>
+              <h5>Nov 2025</h5>
+              <p><em>Oxford English Language Level Test</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>IELTS – Overall Band: 6.0</h4>
+              <h5>Feb 2025</h5>
+              <p><em>IDP Education</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>3<sup>rd</sup> Coding Competition</h4>
+              <h5>May 2023</h5>
+              <p><em>Istanbul Aydin University</em></p>
+              <ul>
+                <li>Got a 2<sup>nd</sup> position with my team.</li>
+                <li>Organized by Caretta Software Company.</li>
+              </ul>
+            </div>
           </div>
 
           <h3 class="resume-title">Certifications</h3>
-          <div class="resume-item">
-            <h4>React Native</h4>
-            <h5>March 2025</h5>
-            <p><em>Meta | Coursera</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Unsupervised Learning, Recommenders, Reinforcement Learning</h4>
-            <h5>Sep 2024</h5>
-            <p><em>Stanford | Coursera</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Supervised Machine Learning: Regression and Classification</h4>
-            <h5>Aug 2024</h5>
-            <p><em>Stanford | Coursera</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Technical Support Fundamentals</h4>
-            <h5>Oct 2023 – Dec 2023</h5>
-            <p><em>Google | Coursera</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Crash Course of Python</h4>
-            <h5>Oct 2023 – Nov 2023</h5>
-            <p><em>Google | Coursera</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Introduction to Large Language Model</h4>
-            <h5>Oct 2023</h5>
-            <p><em>Google | Coursera</em></p>
-          </div>
-
-          <div class="resume-item">
-            <h4>Introduction to Generative AI</h4>
-            <h5>July 2023</h5>
-            <p><em>Google | Coursera</em></p>
+          <div class="resume-group">
+            <div class="resume-item">
+              <h4>React Native</h4>
+              <h5>March 2025</h5>
+              <p><em>Meta | Coursera</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>Unsupervised Learning, Recommenders, Reinforcement Learning</h4>
+              <h5>Sep 2024</h5>
+              <p><em>Stanford | Coursera</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>Supervised Machine Learning: Regression and Classification</h4>
+              <h5>Aug 2024</h5>
+              <p><em>Stanford | Coursera</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>Technical Support Fundamentals</h4>
+              <h5>Oct 2023 – Dec 2023</h5>
+              <p><em>Google | Coursera</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>Crash Course of Python</h4>
+              <h5>Oct 2023 – Nov 2023</h5>
+              <p><em>Google | Coursera</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>Introduction to Large Language Model</h4>
+              <h5>Oct 2023</h5>
+              <p><em>Google | Coursera</em></p>
+            </div>
+            <div class="resume-item">
+              <h4>Introduction to Generative AI</h4>
+              <h5>July 2023</h5>
+              <p><em>Google | Coursera</em></p>
+            </div>
           </div>
         </div>
-
-        <div class="col-lg-6">
-          <h3 class="resume-title">Professional Experience</h3>
-
-          <div class="resume-item">
-            <h4>Researcher Intern</h4>
-            <h5>Oct 2024 - Jul 2025</h5>
-            <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
-                        <ul>
-              <li>Systematic Literature Reviews</li>
-              <li>Mixed Methods Data Analysis</li>
-              <li>Experimental Design & Prototyping</li>
-              <li>Technical Writing & Presentations</li>
-              <li>Analytical Problem-Solving</li>
-            </ul>
-          </div>
-
-
-          <div class="resume-item">
-            <h4>Engineering Researcher Intern</h4>
-            <h5>March 2024 - June 2024</h5>
-            <p><em>Industrial 4.0 Research Center, Istanbul, Turkey </em></p>
-                        <ul>
-              <li>Literature Review</li>
-              <li>Data Collection & Analysis</li>
-              <li>Experimentations & Prototyping Collaboration</li>
-              <li>Report Writing and Presentation</li>
-              <li>Problem Solving</li>
-            </ul>
-          </div>
-
-          <div class="resume-item">
-            <h4>Frontend Developer (Angular) Intern</h4>
-            <h5>Nov 2023 - Jan 2024</h5>
-            <p><em>Caretta Software Company, Istanbul, Turkey </em></p>
-                        <ul>
-              <li>User Interface Development</li>
-              <li>Application Structure</li>
-              <li>Angular Framework Expertise</li>
-              <li>Responsive Design</li>
-              <li>API Integration</li>
-            </ul>
-          </div>
-
-          <div class="resume-item">
-            <h4>Research Assistant Intern</h4>
-            <h5>Oct 2023 - Jan 2024</h5>
-            <p><em>Industrial 4.0 Research Center, Istanbul, Turkey</em></p>
-                        <ul>
-              <li>Data Collection and Analysis.</li>
-              <li>Literature review, Report writing and Documentation.</li>
-              <li>Data entry.</li>
-              <li>Collaboration and Presentation.</li>
-              <li>Critical thinking.</li>
-            </ul>
-          </div>
-
-          <div class="resume-item">
-            <h4>Network Technician</h4>
-            <h5>July 2023 – Sept 2023</h5>
-            <p><em>Tawhid Almas Logistics Company</em></p>
-                        <ul>
-              <li>Installed and troubleshot networks</li>
-              <li>Monitored network performance</li>
-              <li>Managed backup and recovery</li>
-            </ul>
-          </div>
-        </div>
-
       </div>
     </div><!-- .container -->
   </section><!-- End Resume Section -->
@@ -949,7 +992,7 @@
       <div class="row">
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-          <div class="project-tile">
+          <div class="project-tile" id="project-cv-builder">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-file-earmark-person" aria-hidden="true"></i></div>
             <h3>CV Builder</h3>
@@ -963,6 +1006,7 @@
             <p>A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly
               templates, PDF export, and version control built with Next.js and Firebase.</p>
             <div class="project-actions">
+              <a href="projects/cv-builder/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
               <a href="https://ta-cv.vercel.app/" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="bi bi-eye" aria-hidden="true"></i>Live Demo<span class="sr-only"> (opens in new tab)</span></a>
             </div>
@@ -970,7 +1014,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-          <div class="project-tile">
+          <div class="project-tile" id="project-quizlet">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-question-answer-line" aria-hidden="true"></i></div>
             <h3>Quizlet – Interactive University Quiz Platform</h3>
@@ -988,6 +1032,7 @@
               interface.
             </p>
             <div class="project-actions">
+              <a href="projects/quizlet/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
               <a href="https://tariqahmaad.github.io/quizlet/index.html" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="bi bi-eye" aria-hidden="true"></i>Live Demo<span class="sr-only"> (opens in new tab)</span></a>
               <a href="https://github.com/tariqahmaad/quizlet" target="_blank" rel="noopener noreferrer" class="action-btn">
@@ -998,7 +1043,7 @@
 
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-          <div class="project-tile">
+          <div class="project-tile" id="project-budgetwise">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-cash-stack" aria-hidden="true"></i></div>
             <h3>
@@ -1016,6 +1061,7 @@
               Users log daily expenses, set budgets, and view real-time analytics via RESTful APIs and cloud-sync.
             </p>
             <div class="project-actions">
+              <a href="projects/budgetwise/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
               <a href="https://github.com/tariqahmaad/BudgetWise" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill" aria-hidden="true"></i> View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
@@ -1023,7 +1069,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="project-tile">
+          <div class="project-tile" id="project-graduation-presentation">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-file-earmark-ppt" aria-hidden="true"></i></div>
             <h3><a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer">Graduation Project
@@ -1038,6 +1084,7 @@
             <p>Developed an interactive presentation showcasing my graduation project, utilizing HTML, CSS, and
               JavaScript for a dynamic and engaging user experience.</p>
             <div class="project-actions">
+              <a href="projects/graduation-presentation/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
               <a href="https://tariqahmaad.github.io/Presentation/index.html" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="bi bi-eye" aria-hidden="true"></i>Live Demo<span class="sr-only"> (opens in new tab)</span></a>
               <a href="https://github.com/tariqahmaad/Presentation" target="_blank" rel="noopener noreferrer" class="action-btn">
@@ -1049,7 +1096,7 @@
 
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="project-tile">
+          <div class="project-tile" id="project-note-taking-app">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-notion-line" aria-hidden="true"></i></div>
             <h3>Note-Taking Web Application
@@ -1064,6 +1111,7 @@
               authentication,
               role-specific functions, and a responsive, cross-browser interface.</p>
             <div class="project-actions">
+              <a href="projects/note-taking-app/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
               <a href="https://github.com/tariqahmaad/Note-Taking-Web-Application" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill" aria-hidden="true"></i>View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
@@ -1071,7 +1119,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="project-tile">
+          <div class="project-tile" id="project-hospital-management">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hospital-fill" aria-hidden="true"></i></div>
             <h3>Hospital Management System
@@ -1088,6 +1136,7 @@
               system design
               skills in healthcare software solutions.</p>
             <div class="project-actions">
+              <a href="projects/hospital-management/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
               <a href="https://github.com/tariqahmaad/Hospital-Management-System" target="_blank" rel="noopener noreferrer" class="action-btn">
                 <i class="ri-github-fill" aria-hidden="true"></i>View Code<span class="sr-only"> (opens in new tab)</span></a>
             </div>
@@ -1095,7 +1144,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="project-tile">
+          <div class="project-tile" id="project-digit-classifier">
             <div class="light-reflection"></div>
             <div class="icon"><i class="ri-hand" aria-hidden="true"></i></div>
             <h3>Hand-Written Digit Classifier using Neural Networks</h3>
@@ -1109,11 +1158,14 @@
               demonstrating
               proficiency in
               image recognition and machine learning techniques.</p>
+            <div class="project-actions">
+              <a href="projects/digit-classifier/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
+            </div>
           </div>
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="project-tile">
+          <div class="project-tile" id="project-hotel-management">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-building" aria-hidden="true"></i></div>
             <h3>Hotel Management System</h3>
@@ -1128,11 +1180,14 @@
               and room
               management, integrated with MySQL for secure data handling, enhancing skills in SQL and database
               management.</p>
+            <div class="project-actions">
+              <a href="projects/hotel-management/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
+            </div>
           </div>
         </div>
 
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-          <div class="project-tile">
+          <div class="project-tile" id="project-banking-management">
             <div class="light-reflection"></div>
             <div class="icon"><i class="bi bi-bank" aria-hidden="true"></i></div>
             <h3>Banking Management System</h3>
@@ -1147,6 +1202,9 @@
               like deposit, withdrawal, and account details, enhancing user experience in secure financial
               transactions.
             </p>
+            <div class="project-actions">
+              <a href="projects/banking-management/" class="action-btn"><i class="bi bi-journal-richtext" aria-hidden="true"></i>Case Study</a>
+            </div>
           </div>
         </div>
 
@@ -1248,17 +1306,48 @@
   </section><!-- End Contact Section -->
   </main>
 
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>&copy; 2026 Tariq Ahmad &middot; Computer Engineer &amp; Full-Stack Developer</p>
+      <p class="site-footer__links">
+        <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264">LinkedIn</a>
+        <a href="https://github.com/tariqahmaad">GitHub</a>
+        <a href="mailto:me@tariqahmad.dev">Email</a>
+        <a href="assets/Tariq_Ahmad_Resume.pdf" download>R&eacute;sum&eacute; (PDF)</a>
+        <a href="#home">Back to top</a>
+      </p>
+    </div>
+  </footer>
+
   <!-- Vendor JS Files (deferred for faster page load) -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js" defer></script>
+  <!-- Lenis smooth scroll (self-hosted, v1.3.4); main.js falls back to native scrolling without it -->
+  <script src="assets/vendor/lenis/lenis.min.js" defer></script>
 
   <!-- EmailJS SDK (Self-hosted; Load BEFORE validate.js to prevent retry messages) -->
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Site scripts: contact form + particles + navigation, bundled from assets/js/site.js (npm run build) -->
-  <script src="assets/js/site.min.js?v=20261109a" defer></script>
+  <script src="assets/js/site.min.js?v=20261112d" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
-    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261109a');
+    // Command palette: loaded on first use (Ctrl/Cmd+K or the Menu button), prefetched when idle.
+    const loadPalette = () => import('./assets/js/command-palette.min.js?v=20261112d');
+    const openPalette = () => loadPalette().then((m) => m.openPalette());
+    const isApple = /Mac|iPhone|iPad/.test(navigator.platform);
+    document.querySelectorAll('[data-palette-key]').forEach((el) => { el.textContent = isApple ? '⌘ K' : 'Ctrl K'; });
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        openPalette();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-open-palette]')) openPalette();
+    });
+    if ('requestIdleCallback' in window) requestIdleCallback(loadPalette, { timeout: 8000 });
+
+    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261112d');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

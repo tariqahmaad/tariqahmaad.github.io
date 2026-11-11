@@ -1,0 +1,1134 @@
+/*--------------------------------------------------------------
+# HUD design language
+# Corner-bracket frames, scanlines, console-style section titles and
+# angular buttons. Imported after shell.css; selectors are prefixed with
+# `main` so they also beat the async deferred.css (projects, testimonials).
+--------------------------------------------------------------*/
+:root {
+  --font-display: "Anton", "Raleway", Impact, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  --secondary-color: #18c8ff; /* cyan */
+  --hud-surface: #0a0c0b;
+  --hud-surface-2: #0e1211;
+  --hud-line: rgba(255, 255, 255, 0.13);
+  --hud-line-strong: rgba(24, 210, 110, 0.45);
+  --hud-corner: 14px;
+  --hud-corner-hover: 26px;
+}
+
+/* ---------- Section frame: open on the page, no glass panel ---------- */
+main > section .container {
+  max-width: 1148px;
+  padding: 0 16px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+main > section:not(.hero) {
+  padding-block: clamp(48px, 7vw, 96px);
+}
+
+/* ---------- Console-style section titles ---------- */
+main {
+  counter-reset: hud-section;
+}
+
+main .section-title {
+  margin-bottom: clamp(28px, 4vw, 48px);
+  padding: 0 0 18px;
+  border-bottom: 1px solid var(--hud-line);
+  text-align: left;
+}
+
+main .section-title h2 {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-shadow: none;
+  text-transform: uppercase;
+}
+
+main .section-title h2::before {
+  counter-increment: hud-section;
+  content: counter(hud-section, decimal-leading-zero);
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+main .section-title h2::after {
+  display: none;
+}
+
+main .section-title p {
+  margin: 12px 0 0;
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+main .section-title p::before {
+  content: "// ";
+  color: var(--primary-color);
+}
+
+/* ---------- Cards: bracketed HUD panels ---------- */
+main .glass-projects,
+main .project-tile,
+main .contact .info-box,
+main .contact .php-email-form,
+main .count-card,
+main .skill-card,
+main .about-info-card,
+main .testimonial-item,
+main .resume .resume-item {
+  position: relative;
+  background: linear-gradient(180deg, var(--hud-surface-2) 0%, var(--hud-surface) 100%);
+  border: 1px solid var(--hud-line);
+  border-radius: 2px;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition: border-color 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+}
+
+/* Retire the old glass shimmer layers */
+main .glass-projects::after,
+main .project-tile::after,
+main .contact .info-box::after,
+main .count-card::after,
+main .skill-card::after,
+main .about-info-card::after,
+main .light-reflection {
+  display: none;
+}
+
+/* Corner brackets (drawn with eight gradients on ::before) */
+main .glass-projects::before,
+main .project-tile::before,
+main .contact .info-box::before,
+main .contact .php-email-form::before,
+main .count-card::before,
+main .skill-card::before,
+main .about-info-card::before,
+main .testimonial-item::before,
+main .resume .resume-item::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+  width: auto;
+  height: auto;
+  transform: none;
+  mix-blend-mode: normal; /* the old noise layer used overlay, which hides green on black */
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(var(--primary-color), var(--primary-color)) top left / var(--hud-corner) 2px no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) top left / 2px var(--hud-corner) no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) top right / var(--hud-corner) 2px no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) top right / 2px var(--hud-corner) no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) bottom left / var(--hud-corner) 2px no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) bottom left / 2px var(--hud-corner) no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) bottom right / var(--hud-corner) 2px no-repeat,
+    linear-gradient(var(--primary-color), var(--primary-color)) bottom right / 2px var(--hud-corner) no-repeat;
+  transition: background-size 0.3s ease, filter 0.3s ease;
+}
+
+main .glass-projects:hover,
+main .project-tile:hover,
+main .contact .info-box:hover,
+main .count-card:hover,
+main .skill-card:hover,
+main .about-info-card:hover,
+main .testimonial-item:hover,
+main .resume .resume-item:hover {
+  border-color: var(--hud-line-strong);
+  transform: translateY(-3px);
+  background: linear-gradient(180deg, rgba(24, 210, 110, 0.07) 0%, var(--hud-surface) 100%);
+  box-shadow: none;
+}
+
+main .glass-projects:hover::before,
+main .project-tile:hover::before,
+main .contact .info-box:hover::before,
+main .count-card:hover::before,
+main .skill-card:hover::before,
+main .about-info-card:hover::before,
+main .testimonial-item:hover::before,
+main .resume .resume-item:hover::before {
+  --hud-corner: var(--hud-corner-hover);
+  filter: drop-shadow(0 0 6px rgba(24, 210, 110, 0.6));
+}
+
+/* Contact boxes hid their ::before on small screens; keep the brackets there too. */
+main .contact .info-box,
+main .contact .php-email-form {
+  overflow: visible;
+}
+
+main .contact .info-box::before {
+  display: block !important;
+}
+
+/* ---------- Project tiles ---------- */
+main .project-tile {
+  padding: 28px 24px;
+  text-align: left;
+}
+
+main .project-tile .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 0 18px;
+  border: 1px solid var(--hud-line-strong);
+  border-radius: 2px;
+  background: rgba(24, 210, 110, 0.07);
+  box-shadow: none;
+}
+
+main .project-tile h3 {
+  margin: 0 0 14px;
+  color: #fff;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+}
+
+main .project-tile p {
+  color: var(--muted-text);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  text-align: left;
+}
+
+main .project-tile .tech-tags {
+  justify-content: flex-start;
+}
+
+main .tech-tag {
+  padding: 3px 9px;
+  border: 1px solid var(--hud-line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+main .project-actions {
+  justify-content: flex-start;
+}
+
+/* ---------- Buttons: angular, outlined, fill on hover ---------- */
+main .btn-brand,
+main .action-btn,
+main .btn-ghost,
+.btn-brand,
+.btn-ghost {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border: 1px solid var(--primary-color);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transform: none;
+}
+
+main .btn-brand::before,
+main .btn-brand::after,
+.btn-brand::before,
+.btn-brand::after {
+  display: none;
+}
+
+main .btn-brand:hover,
+main .btn-brand:focus-visible,
+main .action-btn:hover,
+main .action-btn:focus-visible,
+.btn-brand:hover,
+.btn-brand:focus-visible {
+  background: var(--primary-color);
+  color: #000;
+  transform: none;
+  box-shadow: none;
+}
+
+main .btn-brand i,
+main .action-btn i {
+  color: inherit;
+  transition: none;
+}
+
+main .btn-ghost,
+.btn-ghost {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+main .btn-ghost:hover,
+main .btn-ghost:focus-visible,
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  border-color: var(--secondary-color);
+  background: rgba(24, 200, 255, 0.1);
+  color: var(--secondary-color);
+}
+
+/* ---------- Hero ---------- */
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 15vw, 10rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.hero__eyebrow,
+.hero__role {
+  font-family: var(--font-mono);
+}
+
+.hero__eyebrow::before {
+  content: "> ";
+  color: var(--secondary-color);
+}
+
+.hero__role {
+  font-size: clamp(1rem, 2.8vw, 1.6rem);
+  font-weight: 500;
+}
+
+/* Scanlines over the hero */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* ---------- Header / nav in HUD voice ---------- */
+.site-nav a.nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+}
+
+.site-nav .nav-social a {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+}
+
+.site-logo__name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Resume ---------- */
+main .resume .container {
+  counter-reset: resume-part;
+}
+
+/* Sub-headers: big Anton titles with a mono index, like the section titles */
+main .resume .resume-title {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0 0 22px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--hud-line);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+main .resume .resume-title::before {
+  counter-increment: resume-part;
+  content: counter(resume-part, decimal-leading-zero);
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+main .resume .resume-col > .resume-title:not(:first-child) {
+  margin-top: clamp(32px, 4vw, 48px);
+}
+
+/* Summary: a lead panel */
+main .resume .resume-summary {
+  position: relative;
+  margin: 0 0 4px;
+  padding: 24px 28px;
+  border-left: 3px solid var(--primary-color);
+  background: linear-gradient(90deg, rgba(24, 210, 110, 0.09), rgba(24, 210, 110, 0) 75%);
+}
+
+main .resume .resume-summary h4 {
+  margin: 0 0 10px;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+main .resume .resume-summary p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(1rem, 1.45vw, 1.1rem);
+  line-height: 1.75;
+}
+
+main .resume .resume-summary em {
+  font-style: normal;
+}
+
+/* Two balanced columns: experience (main) and education/achievements/certifications */
+main .resume .resume-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 24px clamp(32px, 5vw, 64px);
+  align-items: stretch; /* both columns end on the same line (see .resume-col below) */
+}
+
+@media (max-width: 991.98px) {
+  main .resume .resume-columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(40px, 8vw, 56px);
+  }
+}
+
+/* Cards (bracket frame + hover come from the shared card lists above) */
+main .resume .resume-item {
+  margin: 0 0 16px;
+  padding: 20px 22px;
+  text-align: left;
+}
+
+main .resume .resume-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 20px;
+}
+
+main .resume .resume-item h4 {
+  margin: 0 0 10px;
+  color: #fff;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-transform: none;
+}
+
+/* Dates as outlined mono chips */
+main .resume .resume-item h5 {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 3px 10px;
+  border: 1px solid var(--hud-line-strong);
+  border-radius: 0;
+  background: rgba(24, 210, 110, 0.07);
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+main .resume .resume-item p {
+  margin: 0 0 8px;
+  color: var(--muted-text);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Company / issuer lines */
+main .resume .resume-item p em {
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-style: normal;
+  letter-spacing: 0.02em;
+}
+
+main .resume .resume-item ul {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+main .resume .resume-item ul li {
+  position: relative;
+  padding: 0 0 6px 20px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+main .resume .resume-item ul li::before {
+  content: ">";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* Experience timeline: a rail with a square node per card */
+main .resume .resume-timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+main .resume .resume-timeline::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 6px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--primary-color), rgba(24, 210, 110, 0.12));
+}
+
+main .resume .resume-timeline .resume-item::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  left: -30px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--primary-color);
+  background: var(--bg-color);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+main .resume .resume-timeline .resume-item:hover::after {
+  background: var(--primary-color);
+  box-shadow: 0 0 12px rgba(24, 210, 110, 0.7);
+}
+
+/* Achievements and certifications: compact stacked cards */
+main .resume .resume-group {
+  display: grid;
+  gap: 12px;
+}
+
+main .resume .resume-group .resume-item {
+  margin: 0;
+  padding: 16px 18px;
+}
+
+main .resume .resume-group .resume-item h4 {
+  margin-bottom: 8px;
+  font-size: 0.98rem;
+}
+
+main .resume .resume-group .resume-item h5 {
+  margin-bottom: 6px;
+}
+
+main .resume .resume-group .resume-item p {
+  margin-bottom: 0;
+}
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  main .resume .resume-group {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+@media (max-width: 575.98px) {
+  main .resume .resume-timeline {
+    padding-left: 22px;
+  }
+
+  main .resume .resume-timeline::before {
+    left: 5.5px;
+  }
+
+  main .resume .resume-timeline .resume-item::after {
+    left: -22px;
+    width: 12px;
+    height: 12px;
+  }
+
+  main .resume .resume-item {
+    padding: 16px 16px;
+  }
+
+  main .resume .resume-summary {
+    padding: 18px 18px;
+  }
+}
+
+/* ---------- Contact form ---------- */
+main .contact .php-email-form input,
+main .contact .php-email-form textarea {
+  border: 1px solid var(--hud-line);
+  border-radius: 0;
+  background: var(--hud-surface);
+  color: #fff;
+}
+
+main .contact .php-email-form input:focus,
+main .contact .php-email-form textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  main .glass-projects,
+  main .project-tile,
+  main .info-box,
+  main .count-card,
+  main .skill-card,
+  main .about-info-card,
+  main .testimonial-item,
+main .resume .resume-item {
+    transition: none;
+  }
+
+  main .glass-projects:hover,
+  main .project-tile:hover,
+  main .info-box:hover,
+  main .count-card:hover,
+  main .skill-card:hover,
+  main .about-info-card:hover,
+  main .testimonial-item:hover,
+main .resume .resume-item:hover {
+    transform: none;
+  }
+}
+
+/* The particle network is atmosphere, not content: keep it from fighting body text. */
+#particles-js {
+  opacity: 0.45;
+}
+
+/* Legacy mobile rules hid the glass layers with !important; the brackets must stay on every screen. */
+main :is(.glass-projects, .project-tile, .count-card, .skill-card, .about-info-card, .testimonial-item, .resume-item)::before {
+  display: block !important;
+}
+
+
+/* ---------- Command menu trigger (header) ---------- */
+.palette-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border: 1px solid var(--hud-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.palette-trigger:hover,
+.palette-trigger:focus-visible {
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.site-nav .nav-palette {
+  margin-left: 8px;
+}
+
+/* Keyboard hint only makes sense with a keyboard */
+@media (hover: none) {
+  .palette-trigger kbd {
+    display: none;
+  }
+}
+
+/* ---------- Mobile menu: numbered rows, full-width search, social at the bottom ---------- */
+@media (max-width: 991.98px) {
+  .site-nav ul {
+    counter-reset: navnum;
+  }
+
+  .site-nav a.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 58px;
+    padding: 0 4px;
+    border-bottom: 1px solid var(--hud-line);
+    color: var(--muted-text);
+    font-size: 1.15rem;
+    letter-spacing: 0.14em;
+    text-align: left;
+  }
+
+  .site-nav a.nav-link::before {
+    counter-increment: navnum;
+    content: counter(navnum, decimal-leading-zero);
+    min-width: 1.7rem;
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+  }
+
+  /* The desktop underline becomes a trailing arrow on the active row. */
+  .site-nav a.nav-link::after {
+    content: ">";
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
+    margin-left: auto;
+    background: none;
+    color: var(--primary-color);
+    font-weight: 700;
+    opacity: 0;
+    transform: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-nav a.nav-link.active,
+  .site-nav a.nav-link:hover {
+    color: #fff;
+  }
+
+  .site-nav a.nav-link.active::after,
+  .site-nav a.nav-link:hover::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  .site-nav .nav-palette {
+    margin: 24px 0 0;
+  }
+
+  .palette-trigger {
+    width: 100%;
+    min-height: 52px;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 0.85rem;
+  }
+
+  .site-nav .nav-social {
+    justify-content: flex-start;
+    margin: 16px 0 0;
+    gap: 12px;
+  }
+
+  .site-nav .nav-social a {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--hud-line);
+  background: rgba(4, 4, 4, 0.85);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  max-width: 1148px;
+  margin-inline: auto;
+  padding: 24px 16px;
+}
+
+.site-footer p {
+  margin: 0;
+  color: var(--muted-text);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.site-footer__links a {
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.site-footer__links a:hover,
+.site-footer__links a:focus-visible {
+  color: #fff;
+}
+
+/* Tiles can have up to three actions: let them wrap instead of clipping. */
+main .project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+main .action-btn {
+  padding: 9px 14px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+/* ---------- About: square portrait and left-aligned role heading ---------- */
+main .about-me img {
+  border: 1px solid var(--hud-line);
+  border-radius: 2px;
+}
+
+main .about-me .content h3 {
+  text-align: left;
+  text-shadow: none;
+}
+
+/* ======================================================================
+   Phone fixes
+   ====================================================================== */
+
+/* Smaller bracket corners on small screens */
+@media (max-width: 575.98px) {
+  :root {
+    --hud-corner: 10px;
+    --hud-corner-hover: 16px;
+  }
+}
+
+/* Contact form: 16px stops iOS from zooming the page on focus; no blur on fields (paint cost) */
+@media (max-width: 767.98px) {
+  main .contact .php-email-form input,
+  main .contact .php-email-form textarea {
+    min-height: 48px;
+    font-size: 16px;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  main .contact .php-email-form textarea {
+    min-height: 140px;
+  }
+
+  main .contact .php-email-form button[type="submit"].btn-brand {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Hero on phones: stacked full-width buttons, stats in a 2x2 grid */
+@media (max-width: 575.98px) {
+  .hero__cta {
+    flex-direction: column;
+  }
+
+  .hero__cta .btn-brand,
+  .hero__cta .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero .hero__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 16px;
+  }
+
+  main .project-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  main .action-btn {
+    justify-content: center;
+  }
+}
+
+/* Phones and touch screens: every tap target at least 44px.
+   Buttons get it everywhere (it is invisible on desktop); the rest is by screen width. */
+main .btn-brand,
+main .btn-ghost,
+main .action-btn,
+.hero__cta .btn-brand,
+.hero__cta .btn-ghost {
+  min-height: 44px;
+}
+
+@media (max-width: 991.98px) {
+  .site-logo {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 991.98px), (pointer: coarse) {
+  .site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* contact social icons */
+  main .contact .glass-social a {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* the project title doubles as a link on one tile: grow its hit area without moving the layout */
+  main .project-tile h3 a {
+    display: inline-block;
+    padding: 11px 0;
+    margin: -11px 0;
+  }
+
+  .palette-trigger {
+    min-height: 44px;
+  }
+}
+
+/* The assistant button floats at the bottom-right: leave room so it never covers footer links */
+@media (max-width: 767.98px) {
+  .site-footer__inner {
+    padding-bottom: 96px;
+  }
+}
+
+/* Landscape phones: the viewport is short, so size the hero by height too */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    padding-top: calc(var(--header-h) + 16px);
+    padding-bottom: 24px;
+  }
+
+  .hero__title {
+    font-size: clamp(2.6rem, 17vh, 4.75rem);
+  }
+
+  .hero__lead {
+    margin-top: 14px;
+  }
+
+  .hero__stats {
+    margin-top: 20px;
+  }
+
+  .hero__cta {
+    margin-top: 20px;
+  }
+}
+
+/* ======================================================================
+   References (testimonials)
+   Several older rules (style.css, glassmorphism.css, testimonials-professional.css)
+   give these cards a 16-20px radius, `overflow: hidden`, `content-box` sizing and a
+   fixed height. That cropped the corner brackets and let long quotes run under the
+   border and squeeze the photo. This block is the single owner of the card shape.
+   ====================================================================== */
+main .testimonials .testimonials-slider {
+  overflow: visible; /* the bracket corners and the hover lift sit outside the card box */
+}
+
+/* The scroll track must not trim the outer edge of the first/last card either */
+main .testimonials .testimonials-track {
+  padding: 10px 6px 24px;
+  margin: -10px -6px -24px;
+  scroll-padding-inline: 6px;
+}
+
+/* Slides are as tall as the tallest quote, so every card matches and nothing is clipped */
+main .testimonials .testimonial-slide {
+  display: flex;
+}
+
+main .testimonials .testimonial-item.glass-projects {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 28px 28px 26px;
+  border-radius: 2px;
+  overflow: visible;
+  justify-content: flex-start;
+}
+
+/* The old rounded hover accent line */
+main .testimonials .testimonial-item.glass-projects::after {
+  display: none;
+}
+
+/* Photo and name never shrink or move, whatever the quote length */
+main .testimonials .testimonial-header {
+  flex: none;
+}
+
+main .testimonials .testimonial-item.glass-projects .testimonial-img {
+  flex: none;
+  width: 80px;
+  height: 80px;
+  max-width: none;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+main .testimonials .testimonial-info h3,
+main .testimonials .testimonial-info h4 {
+  overflow-wrap: anywhere;
+}
+
+main .testimonials .testimonial-quote {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+main .testimonials .testimonial-item.glass-projects p {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+@media (max-width: 575.98px) {
+  main .testimonials .testimonial-item.glass-projects {
+    padding: 22px 20px 20px;
+  }
+
+  main .testimonials .testimonial-item.glass-projects .testimonial-img {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* ---------- Resume: balanced columns ---------- */
+/* The last block of each column absorbs any leftover height as extra space BETWEEN its
+   cards (never as taller, hollow cards), so the two columns always end on the same line. */
+main .resume .resume-col {
+  display: flex;
+  flex-direction: column;
+}
+
+main .resume .resume-col > :last-child {
+  flex: 1 1 auto;
+}
+
+main .resume .resume-timeline {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+main .resume .resume-timeline > .resume-item {
+  margin-bottom: 0;
+}
+
+main .resume .resume-group {
+  align-content: space-between;
+}
+
+/* Achievements and certifications: title on its own row, issuer left and date chip right,
+   so each card is about half as tall as the stacked version. */
+main .resume .resume-group .resume-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+main .resume .resume-group .resume-item h4 {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+main .resume .resume-group .resume-item p {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
+}
+
+main .resume .resume-group .resume-item h5 {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  margin: 0;
+  white-space: nowrap;
+}
+
+main .resume .resume-group .resume-item ul {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin: 2px 0 0;
+}

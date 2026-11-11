@@ -94,6 +94,77 @@ test('the dead CV-Builder repository is not linked', () => {
 test('only the documented web fonts are referenced from the main stylesheet', () => {
     const css = read('assets/css/style.css');
     for (const [, family] of css.matchAll(/font-family:\s*"([^"]+)"/g)) {
-        assert.ok(['Open Sans', 'Raleway'].includes(family), `unexpected font: ${family}`);
+        assert.ok(['Open Sans', 'Raleway', 'Anton'].includes(family), `unexpected font: ${family}`);
     }
+});
+
+/* ---------- Phone / layout regressions ---------- */
+const cssSources = ['style.css', 'branding.css', 'glassmorphism.css', 'shell.css', 'hud.css', 'fx.css']
+    .map(file => ({ file, css: read(`assets/css/${file}`) }));
+
+test('the fixed header element never gets a filter, backdrop-filter or transform (it would trap the fixed mobile menu)', () => {
+    const trapping = /(?:^|[;\s{])(?:-webkit-)?(?:backdrop-filter|filter|transform|perspective)\s*:/;
+    for (const { file, css } of cssSources) {
+        for (const [, selectors, body] of css.matchAll(/([^{}@]+)\{([^{}]*)\}/g)) {
+            const targetsHeader = selectors.split(',')
+                .map(selector => selector.trim())
+                .some(selector => /(^|\s)(\.site-header|#site-header)(\.[\w-]+)*$/.test(selector));
+            if (targetsHeader) {
+                assert.doesNotMatch(body, trapping, `${file}: "${selectors.trim()}" must not use ${body.match(trapping)?.[0].trim()}`);
+            }
+        }
+    }
+});
+
+test('the mobile menu overlay is sized against the viewport and the page locks while it is open', () => {
+    const shell = read('assets/css/shell.css');
+    assert.match(shell, /\.site-nav\s*\{[^}]*position:\s*fixed[^}]*100dvh/s);
+    assert.match(shell, /html\.nav-open\s*\{[^}]*overflow:\s*hidden/s);
+    assert.match(shell, /html\.nav-open \.ai-assistant\s*\{[^}]*display:\s*none/s);
+    assert.match(read('assets/js/main.js'), /classList\.toggle\('nav-open'/);
+});
+
+test('contact form fields are 16px on phones so iOS does not zoom on focus', () => {
+    const hud = read('assets/css/hud.css');
+    assert.match(hud, /@media \(max-width: 767\.98px\)\s*\{[^@]*?php-email-form input[^}]*font-size:\s*16px/s);
+});
+
+test('the scroll progress line is gone', () => {
+    for (const { file, css } of cssSources) assert.doesNotMatch(css, /scroll-progress/, file);
+    assert.doesNotMatch(read('assets/js/site.js'), /progress/);
+    assert.ok(!existsSync(resolve(root, 'assets/js/fx/progress.js')));
+});
+
+test('the resume keeps a valid heading order and every card', () => {
+    const resume = html.match(/<section id="resume"[\s\S]*?<\/section>/)[0];
+    const levels = [...resume.matchAll(/<h([2-5])[\s>]/g)].map(m => Number(m[1]));
+    levels.reduce((previous, level) => {
+        assert.ok(level <= previous + 1, `resume heading jumps from h${previous} to h${level}`);
+        return level;
+    });
+    assert.equal((resume.match(/class="resume-title"/g) || []).length, 5);
+    assert.equal((resume.match(/class="resume-item"/g) || []).length, 16);
+});
+
+test('testimonial cards are never given a fixed height (a long quote would overflow the border and squeeze the photo)', () => {
+    for (const file of ['testimonials-professional.css', 'glassmorphism.css', 'style.css', 'hud.css']) {
+        const css = read(`assets/css/${file}`);
+        for (const [, selectors, body] of css.matchAll(/([^{}@]+)\{([^{}]*)\}/g)) {
+            const targetsCard = selectors.split(',').some(selector => /(^|\s)\.testimonial-item(\.[\w-]+)*(:(?!:)[\w-]+)*$/.test(selector.trim().replace(/\/\*[\s\S]*?\*\//g, '').trim()));
+            if (!targetsCard) continue;
+            assert.doesNotMatch(body, /(?<![-\w])height:\s*\d/, `${file}: "${selectors.trim()}" sets a fixed height`);
+        }
+    }
+});
+
+test('testimonial cards keep square corners and visible overflow so the corner brackets are not clipped', () => {
+    const hud = read('assets/css/hud.css');
+    const rule = hud.match(/main \.testimonials \.testimonial-item\.glass-projects \{([^}]*)\}/)?.[1] ?? '';
+    assert.match(rule, /border-radius:\s*2px/);
+    assert.match(rule, /overflow:\s*visible/);
+    assert.match(hud, /main \.testimonials \.testimonials-slider \{[^}]*overflow:\s*visible/s);
+});
+
+test('the hero title is ready for the glitch (data-text for the colour layers)', () => {
+    assert.match(html, /<h1 id="hero-title" class="hero__title" data-text="Tariq Ahmad">Tariq Ahmad<\/h1>/);
 });

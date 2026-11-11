@@ -20,7 +20,7 @@ export default [
     files: ['assets/js/main.js', 'assets/js/contact-form.js', 'assets/js/particles-config.js'],
     languageOptions: {
       sourceType: 'script',
-      globals: { ...globals.browser, PureCounter: 'readonly', emailjs: 'readonly', particlesJS: 'readonly' }
+      globals: { ...globals.browser, PureCounter: 'readonly', Lenis: 'readonly', emailjs: 'readonly', particlesJS: 'readonly' }
     }
   },
   {

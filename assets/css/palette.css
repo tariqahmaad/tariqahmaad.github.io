@@ -1,0 +1,180 @@
+/*--------------------------------------------------------------
+# Command palette (<dialog>) in the HUD style. Deferred bundle.
+--------------------------------------------------------------*/
+dialog.palette {
+  position: fixed;
+  inset: 12vh 0 auto 0;
+  width: min(640px, calc(100vw - 24px));
+  max-height: 70vh;
+  max-height: 70dvh;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--hud-line-strong, rgba(24, 210, 110, 0.45));
+  border-radius: 2px;
+  background: #070909;
+  color: #fff;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(24, 210, 110, 0.08);
+}
+
+dialog.palette[open] {
+  display: flex;
+  flex-direction: column;
+  animation: palette-in 0.16s ease-out;
+}
+
+dialog.palette::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes palette-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.palette__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--hud-line, rgba(255, 255, 255, 0.13));
+}
+
+.palette__prompt {
+  color: var(--primary-color);
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+}
+
+.palette__input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font-family: var(--font-mono, monospace);
+  font-size: 1rem;
+}
+
+.palette__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.palette__esc,
+.palette-trigger kbd {
+  padding: 2px 7px;
+  border: 1px solid var(--hud-line, rgba(255, 255, 255, 0.13));
+  border-radius: 2px;
+  color: var(--muted-text, rgba(255, 255, 255, 0.78));
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.palette__list {
+  flex: 1;
+  margin: 0;
+  padding: 6px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+
+.palette__group {
+  padding: 12px 16px 4px;
+  color: var(--primary-color);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.palette__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+
+.palette__item[aria-selected="true"] {
+  border-left-color: var(--primary-color);
+  background: rgba(24, 210, 110, 0.1);
+}
+
+.palette__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.palette__hint {
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted-text, rgba(255, 255, 255, 0.78));
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+}
+
+.palette__empty {
+  padding: 28px 16px;
+  color: var(--muted-text, rgba(255, 255, 255, 0.78));
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.palette__foot {
+  margin: 0;
+  padding: 10px 16px;
+  border-top: 1px solid var(--hud-line, rgba(255, 255, 255, 0.13));
+  color: var(--muted-text, rgba(255, 255, 255, 0.78));
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 575.98px) {
+  dialog.palette {
+    inset-block-start: 8vh;
+    inset-block-start: 8dvh;
+  }
+
+  .palette__input {
+    font-size: 16px;
+  }
+
+  .palette__item {
+    min-height: 48px;
+    align-items: center;
+  }
+
+  .palette__hint {
+    display: none;
+  }
+
+  .palette__foot {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.palette[open] {
+    animation: none;
+  }
+}
