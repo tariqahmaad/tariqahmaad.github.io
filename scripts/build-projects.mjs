@@ -86,7 +86,7 @@ export function footer() {
       <p class="site-footer__links">
         <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264">LinkedIn</a>
         <a href="https://github.com/tariqahmaad">GitHub</a>
-        <a href="mailto:me@tariqahmad.dev">Email</a>
+        <a href="mailto:tariq2u24@gmail.com">Email</a>
         <a href="/assets/Tariq_Ahmad_Resume.pdf" download>R&eacute;sum&eacute; (PDF)</a>
         <a href="/#home">Back to top</a>
       </p>

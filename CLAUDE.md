@@ -156,7 +156,7 @@ There is **no `projects/` directory** — all project info lives in the index.ht
 - Social presence: **LinkedIn + GitHub only** — X/Twitter, Facebook, and Instagram profiles are removed from the site, structured data, and chatbot (do not re-add). The twitter:card meta tags stay: they control link previews, not a profile link.
 - References section shows quotes with photos + "Full references available upon request"
 - **Résumé PDF** (`assets/Tariq_Ahmad_Resume.pdf`, built by `npm run build:resume`): contact is email, LinkedIn and GitHub only; no phone, and it omits cities, as does the on-site resume.
-- **Contact privacy**: phone number is NOT published anywhere (site or chatbot) — the contact box shows "Prefer to Talk?" with an "Email Me Instead" mailto button. The public email is **me@tariqahmad.dev** (hero Hire Me, contact box, form to_email, chatbot knowledge base). Do not reintroduce the old address or phone.
+- **Contact privacy**: phone number is NOT published anywhere (site or chatbot) — the contact box shows "Prefer to Talk?" with an "Email Me Instead" mailto button. The public email is **tariq2u24@gmail.com** (hero Hire Me, contact box, form to_email, chatbot knowledge base). Do not reintroduce the old address or phone.
 - Structured data (JSON-LD) is **inline** in index.html; keep `numberOfItems` in sync with the ItemList
 
 ## Common Tasks

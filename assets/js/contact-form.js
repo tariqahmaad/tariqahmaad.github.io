@@ -10,7 +10,7 @@
 
   var CONFIG = {
     formId: "contact-form",
-    contactEmail: "me@tariqahmad.dev",
+    contactEmail: "tariq2u24@gmail.com",
     serviceId: "portfolio-contact-form",
     templateId: "template_nivqe7n",
     // EmailJS public keys are designed to be client-side; restrict allowed

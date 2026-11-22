@@ -64,9 +64,9 @@ test('sitemap and robots.txt are consistent', () => {
     }
 });
 
-test('branding: public email is me@tariqahmad.dev and no phone is published', () => {
-    assert.equal(kb.personal.email, 'me@tariqahmad.dev');
-    assert.match(html, /mailto:me@tariqahmad\.dev/);
+test('branding: public email is tariq2u24@gmail.com and no phone is published', () => {
+    assert.equal(kb.personal.email, 'tariq2u24@gmail.com');
+    assert.match(html, /mailto:tariq2u24@gmail\.com/);
     assert.doesNotMatch(html, /href="tel:/);
     assert.doesNotMatch(assistantSources, /\+\d[\d\s().-]{8,}/); // no phone-like numbers in the bot
 });

@@ -9,7 +9,7 @@ export const knowledgeBase = {
         name: "Tariq Ahmad",
         title: "Computer Engineer",
         location: "Details available on request",
-        email: "me@tariqahmad.dev",
+        email: "tariq2u24@gmail.com",
         phone: "Available on request — please email me",
         degree: "BSc Computer Engineering",
         university: "Istanbul Aydin University",
