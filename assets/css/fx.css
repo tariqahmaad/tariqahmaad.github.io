@@ -98,15 +98,22 @@ html.boot-pending .boot {
 }
 
 /* ---------- Title glitch ----------
-   hero-fx.js sets the --g-* numbers (unitless) every ~55ms while `.is-glitching`
-   is on, so every burst has different slices, offsets and skew. Two copies of the
-   text (::before cyan, ::after red) are clipped to horizontal bands and shifted;
-   the main text gets a matching chromatic split, a jitter and a quick flash. */
+   hero-fx.js builds a few aria-hidden copies of the name inside the h1 (their
+   text comes from attr(data-text), so the h1's own text and accessible name stay
+   exactly "Tariq Ahmad") and re-randomises the --g-* numbers on a stepped timer
+   while `.is-glitching` is on. Two extra copies live on ::before / ::after, so
+   every burst gets several independently clipped bands, offsets and colours.
+   The real text only gets a chromatic split, a jolt and a quick flash. */
 .hero__title {
   position: relative;
+  /* Hug the name: the slices, the scan and the hover area are measured against
+     the text, not the full container. Nothing in the layout depends on it. */
+  width: fit-content;
 }
 
-/* While the name decodes, glyph widths change: never let it wrap and shift the page. */
+/* While the name decodes, glyph widths change: never let it wrap and shift the
+   page. hero-fx.js adds this class only when the final name is a single line
+   (on a very narrow screen that wraps, nowrap would cause a layout jump). */
 .hero__title.is-decoding {
   white-space: nowrap;
 }
@@ -120,6 +127,7 @@ html.boot-pending .boot {
   pointer-events: none;
   opacity: 0;
   mix-blend-mode: screen;
+  text-shadow: none;
 }
 
 .hero__title::before {
@@ -130,24 +138,137 @@ html.boot-pending .boot {
   color: #ff2d55;
 }
 
+/* A subtle RGB fringe follows the pointer while it is over the name. */
+.hero__title.is-hovering {
+  text-shadow:
+    var(--g-hx, 0px) var(--g-hy, 0px) 0 rgba(24, 200, 255, 0.5),
+    calc(var(--g-hx, 0px) * -1) calc(var(--g-hy, 0px) * -1) 0 rgba(255, 45, 85, 0.45);
+}
+
 .hero__title.is-glitching {
   text-shadow:
-    calc(var(--g-dx1, 0) * 0.3px) 0 rgba(24, 200, 255, 0.55),
-    calc(var(--g-dx2, 0) * -0.3px) 0 rgba(255, 45, 85, 0.5);
-  transform: translateX(calc(var(--g-shift, 0) * 1px)) skewX(calc(var(--g-skew, 0) * 1deg));
+    calc(var(--g-dx1, 0) * 1px) 0 rgba(24, 200, 255, 0.6),
+    calc(var(--g-dx2, 0) * -1px) 0 rgba(255, 45, 85, 0.55),
+    0 0 calc(var(--g-glow, 0) * 1px) rgba(24, 210, 110, 0.35);
+  transform:
+    translate3d(calc(var(--g-shift, 0) * 1px), calc(var(--g-lift, 0) * 1px), 0)
+    skewX(calc(var(--g-skew, 0) * 1deg));
   filter: brightness(var(--g-bright, 1));
 }
 
 .hero__title.is-glitching::before {
-  opacity: 0.9;
+  opacity: var(--g-a1, 0);
   clip-path: inset(calc(var(--g-y1, 10) * 1%) 0 calc(100% - (var(--g-y1, 10) + var(--g-h1, 15)) * 1%) 0);
-  transform: translateX(calc(var(--g-dx1, 0) * 1px));
+  transform: translate3d(calc(var(--g-dx1, 0) * 1px), 0, 0);
 }
 
 .hero__title.is-glitching::after {
-  opacity: 0.9;
+  opacity: var(--g-a2, 0);
   clip-path: inset(calc(var(--g-y2, 55) * 1%) 0 calc(100% - (var(--g-y2, 55) + var(--g-h2, 15)) * 1%) 0);
-  transform: translateX(calc(var(--g-dx2, 0) * 1px));
+  transform: translate3d(calc(var(--g-dx2, 0) * 1px), 0, 0);
+}
+
+/* The JS-built copies. aria-hidden, no text nodes and no layout: each one is a
+   full copy of the name clipped to one band by an inline clip-path. */
+.hero__title-fx {
+  --glitch-cyan: var(--secondary-color, #18c8ff);
+  --glitch-magenta: #ff2d55;
+  --glitch-green: var(--primary-color, #18d26e);
+  --glitch-white: #fff;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  visibility: hidden; /* nothing to paint between bursts */
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero__title.is-glitching .hero__title-fx {
+  visibility: visible;
+}
+
+.hero__glitch {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 0;
+  color: var(--glitch-color, var(--glitch-white));
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: inherit;
+  text-shadow: none;
+  mix-blend-mode: screen;
+}
+
+.hero__glitch::before {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+}
+
+.hero__glitch--cyan { --glitch-color: var(--glitch-cyan); }
+.hero__glitch--magenta { --glitch-color: var(--glitch-magenta); }
+.hero__glitch--green { --glitch-color: var(--glitch-green); }
+.hero__glitch--white { --glitch-color: var(--glitch-white); }
+
+.hero__title.is-glitching .hero__glitch {
+  will-change: transform, opacity;
+}
+
+/* Scan sweep: a cyan band clipped to the glyphs and multiplied over the white
+   text, so it tints the letters it crosses instead of adding a rectangle. */
+.hero__title-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: inherit;
+  text-shadow: none;
+  mix-blend-mode: multiply;
+}
+
+.hero__title-scan::before {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  display: block;
+  background-image: linear-gradient(180deg, #fff 0%, var(--glitch-cyan) 50%, #fff 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 18%;
+  background-position: 0 calc(var(--g-scan, -30) * 1%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Without text clipping the gradient would paint a rectangle: drop the layer. */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero__title-scan {
+    display: none;
+  }
+}
+
+/* Forced colours replace the palette and often ignore blend modes: a static
+   name is the only readable option. Target the real h1 by id: the title-dock
+   ghost also carries .hero__title and must keep its inline flight transform. */
+@media (forced-colors: active) {
+  .hero__title-fx,
+  #hero-title::before,
+  #hero-title::after {
+    display: none !important;
+  }
+
+  #hero-title,
+  #hero-title.is-hovering,
+  #hero-title.is-glitching {
+    transform: none !important;
+    filter: none !important;
+    text-shadow: none !important;
+  }
 }
 
 /* ---------- Title dock (hero name -> navbar wordmark) ----------
@@ -278,6 +399,22 @@ html.reveal-ready .reveal.is-visible {
   .cursor-ring,
   .hero-title-ghost {
     display: none !important;
+  }
+
+  /* The glitch is decoration: keep the name exactly as the HTML ships it. */
+  .hero__title-fx,
+  #hero-title::before,
+  #hero-title::after {
+    display: none !important;
+  }
+
+  #hero-title,
+  #hero-title.is-hovering,
+  #hero-title.is-glitching {
+    transform: none !important;
+    filter: none !important;
+    text-shadow: none !important;
+    animation: none !important;
   }
 
   .site-logo.is-docked {

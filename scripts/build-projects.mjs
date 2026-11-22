@@ -82,7 +82,7 @@ function header() {
 export function footer() {
   return `  <footer class="site-footer">
     <div class="site-footer__inner">
-      <p>&copy; 2026 Tariq Ahmad &middot; Computer Engineer &amp; Full-Stack Developer</p>
+      <p>&copy; 2026 Tariq Ahmad<span class="site-footer__role"> &middot; Computer Engineer &amp; Full-Stack Developer</span></p>
       <p class="site-footer__links">
         <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264">LinkedIn</a>
         <a href="https://github.com/tariqahmaad">GitHub</a>

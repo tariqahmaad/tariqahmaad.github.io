@@ -216,6 +216,9 @@
 .chat-messages {
   flex: 1;
   overflow-y: auto;
+  /* Stop a scroll that reaches the top/bottom of the conversation from
+     chaining to the page behind the widget. */
+  overscroll-behavior: contain;
   padding: 0.75rem 1rem;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;

@@ -891,6 +891,8 @@ He's continuously learning and adapting to stay at the forefront of technologica
      * Create the assistant UI elements
      */
     createAssistantUI() {
+        // `data-lenis-prevent` on the message list stops the page's smooth-scroll
+        // engine from hijacking wheel/touch events meant for the conversation.
         const assistantHTML = `
       <div class="ai-assistant" id="aiAssistant">
         <!-- Floating Action Button -->
@@ -923,7 +925,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
           </div>
 
           <!-- Messages Area -->
-          <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
+          <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages" data-lenis-prevent>
             ${this.getWelcomeMessageHTML()}
           </div>
 

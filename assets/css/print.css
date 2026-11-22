@@ -64,6 +64,15 @@
 
   .hero__title {
     opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Glitch decoration never belongs on paper. */
+  .hero__title-fx,
+  .hero__title::before,
+  .hero__title::after {
+    display: none !important;
   }
 
   /* The dock may have hidden the mark mid-flight; on paper the full name belongs

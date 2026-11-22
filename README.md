@@ -19,7 +19,7 @@ Then open <http://localhost:8000>.
 | ----------------------- | ----------------------------------------------------------------------------- |
 | Page content, JSON-LD   | `index.html`                                                                  |
 | Styles                  | `assets/css/*.css` (sources, registered in `critical.css` / `deferred.css`)   |
-| Navigation, carousel, hero effect | `assets/js/main.js`                                                 |
+| Navigation, carousel, hero effect | `assets/js/main.js`, `assets/js/fx/hero-fx.js`                    |
 | Chat assistant data     | `assets/js/knowledge-base.js`                                                 |
 | Chat assistant logic    | `assets/js/ai-assistant.js` and `assets/js/assistant/`                        |
 | Contact form            | `assets/js/contact-form.js` (EmailJS)                                         |

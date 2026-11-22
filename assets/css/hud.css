@@ -1003,10 +1003,44 @@ main .action-btn,
   }
 }
 
-/* The assistant button floats at the bottom-right: leave room so it never covers footer links */
+/* Phones: a compact, centred footer - one copyright line over a balanced
+   3 + 2 cluster of links. The old 96px bottom gutter kept clear of the
+   assistant button, but that button is centred on phones and hidden once the
+   hero leaves the screen, so it can never sit over the footer. */
 @media (max-width: 767.98px) {
   .site-footer__inner {
-    padding-bottom: 96px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+  }
+
+  .site-footer p {
+    line-height: 1.5;
+  }
+
+  .site-footer__links {
+    gap: 0 8px;
+    width: 100%;
+    /* Wide enough for the two-link second row, narrow enough that the first row
+       never takes four and leaves "Back to top" orphaned on its own. */
+    max-width: 16rem;
+    margin: 4px auto 0;
+    justify-content: center;
+  }
+
+  .site-footer__links a {
+    padding-inline: 6px;
+  }
+}
+
+/* Small phones: the role suffix is already carried by the hero and the
+   case-study headings, so the copyright stays on one line. */
+@media (max-width: 575.98px) {
+  .site-footer__role {
+    display: none;
   }
 }
 

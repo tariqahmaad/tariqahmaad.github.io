@@ -230,6 +230,18 @@ test('the assistant only offers itself while the hero is on screen', () => {
     assert.match(read('assets/js/command-palette.js'), /fab\.classList\.contains\('visible'\)/);
 });
 
+test('scrolling the assistant conversation never scrolls the page', () => {
+    const assistant = read('assets/js/ai-assistant.js');
+    // Lenis must ignore wheel/touch events inside the message list.
+    assert.match(assistant, /class="chat-messages"[^>]*data-lenis-prevent/);
+
+    const css = read('assets/css/ai-assistant.css');
+    const rule = css.match(/\.chat-messages \{([^}]*)\}/)?.[1] ?? '';
+    assert.match(rule, /overflow-y:\s*auto/);
+    // At the top/bottom the message list must not chain the scroll to the page.
+    assert.match(rule, /overscroll-behavior:\s*contain/);
+});
+
 test('a11y: every source rule that removes the outline on :focus-visible supplies a replacement', () => {
     const files = ['style', 'branding', 'shell', 'hud', 'fx', 'case', 'palette', 'ai-assistant', 'assistant-hud',
         'testimonials-professional', 'projects-custom', 'glassmorphism'];
