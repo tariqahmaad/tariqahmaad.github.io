@@ -860,19 +860,15 @@ He's continuously learning and adapting to stay at the forefront of technologica
         this.elements.chatFab.classList.remove('hidden');
         this.elements.chatFab.classList.add('visible');
 
-        // Hide chatbot on mobile when in sections (not landing page)
-        this.setupMobileSectionVisibility();
+        // The FAB belongs to the hero: it parks itself once the page scrolls on
+        this.setupHeroVisibility();
 
         // Mark initialization as complete
         this.isInitialized = true;
 
         // Auto-show notification badge after a delay if FAB hasn't been clicked
         setTimeout(() => {
-            if (!this.hasFabBeenClicked) {
-                const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-                const inSection = document.getElementById('header')?.classList.contains('header-top');
-                // Skip notification on mobile if user is in a section
-                if (isMobile && inSection) return;
+            if (!this.hasFabBeenClicked && this.heroInView !== false) {
                 this.showNotification();
             }
         }, TIMING.notificationDelayMs);
@@ -1163,7 +1159,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
             this.elements.chatWidget.style.display = 'none';
             this.elements.chatWidget.classList.remove(animationClass);
             this.unlockBodyScroll();
-            this.showFab();
+            this.refreshFab();
             // Return focus to the element that opened the dialog
             if (this.previouslyFocusedElement && typeof this.previouslyFocusedElement.focus === 'function') {
                 this.previouslyFocusedElement.focus();
@@ -3032,42 +3028,46 @@ His projects demonstrate both technical proficiency and practical application of
     }
 
     /**
-     * On mobile, hide chatbot when navigating away from landing page.
-     * Uses MutationObserver to watch for header-top class on #header.
-     * - header-top present  → user is in a section → hide chatbot
-     * - header-top absent   → user is on landing page → show chatbot
+     * The assistant belongs to the hero: its FAB is offered while the hero is
+     * still the section on screen and parks itself as soon as the visitor
+     * scrolls into the page (it comes back on the way up).
+     *
+     * The observer's root is shortened from the top to the upper 45% of the
+     * screen, so the hero stops counting once its bottom edge has risen above
+     * that line — the button leaves as the next section takes over.
+     * A conversation that is already open is never closed behind the
+     * visitor's back — only the button is parked.
      */
-    setupMobileSectionVisibility() {
-        const header = document.getElementById('header');
-        const assistantEl = this.elements.assistant;
-        if (!header || !assistantEl) return;
+    setupHeroVisibility() {
+        const hero = document.getElementById('home');
+        if (!hero || !this.elements || !this.elements.chatFab) return;
 
-        const updateVisibility = () => {
-            if (window.innerWidth >= MOBILE_BREAKPOINT) {
-                // Always visible on desktop
-                assistantEl.classList.remove('section-hidden');
-                return;
-            }
-            if (header.classList.contains('header-top')) {
-                // In a section → close chat if open, then hide
-                if (this.elements.chatWidget.style.display === 'flex') {
-                    this.hideWidget('closing', false);
-                }
-                assistantEl.classList.add('section-hidden');
-            } else {
-                // On landing page → show
-                assistantEl.classList.remove('section-hidden');
-            }
-        };
+        // The same rule the observer applies, once, synchronously: a deep link
+        // (…/#resume) must not flash the button in before the observer catches up.
+        this.heroInView = hero.getBoundingClientRect().bottom > window.innerHeight * 0.45;
+        this.refreshFab();
 
-        // Observe class changes on #header
-        this.sectionObserver = new MutationObserver(() => {
-            updateVisibility();
-        });
-        this.sectionObserver.observe(header, { attributes: true, attributeFilter: ['class'] });
+        this.heroObserver = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting === this.heroInView) return;
+            this.heroInView = entry.isIntersecting;
+            this.refreshFab();
+            if (!this.heroInView) this.hideNotification();
+        }, { threshold: 0, rootMargin: '-45% 0px 0px 0px' });
 
-        // Set initial state (handles page load with hash)
-        updateVisibility();
+        this.heroObserver.observe(hero);
+    }
+
+    /**
+     * Show the FAB only when it is both allowed (hero on screen) and wanted
+     * (the chat panel is closed). Everything that changes either state calls it.
+     */
+    refreshFab() {
+        const panelOpen = this.elements.chatWidget.style.display === 'flex';
+        if (this.heroInView === false || panelOpen) {
+            this.hideFab();
+        } else {
+            this.showFab();
+        }
     }
 
     /**

@@ -698,13 +698,23 @@
 @media (max-width: 768px) {
   /* Disable expensive effects on mobile to prevent scrolling lag */
   .glass-projects,
-  .glass-social a,
-  .glass-btn {
+  .glass-social a {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
     background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: none !important;
+    transition: none !important;
+  }
+
+  /* A .glass-btn is still a .btn-brand / .btn-ghost: drop only the blur and
+     keep its own outline. Forcing a faint 8% white border plus a green glow on
+     it here left the phone download buttons with almost no outline, while the
+     desktop ones keep a crisp 1px stroke — the same element, two different
+     buttons. The button language lives in hud.css, at every width. */
+  .glass-btn {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     transition: none !important;
   }
 
@@ -784,10 +794,7 @@
     padding: 0.2rem 0.6rem;
   }
 
-  /* Glass button — simplified for mobile */
-  .glass-btn {
-    box-shadow: 0 0 10px rgba(24, 210, 110, 0.15) !important;
-  }
+  /* Glass button — keeps its HUD stroke on phones (see the note above) */
 
   .contact .info-box .contact-social-links.glass-social {
     margin: 5px 0 0 0 !important;

@@ -79,13 +79,16 @@ function buildCommands() {
     }
   }
 
-  if (document.getElementById('chatFab')) {
+  // The assistant only offers itself while the hero is on screen (see
+  // setupHeroVisibility in ai-assistant.js), so the command follows the button.
+  const fab = document.getElementById('chatFab')
+  if (fab && fab.classList.contains('visible')) {
     items.push({
       group: 'Actions',
       label: 'Ask the assistant',
       hint: 'Chat about my work',
       keywords: ['chat', 'bot', 'help', 'ai'],
-      run: () => document.getElementById('chatFab').click()
+      run: () => fab.click()
     })
   }
 

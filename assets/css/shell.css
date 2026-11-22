@@ -93,7 +93,7 @@ main > section .container + .container {
 .site-logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #fff;
   font-weight: 700;
   font-size: 1.05rem;
@@ -103,7 +103,7 @@ main > section .container + .container {
 
 .site-logo i {
   color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.9rem;
 }
 
 .site-logo:hover {

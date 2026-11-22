@@ -666,11 +666,21 @@
   animation: fabAppear var(--duration-slow) var(--ease-out) forwards;
 }
 
+/* Leaving: an animation, not a transition. The FAB is normally showing through
+   `fabAppear`'s forwards fill, and a class swap cannot transition a property an
+   animation is still holding — it would blink out. The static values below stay
+   as the fallback (reduced motion, no animation support). */
 .chat-fab.hidden {
   opacity: 0;
   visibility: hidden;
   transform: scale(0.8);
   transition: all var(--duration-normal) var(--ease-default);
+  animation: fabDisappear var(--duration-normal) var(--ease-default) forwards;
+}
+
+@keyframes fabDisappear {
+  from { opacity: 1; visibility: visible; transform: scale(1); }
+  to   { opacity: 0; visibility: hidden; transform: scale(0.8); }
 }
 
 @keyframes fabAppear {
@@ -779,6 +789,16 @@
     to   { opacity: 1; transform: translateX(-50%) scale(1); }
   }
 
+  /* Centred mark: the exit must keep the translateX, like the entrance does */
+  .chat-fab.hidden {
+    animation: fabDisappear var(--duration-normal) var(--ease-default) forwards;
+  }
+
+  @keyframes fabDisappear {
+    from { opacity: 1; transform: translateX(-50%) scale(1); }
+    to   { opacity: 0; transform: translateX(-50%) scale(0.8); }
+  }
+
   /* Near-fullscreen bottom sheet */
   .chat-widget {
     position: fixed;
@@ -833,11 +853,6 @@
     overflow: hidden;
     position: fixed;
     width: 100%;
-  }
-
-  /* Hide chatbot when viewing a section (not landing page) */
-  .ai-assistant.section-hidden {
-    display: none !important;
   }
 }
 

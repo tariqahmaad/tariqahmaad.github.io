@@ -368,12 +368,58 @@ main .btn-ghost:focus-visible,
   clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
 }
 
+/* The mark switches between the compact hero-section "TA" (its A slides out to
+   the AHMAD column on scroll) and the full name once the hero name has docked.
+   The full name stays in the flow (invisible at first) so the header never
+   shifts; the short mark overlays its left edge. */
 .site-logo__name {
+  position: relative;
+  display: inline-block;
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.7rem;
   font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.site-logo__full {
+  opacity: 0; /* the dock fades it in when the flying name lands */
+}
+
+.site-logo__short {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+}
+
+/* The A travels to the AHMAD column and hands over to the arriving AHMAD;
+   title-dock.js raises --mark-glow while it moves and merges. */
+.site-logo__short-a {
+  display: inline-block;
+  will-change: transform;
+  text-shadow: 0 0 14px rgb(24 210 110 / var(--mark-glow, 0));
+}
+
+/* Case-study pages have no hero for the name to dock from, so the wordmark is
+   always the full name there (the compact TA is a hero-state mark). */
+.case-page .site-logo__full {
+  opacity: 1;
+}
+
+.case-page .site-logo__short {
+  display: none;
+}
+
+/* Without the scroll animation the mark still has to read as the full name. */
+@media (prefers-reduced-motion: reduce) {
+  .site-logo__full {
+    opacity: 1;
+  }
+
+  .site-logo__short {
+    display: none;
+  }
 }
 
 /* ---------- Resume ---------- */

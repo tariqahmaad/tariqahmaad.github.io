@@ -193,28 +193,65 @@
   /**
    * References carousel: a native scroll-snap track (see testimonials CSS) plus
    * dots and a gentle autoplay. No library; the browser does the scrolling.
+   *
+   * The track loops. A set of cloned slides sits at each end, so stepping past
+   * the last slide lands on a copy of the first one (and the other way round);
+   * a silent jump of exactly one set — a whole number of slide pitches, so the
+   * picture before and after is identical — puts the track back in range. That
+   * is why the autoplay never rewinds across the whole list.
    */
   const initCarousel = (root) => {
     const track = root.querySelector('.testimonials-track')
     const dotsEl = root.querySelector('.testimonials-dots')
-    const slides = track ? [...track.children] : []
-    if (slides.length < 2 || !dotsEl) return
+    if (!track || !dotsEl) return
+    const slides = [...track.children]
+    const count = slides.length
+    if (count < 2) return
 
     const AUTOPLAY_MS = 5000
     const PAUSE_AFTER_INTERACTION_MS = 10000
+    const WRAP_SETTLE_MS = 160
+
     let dots = []
     let pausedUntil = 0
     let hovering = false
     let onScreen = false
+    let clones = 0 // cloned slides currently sitting on each side
+    let wrapTimer = 0
 
     // Distance between the start of two neighbouring slides (includes the gap).
     const step = () => slides[1].offsetLeft - slides[0].offsetLeft
-    const perView = () => (slides[0].offsetWidth ? Math.max(1, Math.round(track.clientWidth / slides[0].offsetWidth)) : 1)
-    const positions = () => Math.max(1, slides.length - perView() + 1)
-    const current = () => (step() ? Math.min(positions() - 1, Math.round(track.scrollLeft / step())) : 0)
+    const perView = () => {
+      const size = step()
+      if (size <= 0) return 0
+      return Math.max(1, Math.round((track.clientWidth - slides[0].offsetWidth) / size) + 1)
+    }
 
-    const goTo = (index, behavior = scrollBehavior()) => {
-      track.scrollTo({ left: index * step(), behavior })
+    // The slide whose left edge sits closest to the scrollport's edge. Measuring
+    // rectangles instead of scrollLeft keeps the track's padding out of the maths.
+    const leftmost = () => {
+      const edge = track.getBoundingClientRect().left
+      let best = 0
+      let distance = Infinity
+      Array.from(track.children).forEach((slide, i) => {
+        const gap = Math.abs(slide.getBoundingClientRect().left - edge)
+        if (gap < distance) {
+          distance = gap
+          best = i
+        }
+      })
+      return best
+    }
+
+    const current = () => (((leftmost() - clones) % count) + count) % count
+
+    // This browser position and the target one are both snapped, so the move is
+    // exactly a whole number of pitches — no padding or gap guesswork.
+    const scrollToSlide = (domIndex, behavior = scrollBehavior()) => {
+      const slide = track.children[domIndex]
+      if (!slide) return
+      const delta = slide.getBoundingClientRect().left - track.getBoundingClientRect().left
+      track.scrollTo({ left: track.scrollLeft + delta, behavior })
     }
 
     const markActive = () => {
@@ -223,8 +260,7 @@
     }
 
     const buildDots = () => {
-      const count = positions()
-      if (count === dots.length) return
+      if (dots.length === count) return
       dotsEl.replaceChildren(...Array.from({ length: count }, (_, i) => {
         const dot = document.createElement('button')
         dot.type = 'button'
@@ -232,7 +268,7 @@
         dot.setAttribute('aria-label', `Go to reference ${i + 1}`)
         dot.addEventListener('click', () => {
           pausedUntil = Date.now() + PAUSE_AFTER_INTERACTION_MS
-          goTo(i)
+          scrollToSlide(clones + i)
         })
         return dot
       }))
@@ -240,10 +276,52 @@
       markActive()
     }
 
+    // A clone is decoration: hidden from assistive tech and stripped of the
+    // slide semantics, so the list is still announced once.
+    const makeClone = (slide) => {
+      const clone = slide.cloneNode(true)
+      clone.setAttribute('data-loop-clone', '')
+      clone.setAttribute('aria-hidden', 'true')
+      clone.removeAttribute('role')
+      clone.removeAttribute('aria-roledescription')
+      clone.removeAttribute('aria-label')
+      return clone
+    }
+
+    /* One cloned set per side. The trailing side gets one extra slide: a
+       scroll-snap track cannot align its final slide to the start edge, so
+       without it the last step of the loop would stop short of the wrap. */
+    const sync = () => {
+      const perSide = perView()
+      if (!perSide) return // deferred CSS has not laid the track out yet
+      if (perSide === clones) {
+        markActive()
+        return
+      }
+      const at = current()
+      track.querySelectorAll('[data-loop-clone]').forEach((node) => node.remove())
+      track.prepend(...slides.slice(-perSide).map(makeClone))
+      track.append(...slides.slice(0, perSide).map(makeClone), makeClone(slides[0]))
+      clones = perSide
+      scrollToSlide(clones + at, 'auto')
+      buildDots()
+      markActive()
+    }
+
+    // A step that landed on a cloned stretch: jump back one set, invisibly.
+    const normalize = () => {
+      if (!clones) return
+      const index = leftmost()
+      if (index >= clones && index < clones + count) return
+      scrollToSlide(index + (index < clones ? count : -count), 'auto')
+    }
+
     let scrollFrame = 0
     track.addEventListener('scroll', () => {
       cancelAnimationFrame(scrollFrame)
       scrollFrame = requestAnimationFrame(markActive)
+      clearTimeout(wrapTimer)
+      wrapTimer = setTimeout(normalize, WRAP_SETTLE_MS)
     }, { passive: true })
 
     // Any manual interaction pauses autoplay for a while.
@@ -253,8 +331,8 @@
     root.addEventListener('pointerenter', () => { hovering = true })
     root.addEventListener('pointerleave', () => { hovering = false })
 
-    if ('ResizeObserver' in window) new ResizeObserver(buildDots).observe(track)
-    buildDots()
+    if ('ResizeObserver' in window) new ResizeObserver(sync).observe(track)
+    sync()
 
     // Autoplay runs only while the carousel is on screen (the section is hidden
     // until visited) and never for users who asked for reduced motion.
@@ -280,7 +358,8 @@
     setInterval(() => {
       if (userPaused || !onScreen || hovering || document.hidden || Date.now() < pausedUntil) return
       if (root.contains(document.activeElement)) return
-      goTo((current() + 1) % positions())
+      const index = leftmost()
+      if (index + 1 < track.children.length) scrollToSlide(index + 1)
     }, AUTOPLAY_MS)
   }
 

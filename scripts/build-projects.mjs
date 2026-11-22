@@ -54,7 +54,7 @@ function header() {
     <div class="site-header__bar">
       <a href="/#home" class="site-logo" aria-label="Tariq Ahmad, home">
         <i class="ri-code-s-slash-fill" aria-hidden="true"></i>
-        <span class="site-logo__name">Tariq Ahmad</span>
+        <span class="site-logo__name"><span class="site-logo__full">Tariq Ahmad</span><span class="site-logo__short" aria-hidden="true">T<span class="site-logo__short-a">A</span></span></span>
       </a>
       <button type="button" class="site-nav-toggle mobile-nav-toggle" aria-label="Open navigation menu"
         aria-expanded="false" aria-controls="site-nav">

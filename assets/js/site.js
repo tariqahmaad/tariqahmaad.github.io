@@ -14,4 +14,5 @@ import './back-link.js';
 import './fx/preloader.js';
 import './fx/reveal.js';
 import './fx/hero-fx.js';
+import './fx/title-dock.js';
 import './fx/cursor.js';

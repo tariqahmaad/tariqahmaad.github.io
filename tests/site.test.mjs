@@ -169,6 +169,40 @@ test('the hero title is ready for the glitch (data-text for the colour layers)',
     assert.match(html, /<h1 id="hero-title" class="hero__title" data-text="Tariq Ahmad">Tariq Ahmad<\/h1>/);
 });
 
+test('the navbar shows a compact TA in the hero and the full name after the dock', () => {
+    assert.match(html, /<span class="site-logo__name"><span class="site-logo__full">Tariq Ahmad<\/span><span class="site-logo__short" aria-hidden="true">T<span class="site-logo__short-a">A<\/span><\/span><\/span>/);
+    assert.match(read('scripts/build-projects.mjs'), /site-logo__short-a/);
+    const hud = read('assets/css/hud.css');
+    // The full name keeps its width in the header; only its opacity changes.
+    assert.match(hud, /\.site-logo__full \{\s*opacity:\s*0/);
+    // The A must be transformable: the dock slides it to the AHMAD column on scroll.
+    assert.match(hud, /\.site-logo__short-a \{[^}]*display:\s*inline-block/);
+});
+
+test('the hero name docks onto the full navbar wordmark from a fixed, non-interactive copy', () => {
+    const dock = read('assets/js/fx/title-dock.js');
+    assert.match(read('assets/js/site.js'), /import '\.\/fx\/title-dock\.js'/);
+    assert.match(dock, /reducedMotion/);
+    assert.match(dock, /\.site-logo__full/);
+    assert.match(dock, /\.site-logo__short/);
+    assert.match(dock, /markShift/);
+    assert.match(dock, /setAttribute\('aria-hidden', 'true'\)/);
+    const rule = read('assets/css/fx.css').match(/\.hero-title-ghost \{([^}]*)\}/)?.[1] ?? '';
+    assert.match(rule, /position:\s*fixed/);
+    assert.match(rule, /pointer-events:\s*none/);
+    assert.match(rule, /z-index:\s*998/);
+    // The dock is decoration: it must never touch the header element itself.
+    assert.match(read('assets/css/fx.css'), /html\.nav-open \.hero-title-ghost \{[^}]*display:\s*none/);
+});
+
+test('print keeps the hero name and the full navbar name, and drops the flying copy', () => {
+    const print = read('assets/css/print.css');
+    assert.match(print, /\.hero-title-ghost\s*\{[^}]*display:\s*none/);
+    assert.match(print, /\.hero__title\s*\{[^}]*opacity:\s*1\s*!important/);
+    assert.match(print, /\.site-logo__short\s*\{[^}]*display:\s*none/);
+    assert.match(print, /\.site-logo__full\s*\{[^}]*opacity:\s*1\s*!important/);
+});
+
 test('a11y: the References carousel builds a pause/play toggle with aria-pressed, and autoplay honours it', () => {
     const main = read('assets/js/main.js');
     assert.match(main, /testimonials-toggle/);
@@ -182,6 +216,18 @@ test('a11y: the pause toggle is at least 44px and keeps a visible focus ring', (
     assert.match(rule, /width:\s*44px/);
     assert.match(rule, /height:\s*44px/);
     assert.match(css, /\.testimonials-toggle:focus-visible \{[^}]*outline:\s*2px solid/);
+});
+
+test('the assistant only offers itself while the hero is on screen', () => {
+    const assistant = read('assets/js/ai-assistant.js');
+    assert.match(assistant, /setupHeroVisibility\(\)/);
+    assert.match(assistant, /getElementById\('home'\)/);
+    // One place decides "hero on screen AND panel closed".
+    assert.match(assistant, /refreshFab\(\) \{[\s\S]*?display === 'flex'[\s\S]*?hideFab\(\)[\s\S]*?\}/);
+    // Closing the panel must not resurrect a FAB the hero gate parked.
+    assert.doesNotMatch(assistant, /unlockBodyScroll\(\);\s*\n\s*this\.showFab\(\)/);
+    // The command palette entry follows the button instead of the element.
+    assert.match(read('assets/js/command-palette.js'), /fab\.classList\.contains\('visible'\)/);
 });
 
 test('a11y: every source rule that removes the outline on :focus-visible supplies a replacement', () => {
