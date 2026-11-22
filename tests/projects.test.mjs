@@ -10,6 +10,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { SLUGS, SITE, projectPages } from '../scripts/build-projects.mjs';
+import { knowledgeBase as kb } from '../assets/js/knowledge-base.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = file => readFileSync(resolve(root, file), 'utf8');
@@ -87,10 +88,46 @@ test('pages carry no phone number, banned social profile or the dead CV-Builder 
     }
 });
 
-test('every case study has a Back to projects link at the top and bottom, pointing at /#projects', () => {
+test('every case study has one Back to projects link at the top, pointing at /#projects', () => {
     for (const { path, html } of pages) {
         const links = html.match(/<a class="case__back[^"]*" href="\/#projects" data-back>/g) || [];
-        assert.equal(links.length, 2, `${path}: expected a back link at the top and the bottom`);
+        assert.equal(links.length, 1, `${path}: expected a single back link at the top`);
+        assert.doesNotMatch(html, /case__back--bottom/, `${path}: the bottom back link should be gone`);
         assert.ok(html.indexOf('case__back') < html.indexOf('case__crumbs'), `${path}: back link should come before the breadcrumb`);
+    }
+});
+
+test('each case study ends with a prominent Next project button that names the next project', () => {
+    const decode = (text) => text
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"');
+    for (const [index, { path, html }] of pages.entries()) {
+        const next = kb.projects[index + 1];
+        if (!next) {
+            assert.doesNotMatch(html, /class="case__next"/, `${path}: the last case study must not show a Next project button`);
+            continue;
+        }
+        const cta = html.match(/<a class="case__next" rel="next" href="([^"]+)">([\s\S]*?)<\/a>/);
+        assert.ok(cta, `${path}: missing the Next project button`);
+        assert.equal(cta[1], `/projects/${SLUGS[index + 1]}/`, `${path}: Next project points at ${cta[1]}`);
+        assert.match(cta[2], /<span class="case__next-label">Next project<\/span>/, `${path}: missing the button label`);
+        const shown = cta[2].match(/<span class="case__next-name">([^<]*)<\/span>/)?.[1];
+        assert.equal(decode(shown ?? ''), next.name, `${path}: the button should name ${next.name}`);
+        assert.ok(html.lastIndexOf('class="case__next"') > html.lastIndexOf('class="case__block"'), `${path}: the button belongs after the case-study blocks`);
+        assert.ok(html.lastIndexOf('class="case__next"') < html.indexOf('</article>'), `${path}: the button finishes the case description`);
+    }
+});
+
+test('the previous case study keeps a real rel=prev link, and the first page has none', () => {
+    for (const [index, { path, html }] of pages.entries()) {
+        const prev = html.match(/<a class="case__pager-link" rel="prev" href="([^"]+)">/);
+        if (index === 0) {
+            assert.equal(prev, null, `${path}: the first case study must not link to a previous project`);
+            continue;
+        }
+        assert.ok(prev, `${path}: missing the Previous project link`);
+        assert.equal(prev[1], `/projects/${SLUGS[index - 1]}/`, `${path}: Previous points at ${prev[1]}`);
     }
 });

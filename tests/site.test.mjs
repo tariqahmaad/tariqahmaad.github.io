@@ -197,6 +197,19 @@ test('a11y: every source rule that removes the outline on :focus-visible supplie
     }
 });
 
+test('the case-study Next project button reuses the HUD button style (44px, angular, fills on hover)', () => {
+    const css = read('assets/css/case.css');
+    const rule = css.match(/\.case__next \{([^}]*)\}/)?.[1] ?? '';
+    assert.match(rule, /min-height:\s*44px/);
+    assert.match(rule, /border:\s*1px solid var\(--hud-line-strong\)/);
+    assert.match(rule, /clip-path:/);
+    assert.match(rule, /text-decoration:\s*none/);
+    const hover = css.match(/\.case__next:hover,\s*\.case__next:focus-visible \{([^}]*)\}/)?.[1] ?? '';
+    assert.match(hover, /background:\s*var\(--primary-color\)/);
+    assert.match(hover, /color:\s*#000/);
+    assert.match(css, /\.case__next:focus-visible \{[^}]*box-shadow:\s*inset/);
+});
+
 test('404 page links to every home section and keeps noindex', () => {
     const page = read('404.html');
     for (const id of ['about', 'resume', 'projects', 'contact']) {

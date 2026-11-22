@@ -35,7 +35,7 @@ const esc = (value) => String(value)
 const pad = (n) => String(n).padStart(2, '0')
 
 /** Real link (works without JS); back-link.js upgrades it to history.back() when that is better. */
-const backLink = (extraClass = '') => `<a class="case__back${extraClass}" href="/#projects" data-back><span class="case__back-icon" aria-hidden="true"></span>Back to projects</a>`
+const backLink = () => `<a class="case__back" href="/#projects" data-back><span class="case__back-icon" aria-hidden="true"></span>Back to projects</a>`
 
 /** "Role: X." -> { Role: 'X.' } */
 function parseDetails(details = []) {
@@ -141,10 +141,23 @@ export function renderProject(project, index, all, version) {
     ]
   }
 
+  /** The next-project primary CTA: a real anchor, so it works with JS disabled. */
+  const nextButton = (target) => `<a class="case__next" rel="next" href="/projects/${target.slug}/">
+          <span class="case__next-text">
+            <span class="case__next-label">Next project</span>
+            <span class="case__next-name">${esc(target.name)}</span>
+          </span>
+          <span class="case__next-arrow" aria-hidden="true"></span>
+        </a>`
+
+  const pagerLinks = [
+    prev ? `<a class="case__pager-link" rel="prev" href="/projects/${prev.slug}/"><span>Previous project</span>${esc(prev.name)}</a>` : '',
+    next ? nextButton(next) : ''
+  ].filter(Boolean)
+
   const pager = `
-      <nav class="case__pager" aria-label="More projects">
-        ${prev ? `<a class="case__pager-link" rel="prev" href="/projects/${prev.slug}/"><span>Previous</span>${esc(prev.name)}</a>` : '<span></span>'}
-        ${next ? `<a class="case__pager-link case__pager-link--next" rel="next" href="/projects/${next.slug}/"><span>Next</span>${esc(next.name)}</a>` : '<span></span>'}
+      <nav class="case__pager" aria-label="Project navigation">
+${pagerLinks.map((link) => `        ${link}`).join('\n')}
       </nav>`
 
   return `<!DOCTYPE html>
@@ -222,8 +235,6 @@ ${actions.length ? `
       </dl>
 ${block('Challenge', facts.Challenge)}${block('Outcome', facts.Outcome)}
 ${pager}
-
-      ${backLink(' case__back--bottom')}
     </article>
   </main>
 
