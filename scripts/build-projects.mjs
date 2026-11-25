@@ -88,7 +88,7 @@ function header() {
 export function footer() {
   return `  <footer class="site-footer">
     <div class="site-footer__inner">
-      <p>&copy; 2026 Tariq Ahmad<span class="site-footer__role"> &middot; Computer Engineer &amp; Full-Stack Developer</span></p>
+      <p>&copy; <span data-year>2026</span> Tariq Ahmad<span class="site-footer__role"> &middot; Computer Engineer &amp; Full-Stack Developer</span></p>
       <p class="site-footer__links">
         <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264">LinkedIn</a>
         <a href="https://github.com/tariqahmaad">GitHub</a>
@@ -195,6 +195,7 @@ ${pagerLinks.map((link) => `        ${link}`).join('\n')}
   <meta name="description" content="${esc(description)}">
   <meta name="author" content="Tariq Ahmad">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#18d26e">
   <link rel="canonical" href="${url}">
 
@@ -302,6 +303,11 @@ export async function loadProjects() {
   if (knowledgeBase.projects.length !== SLUGS.length) {
     throw new Error(`knowledge base has ${knowledgeBase.projects.length} projects but SLUGS has ${SLUGS.length}`)
   }
+  knowledgeBase.projects.forEach((project, index) => {
+    if (project.slug !== SLUGS[index]) {
+      throw new Error(`project #${index + 1} (${project.name}) has slug "${project.slug}", expected "${SLUGS[index]}"`)
+    }
+  })
   return knowledgeBase.projects
 }
 

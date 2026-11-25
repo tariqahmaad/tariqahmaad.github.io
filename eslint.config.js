@@ -17,10 +17,17 @@ export default [
   },
   {
     // Classic (non-module) scripts loaded with <script defer>
-    files: ['assets/js/main.js', 'assets/js/contact-form.js', 'assets/js/particles-config.js'],
+    files: ['assets/js/contact-form.js', 'assets/js/particles-config.js'],
     languageOptions: {
       sourceType: 'script',
       globals: { ...globals.browser, PureCounter: 'readonly', Lenis: 'readonly', emailjs: 'readonly', particlesJS: 'readonly' }
+    }
+  },
+  {
+    files: ['assets/js/main.js'],
+    languageOptions: {
+      sourceType: 'module',
+      globals: { ...globals.browser, PureCounter: 'readonly', Lenis: 'readonly' }
     }
   },
   {

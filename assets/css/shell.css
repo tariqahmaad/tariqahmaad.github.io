@@ -8,7 +8,12 @@
   --muted-text: rgba(255, 255, 255, 0.78);
 }
 
+@view-transition {
+  navigation: auto;
+}
+
 html {
+  color-scheme: dark;
   scroll-padding-top: var(--header-h);
   /* body is transparent; the portrait layer only covers the hero */
   background-color: var(--bg-color);
@@ -385,6 +390,10 @@ body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
   .site-header,
   .site-nav,
   .site-nav a.nav-link::after {

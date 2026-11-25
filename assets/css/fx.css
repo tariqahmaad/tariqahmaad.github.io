@@ -291,6 +291,17 @@ html.boot-pending .boot {
   opacity: 0;
 }
 
+.hero-title-ruler {
+  position: fixed;
+  top: -9999px;
+  left: 0;
+  margin: 0;
+  white-space: nowrap;
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
 .hero-title-ghost__ch {
   position: absolute;
   top: 0;
@@ -448,7 +459,8 @@ html.reveal-ready .reveal.is-visible {
 @media (prefers-reduced-motion: reduce) {
   .boot,
   .cursor-ring,
-  .hero-title-ghost {
+  .hero-title-ghost,
+  .hero-title-ruler {
     display: none !important;
   }
 

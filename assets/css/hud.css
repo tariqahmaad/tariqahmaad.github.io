@@ -57,6 +57,7 @@ main .section-title h2 {
   font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1;
+  text-wrap: balance;
   text-shadow: none;
   text-transform: uppercase;
 }
@@ -328,7 +329,12 @@ main .btn-ghost:focus-visible,
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 0.95;
+  text-wrap: balance;
   text-transform: uppercase;
+}
+
+.hero__lead {
+  text-wrap: pretty;
 }
 
 .hero__eyebrow,

@@ -1,3 +1,5 @@
+import { activeSectionId, nextHashForScroll } from './nav-hash.js'
+
 (function () {
   "use strict";
 
@@ -57,10 +59,11 @@
   }
 
   const scrollToSection = (target, { instant = false } = {}) => {
+    if (!target) return
     const top = target.id === 'home'
       ? 0
       : Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight())
-    if (lenis) lenis.scrollTo(top, { immediate: instant })
+    if (lenis) lenis.scrollTo(top, { immediate: instant, force: instant })
     else window.scrollTo({ top, behavior: instant ? 'auto' : scrollBehavior() })
   }
 
@@ -86,19 +89,102 @@
     }
   }
 
+  const replaceUrl = (hash) => {
+    if (hash === window.location.hash) return
+    try {
+      window.history.replaceState(null, '', hash || window.location.pathname + window.location.search)
+    } catch {
+      // History API unavailable (sandboxed frame): navigation still works without it.
+    }
+  }
+
   const pageSections = select('main > section', true)
   pageSections.forEach((section) => {
     if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1')
   })
 
-  // Scroll-spy: the section crossing the middle of the viewport is the active one.
-  if ('IntersectionObserver' in window) {
-    const spy = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setActiveNav('#' + entry.target.id)
+  const resolveHashTarget = (hash) => {
+    if (!pageSections.length) return null
+    if (!hash || hash === '#home') {
+      const home = select('#home')
+      return home ? { target: home, sectionId: 'home' } : null
+    }
+    const el = safeSelect(hash)
+    if (!el) return null
+    const section = pageSections.includes(el) ? el : el.closest('main > section')
+    if (!section) return null
+    return { target: el, sectionId: section.id }
+  }
+
+  const revealFilteredTarget = (target) => {
+    const hiddenCol = target && target.closest && target.closest('[data-category].is-filtered-out')
+    if (!hiddenCol) return
+    const allBtn = select('.project-filter[data-filter="all"]')
+    if (allBtn) allBtn.click()
+  }
+
+  let lockSpyUntil = 0
+  let userScrolled = false
+  let deepLinkPending = Boolean(pageSections.length && window.location.hash && window.location.hash !== '#home')
+  let lastLenisSpyTime = 0
+  let spyFrame = 0
+
+  const markUserScroll = () => {
+    userScrolled = true
+    lockSpyUntil = 0
+  }
+  window.addEventListener('wheel', markUserScroll, { passive: true })
+  window.addEventListener('touchstart', markUserScroll, { passive: true })
+  window.addEventListener('pointerdown', markUserScroll, { passive: true })
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
+      markUserScroll()
+    }
+  })
+
+  // Deterministic scroll-spy: syncs active nav item and keeps URL hash accurate.
+  const syncScrollSpy = () => {
+    if (!pageSections.length || deepLinkPending || performance.now() < lockSpyUntil) return
+    const activeId = activeSectionId({
+      scrollY: window.scrollY,
+      innerHeight: window.innerHeight,
+      scrollHeight: document.documentElement.scrollHeight,
+      headerHeight: headerHeight(),
+      sections: pageSections.map((s) => ({ id: s.id, top: s.getBoundingClientRect().top }))
+    })
+    if (!activeId) return
+    setActiveNav('#' + activeId)
+    const currentResolved = window.location.hash ? resolveHashTarget(window.location.hash) : null
+    replaceUrl(nextHashForScroll({
+      activeId,
+      currentHash: window.location.hash,
+      currentTargetSectionId: currentResolved ? currentResolved.sectionId : null
+    }))
+  }
+
+  if (pageSections.length) {
+    window.addEventListener('ui:scroll', () => {
+      lastLenisSpyTime = performance.now()
+      syncScrollSpy()
+    })
+    window.addEventListener('scroll', () => {
+      if (performance.now() - lastLenisSpyTime < 40) return
+      if (spyFrame) return
+      spyFrame = requestAnimationFrame(() => {
+        spyFrame = 0
+        syncScrollSpy()
       })
-    }, { rootMargin: '-45% 0px -50% 0px' })
-    pageSections.forEach((section) => spy.observe(section))
+    }, { passive: true })
+  }
+
+  const alignToHash = ({ instant = true } = {}) => {
+    const resolved = resolveHashTarget(window.location.hash)
+    if (!resolved) return false
+    revealFilteredTarget(resolved.target)
+    setActiveNav('#' + resolved.sectionId)
+    scrollToSection(resolved.target, { instant })
+    syncHeader()
+    return true
   }
 
   // Header gets a solid, blurred background once the page has scrolled.
@@ -154,15 +240,19 @@
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a[href^="#"]')
     if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
-    const target = safeSelect(link.hash)
-    if (!target || !pageSections.includes(target)) return
+    const resolved = resolveHashTarget(link.hash)
+    if (!resolved) return
 
     e.preventDefault()
     if (isMobileNavOpen()) setMobileNav(false)
-    updateUrl(target.id === 'home' ? '' : link.hash)
-    setActiveNav('#' + target.id)
-    scrollToSection(target)
-    target.focus({ preventScroll: true })
+    deepLinkPending = false
+    lockSpyUntil = performance.now() + 950
+    revealFilteredTarget(resolved.target)
+    updateUrl(resolved.target.id === 'home' ? '' : link.hash)
+    setActiveNav('#' + resolved.sectionId)
+    scrollToSection(resolved.target)
+    if (!resolved.target.hasAttribute('tabindex')) resolved.target.setAttribute('tabindex', '-1')
+    resolved.target.focus({ preventScroll: true })
   })
 
   // Opening the command menu from the mobile overlay closes the overlay first.
@@ -172,14 +262,17 @@
 
   // The command palette asks the page to scroll to any element by id.
   document.addEventListener('nav:goto', (e) => {
-    const target = document.getElementById(e.detail && e.detail.id)
-    if (!target) return
-    const isSection = pageSections.includes(target)
-    updateUrl(target.id === 'home' ? '' : '#' + target.id)
-    if (isSection) setActiveNav('#' + target.id)
-    scrollToSection(target)
-    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
-    target.focus({ preventScroll: true })
+    const id = e.detail && e.detail.id
+    const resolved = id ? resolveHashTarget('#' + id) : null
+    if (!resolved) return
+    deepLinkPending = false
+    lockSpyUntil = performance.now() + 950
+    revealFilteredTarget(resolved.target)
+    updateUrl(resolved.target.id === 'home' ? '' : '#' + resolved.target.id)
+    setActiveNav('#' + resolved.sectionId)
+    scrollToSection(resolved.target)
+    if (!resolved.target.hasAttribute('tabindex')) resolved.target.setAttribute('tabindex', '-1')
+    resolved.target.focus({ preventScroll: true })
   })
 
   // Modals ask for the smooth-scroll engine to pause while they are open.
@@ -189,11 +282,20 @@
     else if (!isMobileNavOpen()) lenis.start()
   })
 
-  // Back/Forward restores the position that matches the URL.
-  window.addEventListener('popstate', () => {
-    const target = safeSelect(window.location.hash)
-    scrollToSection(target && pageSections.includes(target) ? target : select('#home'), { instant: true })
-  })
+  // Back/Forward and manual address-bar hash edits restore the exact target.
+  const handleHistoryHash = () => {
+    if (!pageSections.length) return
+    const resolved = resolveHashTarget(window.location.hash) || resolveHashTarget('#home')
+    if (!resolved) return
+    deepLinkPending = false
+    lockSpyUntil = performance.now() + 250
+    revealFilteredTarget(resolved.target)
+    setActiveNav('#' + resolved.sectionId)
+    scrollToSection(resolved.target, { instant: true })
+    syncHeader()
+  }
+  window.addEventListener('popstate', handleHistoryHash)
+  window.addEventListener('hashchange', handleHistoryHash)
 
   /**
    * References carousel: a native scroll-snap track (see testimonials CSS) plus
@@ -613,6 +715,19 @@
     const status = select('.project-filter-status');
     if (!buttons.length || !items.length) return;
 
+    // Keep badge counts in sync with the live DOM tiles automatically.
+    const counts = items.reduce((acc, item) => {
+      const cat = item.dataset.category;
+      if (cat) acc[cat] = (acc[cat] || 0) + 1;
+      return acc;
+    }, {});
+    buttons.forEach((btn) => {
+      const badge = btn.querySelector('.project-filter__count');
+      if (!badge) return;
+      const key = btn.dataset.filter;
+      badge.textContent = String(key === 'all' ? items.length : (counts[key] || 0));
+    });
+
     const applyFilter = (category) => {
       let visible = 0;
       items.forEach((item) => {
@@ -708,8 +823,20 @@
 
   // Initialize components when DOM is ready
   document.addEventListener("DOMContentLoaded", function () {
+    const year = String(Math.max(2026, new Date().getFullYear()));
+    select('[data-year]', true).forEach((el) => { el.textContent = year; });
     initProjectFilters();
     initCopyEmail();
+    if (pageSections.length) {
+      if (window.location.hash) {
+        if (!alignToHash({ instant: true })) {
+          deepLinkPending = false;
+          syncScrollSpy();
+        }
+      } else {
+        syncScrollSpy();
+      }
+    }
     // NOTE: Particles.js is initialized by particles-config.js
     // No need to load it here as particles-config.js handles initialization
 
@@ -751,4 +878,13 @@
       }
     }
   });
+
+  if (pageSections.length) {
+    window.addEventListener('load', () => {
+      if (window.location.hash && !userScrolled) {
+        alignToHash({ instant: true });
+      }
+      deepLinkPending = false;
+    });
+  }
 })();

@@ -17,13 +17,13 @@
  * - Skipped for reduced motion and on pages without a hero.
  */
 import { reducedMotion } from './env.js'
+import { clamp01, markOpacityAt, smoothstep } from './dock-timeline.js'
 
 const DESKTOP_FLIGHT_MIN = 360
 const DESKTOP_FLIGHT_MAX = 540
 const MOBILE_FLIGHT_MIN = 200
 const MOBILE_FLIGHT_MAX = 320
 const LAND_AT = 0.86 // all letters finish docking here
-const STAGGER_SPAN = 0.14 // tight, cohesive ribbon spread across the letters
 const MARK_FROM = 0.04 // compact "TA" opens smoothly across the flight...
 const MARK_TO = 0.82 // ...so its A arrives on the AHMAD column right in lockstep
 const BRAND_IN_FROM = 0.85 // real wordmark fades in to 1.0 first...
@@ -38,12 +38,7 @@ const brandShort = document.querySelector('.site-logo__short')
 const brandShortA = document.querySelector('.site-logo__short-a')
 const header = document.getElementById('site-header')
 
-const clamp01 = (value) => Math.min(1, Math.max(0, value))
 const lerp = (from, to, t) => from + (to - from) * t
-const smoothstep = (t, from, to) => {
-  const x = clamp01((t - from) / (to - from))
-  return x * x * (3 - 2 * x)
-}
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
 const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2
 const easeY = (t) => 0.6 * easeOutCubic(t) + 0.4 * easeInOutSine(t)
@@ -64,31 +59,28 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
 
   const rawText = title.dataset.text || title.textContent.trim()
   const chars = []
-  let prevWasSpace = true
   for (let i = 0; i < rawText.length; i++) {
     const ch = rawText[i]
-    if (ch === ' ') {
-      prevWasSpace = true
-      continue
-    }
+    if (ch === ' ') continue
     const span = document.createElement('span')
     span.className = 'hero-title-ghost__ch'
     span.textContent = ch
     ghost.appendChild(span)
-    chars.push({
-      el: span,
-      charIndex: i,
-      isInitial: prevWasSpace,
-      startX: 0,
-      endX: 0
-    })
-    prevWasSpace = false
+    chars.push({ el: span, charIndex: i, startX: 0, endX: 0 })
   }
   document.body.appendChild(ghost)
+
+  // Pristine, unmutated ruler so hero-fx decode glyphs never corrupt glyph X measurements.
+  const ruler = document.createElement('span')
+  ruler.className = 'hero__title hero-title-ruler'
+  ruler.setAttribute('aria-hidden', 'true')
+  ruler.textContent = rawText
+  document.body.appendChild(ruler)
 
   let geometry = null
   let mode = ''
   let fullOpacity = null
+  let markOpacity = null
   let landed = false
   let retries = 0
   let flashTimer = 0
@@ -111,6 +103,20 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       return
     }
     brandShortA.style.transform = `translate3d(${value.toFixed(2)}px, 0, 0)`
+  }
+
+  // The compact mark hands the navbar to the flying copy while the copy is
+  // crossing the logo columns, then takes it back as the copy drops into the
+  // hero. Leaving both visible drew a doubled T/A in the header.
+  const setMarkOpacity = (value) => {
+    const rounded = Math.round(value * 1000) / 1000
+    if (rounded === markOpacity) return
+    markOpacity = rounded
+    if (rounded >= 1) {
+      brandShort.style.removeProperty('opacity')
+      return
+    }
+    brandShort.style.opacity = String(rounded)
   }
 
   const setMarkGlow = (value) => {
@@ -149,38 +155,37 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       return false
     }
 
-    const titleNode = firstTextNode(title)
+    const rulerNode = firstTextNode(ruler)
     const brandNode = firstTextNode(brand)
-    if (!titleNode || !brandNode) {
+    if (!rulerNode || !brandNode) {
       geometry = null
       return false
     }
 
-    const titleStr = titleNode.textContent
+    const rulerRect = ruler.getBoundingClientRect()
+    const rulerStr = rulerNode.textContent
     const brandStr = brandNode.textContent
-    const titleOffset = titleStr.length - titleStr.trimStart().length
+    const rulerOffset = rulerStr.length - rulerStr.trimStart().length
     const brandOffset = brandStr.length - brandStr.trimStart().length
     const range = document.createRange()
 
     for (const item of chars) {
-      const ti = titleOffset + item.charIndex
+      const ri = rulerOffset + item.charIndex
       const bi = brandOffset + item.charIndex
-      if (ti + 1 > titleStr.length || bi + 1 > brandStr.length) {
+      if (ri + 1 > rulerStr.length || bi + 1 > brandStr.length) {
         geometry = null
         return false
       }
-      range.setStart(titleNode, ti)
-      range.setEnd(titleNode, ti + 1)
-      item.startX = range.getBoundingClientRect().left
+      range.setStart(rulerNode, ri)
+      range.setEnd(rulerNode, ri + 1)
+      item.startX = rect.left + (range.getBoundingClientRect().left - rulerRect.left)
 
       range.setStart(brandNode, bi)
       range.setEnd(brandNode, bi + 1)
       item.endX = range.getBoundingClientRect().left
     }
 
-    const sample = chars[0].el
-    sample.style.transform = 'none'
-    const sampleHeight = sample.getBoundingClientRect().height || rect.height
+    const sampleHeight = rulerRect.height || rect.height
 
     let markShift = 0
     const aIndex = brandStr.indexOf(' ', brandOffset) + 1
@@ -219,6 +224,7 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       ghost.style.opacity = '0'
       title.style.removeProperty('opacity')
       setFullOpacity(0)
+      setMarkOpacity(1)
       setMarkShift(0)
       setMarkGlow(0)
       landed = false
@@ -227,6 +233,7 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       ghost.style.opacity = '0'
       title.style.opacity = '0'
       setFullOpacity(1)
+      setMarkOpacity(0)
       setMarkShift(geometry ? geometry.markShift : 0)
       setMarkGlow(0)
       landed = true
@@ -236,9 +243,9 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       ghost.style.opacity = '0'
       title.style.removeProperty('opacity')
       setFullOpacity(1)
+      setMarkOpacity(0)
       setMarkShift(0)
       setMarkGlow(0)
-      brandShort.style.opacity = '0'
       landed = true
     }
   }
@@ -250,12 +257,10 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       if (safeScroll > 140) {
         setMode('fallback-docked')
       } else {
-        brandShort.style.removeProperty('opacity')
         setMode('rest')
       }
       return
     }
-    brandShort.style.removeProperty('opacity')
 
     if (safeScroll === lastScroll && mode !== '') return
     lastScroll = safeScroll
@@ -280,29 +285,22 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
     ghost.style.visibility = 'visible'
     ghost.style.opacity = String(1 - ghostOut)
 
-    const count = chars.length
-    const denom = Math.max(1, count - 1)
-    const stagger = geometry.isPhone ? STAGGER_SPAN * 0.7 : STAGGER_SPAN
+    const ex = easeInOutSine(flightT)
+    const ey = easeY(flightT)
+    const es = easeScale(flightT)
+    const y = lerp(geometry.startY, geometry.endY, ey)
+    const scale = lerp(1, geometry.endScale, es)
+    const glow = Math.sin(Math.PI * flightT)
+    const yStr = y.toFixed(2)
+    const scaleStr = scale.toFixed(4)
+    const glowStr = (glow * 0.38).toFixed(3)
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < chars.length; i++) {
       const item = chars[i]
-      const delay = (i / denom) * stagger
-      const localT = clamp01((flightT - delay) / (1 - stagger))
-
-      const ex = easeInOutSine(localT)
-      const ey = easeY(localT)
-      const es = easeScale(localT)
-
       const x = lerp(item.startX, item.endX, ex)
-      const y = lerp(geometry.startY, geometry.endY, ey)
-      const scale = lerp(1, geometry.endScale, es)
-      const glow = Math.sin(Math.PI * localT)
-      const mergeFade = item.isInitial ? 1 - smoothstep(localT, 0.85, 1) : 1
-
-      item.el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`
-      item.el.style.opacity = mergeFade.toFixed(3)
+      item.el.style.transform = `translate3d(${x.toFixed(2)}px, ${yStr}px, 0) scale(${scaleStr})`
       if (!geometry.isPhone) {
-        item.el.style.setProperty('--ch-glow', (glow * 0.38).toFixed(3))
+        item.el.style.setProperty('--ch-glow', glowStr)
       }
     }
 
@@ -310,6 +308,7 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
     setMarkShift(geometry.markShift * easeInOutSine(markProgress))
     setMarkGlow(Math.sin(Math.PI * markProgress) * 0.42)
     setFullOpacity(brandIn)
+    setMarkOpacity(markOpacityAt(p))
 
     if (p >= LAND_AT && !landed) {
       landed = true

@@ -11,6 +11,7 @@
     name="description">
   <meta name="author" content="Tariq Ahmad">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#18d26e">
   <meta name="google-site-verification" content="geLpufK_dlELVa0MzvHuTVrULt-Ml6grrN9XzVVdP_8" />
 
@@ -47,33 +48,33 @@
 
   <!-- Render-blocking CSS, one request: Bootstrap subset + self-hosted fonts + style + branding + glass (npm run build).
        Fonts are deliberately NOT preloaded: measured under throttling, preloading delayed first paint. -->
-  <link href="assets/css/critical.min.css?v=20261125i" rel="stylesheet">
+  <link href="assets/css/critical.min.css?v=20261125m" rel="stylesheet">
 
   <!-- Non-Critical CSS: Icon Fonts (async to prevent blocking) -->
-  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125i" as="style"
+  <link rel="preload" href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125m" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125i" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125m" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125i" as="style"
+  <link rel="preload" href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125m" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125i" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125m" rel="stylesheet">
   </noscript>
 
-  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261125i" as="style"
+  <link rel="preload" href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261125m" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261125i" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.subset.min.css?v=20261125m" rel="stylesheet">
   </noscript>
 
 
   <!-- Below-the-fold CSS (testimonials, projects, assistant), one async request -->
-  <link rel="preload" href="assets/css/deferred.min.css?v=20261125i" as="style"
+  <link rel="preload" href="assets/css/deferred.min.css?v=20261125m" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="assets/css/deferred.min.css?v=20261125i" rel="stylesheet">
+    <link href="assets/css/deferred.min.css?v=20261125m" rel="stylesheet">
   </noscript>
 
   <!-- Particles.js - Self-hosted, deferred for faster LCP -->
@@ -86,7 +87,8 @@
     (function (root) {
       root.classList.add('js');
       try {
-        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('booted')) {
+        var hasDeepHash = location.hash && location.hash !== '#home';
+        if (!hasDeepHash && !matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('booted')) {
           root.classList.add('boot-pending');
           setTimeout(function () { root.classList.remove('boot-pending'); }, 4500);
         }
@@ -355,9 +357,9 @@
               aria-label="Open search and commands"><span>Search</span><kbd data-palette-key>Ctrl K</kbd></button>
           </li>
           <li class="nav-social">
-            <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
+            <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" rel="me" aria-label="LinkedIn"><i
                 class="bi bi-linkedin" aria-hidden="true"></i></a>
-            <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
+            <a href="https://github.com/tariqahmaad" class="github" rel="me" aria-label="GitHub"><i
                 class="ri-github-fill" aria-hidden="true"></i></a>
           </li>
         </ul>
@@ -1264,9 +1266,9 @@
             <i class="bx bx-share-alt" aria-hidden="true"></i>
             <h3>Social Profiles</h3>
             <div class="social-links contact-social-links glass-social">
-              <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" aria-label="LinkedIn"><i
+              <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264" class="linkedin" rel="me" aria-label="LinkedIn"><i
                   class="bi bi-linkedin"></i></a>
-              <a href="https://github.com/tariqahmaad" class="github" aria-label="GitHub"><i
+              <a href="https://github.com/tariqahmaad" class="github" rel="me" aria-label="GitHub"><i
                   class="ri-github-fill"></i></a>
             </div>
           </div>
@@ -1337,7 +1339,7 @@
 
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <p>&copy; 2026 Tariq Ahmad<span class="site-footer__role"> &middot; Computer Engineer &amp; Full-Stack Developer</span></p>
+      <p>&copy; <span data-year>2026</span> Tariq Ahmad<span class="site-footer__role"> &middot; Computer Engineer &amp; Full-Stack Developer</span></p>
       <p class="site-footer__links">
         <a href="https://www.linkedin.com/in/tariq-ahmad-a43320264">LinkedIn</a>
         <a href="https://github.com/tariqahmaad">GitHub</a>
@@ -1357,13 +1359,14 @@
   <script type="text/javascript" src="assets/vendor/emailjs/email.min.js" defer></script>
 
   <!-- Site scripts: contact form + particles + navigation, bundled from assets/js/site.js (npm run build) -->
-  <script src="assets/js/site.min.js?v=20261125i" defer></script>
+  <script src="assets/js/site.min.js?v=20261125m" defer></script>
   <!-- AI Assistant: lazy-loaded on idle so 155KB is off the critical path -->
   <script type="module">
     // Command palette: loaded on first use (Ctrl/Cmd+K or the Menu button), prefetched when idle.
-    const loadPalette = () => import('./assets/js/command-palette.min.js?v=20261125i');
+    const loadPalette = () => import('./assets/js/command-palette.min.js?v=20261125m');
     const openPalette = () => loadPalette().then((m) => m.openPalette());
-    const isApple = /Mac|iPhone|iPad/.test(navigator.platform);
+    const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent;
+    const isApple = /Mac|iPhone|iPad/i.test(platform);
     document.querySelectorAll('[data-palette-key]').forEach((el) => { el.textContent = isApple ? '⌘ K' : 'Ctrl K'; });
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && !e.altKey && e.key.toLowerCase() === 'k') {
@@ -1376,7 +1379,7 @@
     });
     if ('requestIdleCallback' in window) requestIdleCallback(loadPalette, { timeout: 8000 });
 
-    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261125i');
+    const bootAssistant = () => import('./assets/js/ai-assistant.min.js?v=20261125m');
     if ('requestIdleCallback' in window) {
       requestIdleCallback(bootAssistant, { timeout: 4000 });
     } else {

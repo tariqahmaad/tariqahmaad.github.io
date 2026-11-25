@@ -186,6 +186,7 @@ test('the hero name docks onto the full navbar wordmark from a fixed, non-intera
     assert.match(dock, /\.site-logo__full/);
     assert.match(dock, /\.site-logo__short/);
     assert.match(dock, /markShift/);
+    assert.match(dock, /hero-title-ruler/);
     assert.match(dock, /setAttribute\('aria-hidden', 'true'\)/);
     const rule = read('assets/css/fx.css').match(/\.hero-title-ghost \{([^}]*)\}/)?.[1] ?? '';
     assert.match(rule, /position:\s*fixed/);
@@ -323,4 +324,19 @@ test('contact section provides a one-click copy-email button with accessible siz
     assert.match(html, /data-copy-email="tariq2u24@gmail\.com"/);
     const hud = read('assets/css/hud.css');
     assert.match(hud, /\.copy-email-btn:focus-visible\s*\{[^}]*outline:\s*2px solid/);
+});
+
+test('future-proofing: dark color-scheme, view-transition, userAgentData, and version bumper', async () => {
+    assert.match(html, /<meta name="color-scheme" content="dark">/);
+    assert.match(read('404.html'), /<meta name="color-scheme" content="dark">/);
+    const shell = read('assets/css/shell.css');
+    assert.match(shell, /@view-transition\s*\{\s*navigation:\s*auto;/);
+    assert.match(shell, /@media \(prefers-reduced-motion: reduce\)[\s\S]*@view-transition\s*\{\s*navigation:\s*none;/);
+    assert.match(html, /navigator\.userAgentData/);
+
+    const { nextVersion } = await import('../scripts/bump-version.mjs');
+    const day = new Date(2026, 10, 25);
+    assert.equal(nextVersion('20261125l', day), '20261125m');
+    assert.equal(nextVersion('20261125z', day), '20261125z1');
+    assert.equal(nextVersion('20261120a', day), '20261125a');
 });

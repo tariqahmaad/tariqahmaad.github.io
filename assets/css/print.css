@@ -64,8 +64,12 @@
     display: none !important;
   }
 
-  /* Title dock: print the hero name, never the flying copy. */
+  /* Title dock: print the hero name, never the flying copy or ruler. */
   .hero-title-ghost {
+    display: none !important;
+  }
+
+  .hero-title-ruler {
     display: none !important;
   }
 

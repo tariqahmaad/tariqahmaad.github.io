@@ -97,6 +97,7 @@ export const knowledgeBase = {
 
     projects: [
         {
+            slug: "cv-builder",
             name: "CV Builder",
             technologies: ["Next.js", "TypeScript", "React", "Firebase", "Tailwind CSS"],
             description: "A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.",
@@ -113,6 +114,7 @@ export const knowledgeBase = {
             liveDemo: "https://ta-cv.vercel.app/"
         },
         {
+            slug: "quizlet",
             name: "Quizlet – Interactive University Quiz Platform",
             technologies: ["HTML", "CSS", "JavaScript", "Responsive"],
             description: "A web-based quiz application designed to help students practice and test their knowledge in university-level courses.",
@@ -130,6 +132,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/quizlet"
         },
         {
+            slug: "budgetwise",
             name: "BudgetWise – React Native Expense Tracker",
             technologies: ["React Native", "JavaScript", "Node.js", "Google Firebase", "REST API"],
             description: "Mobile-first finance tracker built with React Native and Firebase for seamless cloud-sync.",
@@ -146,6 +149,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/BudgetWise"
         },
         {
+            slug: "graduation-presentation",
             name: "Graduation Project Presentation",
             technologies: ["HTML", "CSS", "JavaScript", "Presentation"],
             description: "Developed an interactive presentation showcasing my graduation project, utilizing HTML, CSS, and JavaScript for a dynamic and engaging user experience.",
@@ -163,6 +167,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/Presentation"
         },
         {
+            slug: "note-taking-app",
             name: "Note-Taking Web Application",
             technologies: ["PHP", "MySQL", "JavaScript", "Authentication"],
             description: "Developed a web-based note-taking app with PHP, MySQL, and front-end technologies, offering secure user authentication, role-specific functions, and a responsive, cross-browser interface.",
@@ -179,6 +184,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/Note-Taking-Web-Application"
         },
         {
+            slug: "hospital-management",
             name: "Hospital Management System",
             technologies: ["Java", "Spring Boot", "MySQL", "REST API"],
             description: "Created a Java Spring Boot-based Hospital Management System to streamline hospital functions, featuring patient, doctor, and appointment management with RESTful APIs and MySQL.",
@@ -195,6 +201,7 @@ export const knowledgeBase = {
             github: "https://github.com/tariqahmaad/Hospital-Management-System"
         },
         {
+            slug: "digit-classifier",
             name: "Hand-Written Digit Classifier using Neural Networks",
             technologies: ["Python", "Neural Networks", "Deep Learning", "TensorFlow"],
             description: "Developed a Hand-Written Digit Classifier with Neural Networks in a Deep Learning project, demonstrating proficiency in image recognition and machine learning techniques.",
@@ -210,6 +217,7 @@ export const knowledgeBase = {
             ]
         },
         {
+            slug: "hotel-management",
             name: "Hotel Management System",
             technologies: ["C#", ".NET", "MySQL", "CRUD"],
             description: "Developed a C# Hotel Management System in Microsoft Visual Studio, featuring CRUD operations for customer and room management, integrated with MySQL for secure data handling.",
@@ -225,6 +233,7 @@ export const knowledgeBase = {
             ]
         },
         {
+            slug: "banking-management",
             name: "Banking Management System",
             technologies: ["Java", "Swing", "GUI", "Security"],
             description: "Created a Java-based Banking Management System with a user-friendly interface for account management, including features like deposit, withdrawal, and account details.",

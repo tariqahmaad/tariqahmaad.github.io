@@ -150,3 +150,10 @@ test('every case study renders a Key Highlights section matching the knowledge b
         assert.equal(count, highlights.length, `${path}: highlight item count mismatch`);
     }
 });
+
+test('knowledge-base project slugs match SLUGS and generated pages declare dark color-scheme', () => {
+    assert.deepEqual(kb.projects.map(p => p.slug), SLUGS);
+    for (const { path, html } of pages) {
+        assert.match(html, /<meta name="color-scheme" content="dark">/, `${path}: missing color-scheme meta`);
+    }
+});
