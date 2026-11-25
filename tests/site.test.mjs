@@ -295,3 +295,32 @@ test('privacy: the page and knowledge base never state the city or country as a 
     // The university name is a credential and stays.
     assert.match(html, /Istanbul Aydin University/);
 });
+
+test('GitHub Pages: .nojekyll and site.webmanifest exist and are linked', () => {
+    assert.ok(existsSync(resolve(root, '.nojekyll')), '.nojekyll should exist for GitHub Pages');
+    assert.ok(existsSync(resolve(root, 'site.webmanifest')), 'site.webmanifest should exist');
+    assert.match(html, /<link href="site\.webmanifest" rel="manifest">/);
+    const manifest = JSON.parse(read('site.webmanifest'));
+    assert.equal(manifest.theme_color, '#18d26e');
+});
+
+test('projects filter bar counts match the categorized tiles and print keeps all projects visible', () => {
+    const tilesByCat = {};
+    for (const [, cat] of html.matchAll(/data-category="([a-z]+)"/g)) {
+        tilesByCat[cat] = (tilesByCat[cat] || 0) + 1;
+    }
+    const total = Object.values(tilesByCat).reduce((sum, n) => sum + n, 0);
+    assert.equal(total, tileCount, 'every project tile should declare data-category');
+
+    for (const [, filter, count] of html.matchAll(/data-filter="([a-z]+)"[^>]*>[^<]*<span class="project-filter__count">(\d+)<\/span>/g)) {
+        const expected = filter === 'all' ? total : (tilesByCat[filter] || 0);
+        assert.equal(Number(count), expected, `filter "${filter}" count mismatch`);
+    }
+    assert.match(read('assets/css/print.css'), /is-filtered-out\s*\{[^}]*display:\s*flex\s*!important/);
+});
+
+test('contact section provides a one-click copy-email button with accessible sizing', () => {
+    assert.match(html, /data-copy-email="tariq2u24@gmail\.com"/);
+    const hud = read('assets/css/hud.css');
+    assert.match(hud, /\.copy-email-btn:focus-visible\s*\{[^}]*outline:\s*2px solid/);
+});

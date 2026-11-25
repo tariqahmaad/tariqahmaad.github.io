@@ -281,34 +281,85 @@ html.boot-pending .boot {
   top: 0;
   left: 0;
   z-index: 998; /* above the header (997), below the assistant button (999) */
-  width: max-content;
+  width: 0;
+  height: 0;
   margin: 0;
   white-space: nowrap;
-  transform-origin: 0 0;
   pointer-events: none; /* the logo link underneath stays clickable */
   user-select: none;
   visibility: hidden;
   opacity: 0;
-  will-change: transform, opacity;
-  text-shadow:
-    0 0 30px rgba(24, 210, 110, 0.32),
-    -2px 0 rgba(24, 200, 255, 0.35),
-    2px 0 rgba(255, 45, 85, 0.3);
 }
 
-/* One-shot pulse on the wordmark when the flying name lands. */
+.hero-title-ghost__ch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: 0;
+  text-transform: inherit;
+  color: #fff;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+  text-shadow: 0 0 22px rgb(24 210 110 / var(--ch-glow, 0));
+}
+
+/* Refined HUD specular sheen + hairline sweep when the final letter locks in. */
 @keyframes brand-dock {
-  0%,
+  0% {
+    text-shadow: none;
+  }
+  32% {
+    text-shadow: 0 0 16px rgba(24, 210, 110, 0.55);
+  }
   100% {
     text-shadow: none;
   }
-  35% {
-    text-shadow: 0 0 14px rgba(24, 210, 110, 0.85), 0 0 32px rgba(24, 200, 255, 0.4);
+}
+
+@keyframes brand-lock-sweep {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  30% {
+    opacity: 0.9;
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  72% {
+    opacity: 0.65;
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: right center;
   }
 }
 
 .site-logo.is-docked {
-  animation: brand-dock 520ms ease-out both;
+  animation: brand-dock 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-logo__name::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-color) 45%, #fff 85%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.site-logo.is-docked .site-logo__name::after {
+  animation: brand-lock-sweep 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* The mobile menu is a full-screen overlay inside the header: never float a
@@ -417,7 +468,8 @@ html.reveal-ready .reveal.is-visible {
     animation: none !important;
   }
 
-  .site-logo.is-docked {
+  .site-logo.is-docked,
+  .site-logo.is-docked .site-logo__name::after {
     animation: none;
   }
 

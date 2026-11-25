@@ -287,13 +287,7 @@
     text-align: left;
   }
 
-  /* Keep the subtitle size more reasonable on mobile while maintaining hierarchy */
-
-  .section-title a.btn-brand {
-    margin-top: 10px;
-    width: 100%;
-    justify-content: center;
-  }
+  /* Resume action buttons are owned by hud.css (.resume-actions) at every width. */
 }
 
 /* Tablet Responsiveness */
@@ -303,36 +297,12 @@
     justify-content: space-between;
     align-items: center;
   }
-
-  /* Keep subtitle proportional on tablet */
-
-  .section-title a.btn-brand {
-    margin-top: 0;
-    width: auto;
-    padding: 12px 24px;
-    font-size: 1rem;
-  }
 }
 
 /* Extra Small Devices (phones in portrait mode) */
 @media (max-width: 480px) {
   .section-title {
     padding: 0 10px;
-  }
-
-  /* Keep subtitle readable on very small screens */
-
-  .section-title a.btn-brand {
-    margin-top: 10px;
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 0.95rem;
-    white-space: nowrap;
-  }
-
-  .section-title a.btn-brand i {
-    margin-right: 8px;
-    font-size: 1rem;
   }
 }
 

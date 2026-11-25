@@ -1,0 +1,21 @@
+{
+  "name": "Tariq Ahmad — Portfolio",
+  "short_name": "Tariq Ahmad",
+  "description": "Computer Engineer & Full-Stack Developer portfolio showcasing projects, skills, and experience.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#040404",
+  "theme_color": "#18d26e",
+  "icons": [
+    {
+      "src": "/assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}

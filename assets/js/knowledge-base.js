@@ -105,6 +105,11 @@ export const knowledgeBase = {
                 "Challenge: Building a real-time dual-pane editor with live preview, PDF generation, and conflict resolution for offline/cloud sync.",
                 "Outcome: Delivered a production-ready application with guest mode, dark mode, auto-save, and multiple resume templates."
             ],
+            highlights: [
+                "Dual-pane live editor with instant ATS-friendly template switching and clean PDF export.",
+                "Privacy-first guest mode alongside optional Firebase authentication and cloud sync.",
+                "Auto-save and version history built with Next.js, TypeScript, and Tailwind CSS."
+            ],
             liveDemo: "https://ta-cv.vercel.app/"
         },
         {
@@ -115,6 +120,11 @@ export const knowledgeBase = {
                 "Role: Sole Developer.",
                 "Challenge: Creating a dynamic quiz system with real-time feedback and scoring.",
                 "Outcome: Successfully launched a platform used by students to prepare for exams."
+            ],
+            highlights: [
+                "Course-specific question banks with timer-based practice sessions.",
+                "Instant answer feedback and real-time score calculation in vanilla JavaScript.",
+                "Responsive layout built for quick exam prep on both desktop and mobile devices."
             ],
             liveDemo: "https://tariqahmaad.github.io/quizlet/index.html",
             github: "https://github.com/tariqahmaad/quizlet"
@@ -128,6 +138,11 @@ export const knowledgeBase = {
                 "Challenge: Ensuring real-time data synchronization between multiple devices using Firebase.",
                 "Outcome: Developed a cross-platform mobile app with positive user feedback on its intuitive interface."
             ],
+            highlights: [
+                "Cross-platform mobile UI for daily expense logging and category budget limits.",
+                "Real-time cloud synchronization across devices powered by Firebase and RESTful APIs.",
+                "Visual spending summaries designed for quick glanceability on mobile screens."
+            ],
             github: "https://github.com/tariqahmaad/BudgetWise"
         },
         {
@@ -138,6 +153,11 @@ export const knowledgeBase = {
                 "Role: Presenter and Developer.",
                 "Challenge: To effectively communicate complex technical concepts to a non-technical audience.",
                 "Outcome: Received high marks and commendation for clarity and engaging presentation style."
+            ],
+            highlights: [
+                "Custom browser-based slide deck with smooth transitions and keyboard navigation.",
+                "Structured visual storytelling translating complex engineering concepts for mixed audiences.",
+                "Hosted statically on GitHub Pages for instant, zero-install access from any browser."
             ],
             liveDemo: "https://tariqahmaad.github.io/Presentation/index.html",
             github: "https://github.com/tariqahmaad/Presentation"
@@ -151,6 +171,11 @@ export const knowledgeBase = {
                 "Challenge: Implementing secure authentication and role-based access control with PHP.",
                 "Outcome: Delivered a fully functional note-taking platform with user management and a clean responsive UI."
             ],
+            highlights: [
+                "Session-based user authentication with role-specific permissions and account isolation.",
+                "Relational MySQL schema backing full create, edit, organize, and delete note workflows.",
+                "Responsive, cross-browser front end built with clean HTML, CSS, and JavaScript."
+            ],
             github: "https://github.com/tariqahmaad/Note-Taking-Web-Application"
         },
         {
@@ -162,6 +187,11 @@ export const knowledgeBase = {
                 "Challenge: Designing a robust RESTful API architecture for managing complex hospital data relationships.",
                 "Outcome: Built a comprehensive system with patient, doctor, and appointment management modules."
             ],
+            highlights: [
+                "Layered Spring Boot REST API separating controllers, business services, and repositories.",
+                "Normalized MySQL data model linking patients, doctors, and appointment schedules.",
+                "Structured validation and error handling for reliable multi-entity CRUD workflows."
+            ],
             github: "https://github.com/tariqahmaad/Hospital-Management-System"
         },
         {
@@ -172,6 +202,11 @@ export const knowledgeBase = {
                 "Role: ML Engineer.",
                 "Challenge: Training an accurate neural network model for digit classification on the MNIST dataset.",
                 "Outcome: Achieved high classification accuracy, demonstrating strong understanding of deep learning concepts."
+            ],
+            highlights: [
+                "End-to-end preprocessing, training, and evaluation pipeline on the MNIST benchmark dataset.",
+                "Multi-layer neural network implemented in Python and TensorFlow with tuned hyperparameters.",
+                "Evaluation of accuracy and confusion patterns to verify generalization on unseen digits."
             ]
         },
         {
@@ -182,6 +217,11 @@ export const knowledgeBase = {
                 "Role: Desktop Application Developer.",
                 "Challenge: Building a reliable CRUD system with proper data validation and MySQL integration.",
                 "Outcome: Delivered a functional hotel management tool with an intuitive Windows Forms interface."
+            ],
+            highlights: [
+                "Desktop Windows Forms interface built in C# and .NET for front-desk operations.",
+                "Parameterized MySQL queries managing guest records, room inventory, and bookings.",
+                "Input validation and structured error states to keep reservation data consistent."
             ]
         },
         {
@@ -192,6 +232,11 @@ export const knowledgeBase = {
                 "Role: Java Developer.",
                 "Challenge: Implementing secure transaction logic and account management within a Swing GUI.",
                 "Outcome: Built a complete banking simulation with deposit, withdrawal, and balance tracking features."
+            ],
+            highlights: [
+                "Object-oriented Java core enforcing balance checks on deposits and withdrawals.",
+                "Desktop Java Swing GUI for account lookup, transaction history, and balance tracking.",
+                "Defensive transaction validation preventing invalid or negative-balance operations."
             ]
         }
     ],

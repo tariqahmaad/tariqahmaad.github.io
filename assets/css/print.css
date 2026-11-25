@@ -27,8 +27,15 @@
   .chat-widget,
   dialog,
   .testimonials-controls,
+  .project-filters,
+  .copy-email-btn,
   #contact form {
     display: none !important;
+  }
+
+  /* Filtered project cards should still appear when printing */
+  #projects [data-category].is-filtered-out {
+    display: flex !important;
   }
 
   /* The hero portrait lives on body::before */

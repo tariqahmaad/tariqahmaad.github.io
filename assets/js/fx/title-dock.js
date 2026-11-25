@@ -1,33 +1,36 @@
 /**
- * Title dock: as the page scrolls, the hero name lifts out of the hero and
- * compresses onto the navbar wordmark, reversing when the visitor scrolls back.
+ * Title dock: as the page scrolls from the top of the hero, each letter of the
+ * hero name glides smoothly along a staggered GPU-only FLIP path from its exact
+ * pixel position in `#hero-title` to its exact pixel slot in `.site-logo__full`
+ * (and reverses seamlessly when scrolling back up to the hero).
  *
- * A fixed copy of the name (`.hero-title-ghost`) is moved with a transform while
- * the real <h1> stays in the flow and only fades: the hero layout never reflows
- * and the name remains in the document once (the copy is aria-hidden). The
- * flight is a pure function of the scroll position, so it is reversible and
- * needs no state machine. Skipped entirely for reduced motion, on narrow screens
- * where the name wraps, and on pages without a hero.
- *
- * The navbar shows the compact "TA" while the hero is in view and the full name
- * once the name has docked. The copy starts exactly on the <h1> (same class, same
- * tracking) and ends on `.site-logo__full` with that wordmark's font size *and*
- * letter-spacing, so the hand-over is pixel-aligned instead of a doubled word.
- * The mark never fades: its T and A are the columns the incoming letters merge
- * onto, and the full name fades in over them when the copy lands.
+ * Desktop & mobile smoothness:
+ * - Zero-lag Lenis sync on desktop (`ui:scroll` inside Lenis's rAF) and
+ *   immediate native scroll sync on touch devices so the glide stays locked
+ *   to the finger with zero dropped frames.
+ * - Mobile address-bar resilience: `resize` only remeasures when viewport
+ *   width changes, preventing mid-scroll jumps when mobile toolbars hide/show.
+ * - Responsive flight distance: tuned for both desktop (~360–540px) and phone
+ *   viewports (~200–320px) so docking completes right as the hero exits.
+ * - Graceful wrapped fallback: if extreme zoom wraps the name to two lines,
+ *   the navbar still cleanly reveals the full wordmark once scrolled past the hero.
+ * - Skipped for reduced motion and on pages without a hero.
  */
 import { reducedMotion } from './env.js'
 
-const DETACH_GAP = 96 // px below the header bar where the name detaches
-const FLIGHT_MIN = 180 // shortest / longest flight, in px of scrolling
-const FLIGHT_MAX = 420
-const LAUNCH_FADE = 0.03 // h1 / copy cross-fade at the start (they overlap there)
-const LAND_AT = 0.55 // the flight completes here: the copy is exactly on the wordmark
-const MARK_FROM = 0.05 // the compact "TA" starts spacing as the page moves...
-const MARK_TO = 0.5 // ...so its A reaches the AHMAD column as the name lands
-const HANDOFF_FROM = 0.52 // the copy hands over to the real wordmark...
-const HANDOFF_TO = 0.62 // ...right at the landing, and the mark stays underneath
-const FLASH_MS = 560
+const DESKTOP_FLIGHT_MIN = 360
+const DESKTOP_FLIGHT_MAX = 540
+const MOBILE_FLIGHT_MIN = 200
+const MOBILE_FLIGHT_MAX = 320
+const LAND_AT = 0.86 // all letters finish docking here
+const STAGGER_SPAN = 0.14 // tight, cohesive ribbon spread across the letters
+const MARK_FROM = 0.04 // compact "TA" opens smoothly across the flight...
+const MARK_TO = 0.82 // ...so its A arrives on the AHMAD column right in lockstep
+const BRAND_IN_FROM = 0.85 // real wordmark fades in to 1.0 first...
+const BRAND_IN_TO = 0.92
+const GHOST_OUT_FROM = 0.90 // ...then the ghost fades out (zero brightness dip)
+const GHOST_OUT_TO = 0.96
+const FLASH_MS = 720
 
 const title = document.getElementById('hero-title')
 const brand = document.querySelector('.site-logo__full')
@@ -41,16 +44,46 @@ const smoothstep = (t, from, to) => {
   const x = clamp01((t - from) / (to - from))
   return x * x * (3 - 2 * x)
 }
-// Fast lift, slow settle: also what keeps the shrinking name clear of the hero
-// copy below it while that copy scrolls up.
-const easeOutQuad = (t) => 1 - (1 - t) * (1 - t)
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
+const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2
+const easeY = (t) => 0.6 * easeOutCubic(t) + 0.4 * easeInOutSine(t)
+const easeScale = (t) => 0.5 * easeOutCubic(t) + 0.5 * easeInOutSine(t)
+
+const firstTextNode = (el) => {
+  for (const node of el.childNodes) {
+    if (node.nodeType === 3 && node.textContent.trim().length > 0) return node
+  }
+  return null
+}
 
 if (title && brand && brandShort && brandShortA && header && !reducedMotion.matches) {
   const logo = brand.closest('.site-logo')
   const ghost = document.createElement('span')
   ghost.className = 'hero__title hero-title-ghost'
   ghost.setAttribute('aria-hidden', 'true')
-  ghost.textContent = title.dataset.text || title.textContent.trim()
+
+  const rawText = title.dataset.text || title.textContent.trim()
+  const chars = []
+  let prevWasSpace = true
+  for (let i = 0; i < rawText.length; i++) {
+    const ch = rawText[i]
+    if (ch === ' ') {
+      prevWasSpace = true
+      continue
+    }
+    const span = document.createElement('span')
+    span.className = 'hero-title-ghost__ch'
+    span.textContent = ch
+    ghost.appendChild(span)
+    chars.push({
+      el: span,
+      charIndex: i,
+      isInitial: prevWasSpace,
+      startX: 0,
+      endX: 0
+    })
+    prevWasSpace = false
+  }
   document.body.appendChild(ghost)
 
   let geometry = null
@@ -61,11 +94,15 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
   let flashTimer = 0
   let frame = 0
   let measureFrame = 0
+  let lastLenisTime = 0
+  let lastScroll = -1
+  let lastWidth = window.innerWidth
 
   const setFullOpacity = (value) => {
-    if (value === fullOpacity) return
-    fullOpacity = value
-    brand.style.opacity = String(value)
+    const rounded = Math.round(value * 1000) / 1000
+    if (rounded === fullOpacity) return
+    fullOpacity = rounded
+    brand.style.opacity = String(rounded)
   }
 
   const setMarkShift = (value) => {
@@ -76,7 +113,6 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
     brandShortA.style.transform = `translate3d(${value.toFixed(2)}px, 0, 0)`
   }
 
-  // A soft HUD glow rides the mark while its A is in motion.
   const setMarkGlow = (value) => {
     if (value < 0.01) {
       brandShort.style.removeProperty('--mark-glow')
@@ -88,68 +124,88 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
   const flashLogo = () => {
     if (!logo) return
     logo.classList.remove('is-docked')
-    void logo.offsetWidth // restart the pulse if it is already running
+    void logo.offsetWidth
     logo.classList.add('is-docked')
     clearTimeout(flashTimer)
     flashTimer = setTimeout(() => logo.classList.remove('is-docked'), FLASH_MS)
   }
 
-  /* Cache both boxes. They only change on resize, font swap or rotation, so this
-     never runs inside a scroll frame. */
+  /* Measure exact per-glyph start and end boxes. Runs on load, width change,
+     font swap or orientation change — never during normal scroll. */
   const measure = () => {
-    // The h1's inline glitch transform would skew its box: keep the last one.
     if (title.classList.contains('is-glitching')) return false
 
-    ghost.style.transform = 'none' // a stale transform would corrupt its own box
-    brandShortA.style.transform = 'none' // measure the compact "TA" position
+    brandShortA.style.transform = 'none'
     const rect = title.getBoundingClientRect()
-    const ghostRect = ghost.getBoundingClientRect()
     const brandRect = brand.getBoundingClientRect()
     const shortARect = brandShortA.getBoundingClientRect()
     const layout = getComputedStyle(title)
     const brandStyle = getComputedStyle(brand)
     const lineHeight = parseFloat(layout.lineHeight) || rect.height
 
-    // How far the mark's A has to travel to sit on the AHMAD column.
-    let markShift = 0
-    const fullText = brand.firstChild
-    if (fullText && fullText.nodeType === 3) {
-      const aIndex = brand.textContent.indexOf(' ') + 1
-      if (aIndex > 0 && aIndex + 1 <= fullText.length) {
-        const range = document.createRange()
-        range.setStart(fullText, aIndex)
-        range.setEnd(fullText, aIndex + 1)
-        markShift = range.getBoundingClientRect().left - shortARect.left
-      }
-    }
-
-    // A wrapped name (very narrow screens) has no single line to dock from.
-    if (rect.height > lineHeight * 1.5 || ghostRect.width < 1 || brandRect.width < 1) {
+    // Wrapped name (e.g. extreme zoom): disable per-letter flight and use clean fallback.
+    if (rect.height > lineHeight * 1.5 || rect.width < 1 || brandRect.width < 1) {
       geometry = null
       return false
     }
 
-    const headerBottom = header.getBoundingClientRect().bottom
+    const titleNode = firstTextNode(title)
+    const brandNode = firstTextNode(brand)
+    if (!titleNode || !brandNode) {
+      geometry = null
+      return false
+    }
+
+    const titleStr = titleNode.textContent
+    const brandStr = brandNode.textContent
+    const titleOffset = titleStr.length - titleStr.trimStart().length
+    const brandOffset = brandStr.length - brandStr.trimStart().length
+    const range = document.createRange()
+
+    for (const item of chars) {
+      const ti = titleOffset + item.charIndex
+      const bi = brandOffset + item.charIndex
+      if (ti + 1 > titleStr.length || bi + 1 > brandStr.length) {
+        geometry = null
+        return false
+      }
+      range.setStart(titleNode, ti)
+      range.setEnd(titleNode, ti + 1)
+      item.startX = range.getBoundingClientRect().left
+
+      range.setStart(brandNode, bi)
+      range.setEnd(brandNode, bi + 1)
+      item.endX = range.getBoundingClientRect().left
+    }
+
+    const sample = chars[0].el
+    sample.style.transform = 'none'
+    const sampleHeight = sample.getBoundingClientRect().height || rect.height
+
+    let markShift = 0
+    const aIndex = brandStr.indexOf(' ', brandOffset) + 1
+    if (aIndex > brandOffset && aIndex + 1 <= brandStr.length) {
+      range.setStart(brandNode, aIndex)
+      range.setEnd(brandNode, aIndex + 1)
+      markShift = range.getBoundingClientRect().left - shortARect.left
+    }
+
     const docTop = rect.top + window.scrollY
-    const startScroll = Math.max(0, docTop - (headerBottom + DETACH_GAP))
     const endScale = Math.min(
       1,
       Math.max(0.02, parseFloat(brandStyle.fontSize) / (parseFloat(layout.fontSize) || 1))
     )
+    const isPhone = window.innerWidth < 768
+    const minFlight = isPhone ? MOBILE_FLIGHT_MIN : DESKTOP_FLIGHT_MIN
+    const maxFlight = isPhone ? MOBILE_FLIGHT_MAX : DESKTOP_FLIGHT_MAX
 
     geometry = {
-      startScroll,
-      // The flight lasts exactly until the original slot has scrolled away.
-      flight: Math.min(FLIGHT_MAX, Math.max(FLIGHT_MIN, docTop + rect.height - startScroll)),
-      startX: rect.left,
-      startY: docTop - startScroll,
-      endX: brandRect.left,
-      endY: brandRect.top + (brandRect.height - ghostRect.height * endScale) / 2,
+      flight: Math.min(maxFlight, Math.max(minFlight, docTop + rect.height * 1.2)),
+      startY: docTop,
+      endY: brandRect.top + (brandRect.height - sampleHeight * endScale) / 2,
       endScale,
-      startTracking: parseFloat(layout.letterSpacing) || 0,
-      // Local px that lands on the wordmark's rendered tracking at endScale.
-      endTracking: (parseFloat(brandStyle.letterSpacing) || 0) / endScale,
-      markShift
+      markShift,
+      isPhone
     }
     retries = 0
     return true
@@ -171,77 +227,124 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
       ghost.style.opacity = '0'
       title.style.opacity = '0'
       setFullOpacity(1)
-      // The mark stays spaced underneath; its A shares the wordmark's column.
       setMarkShift(geometry ? geometry.markShift : 0)
       setMarkGlow(0)
+      landed = true
+    } else if (next === 'fallback-docked') {
+      // Wrapped name fallback: keep real h1 untouched and show full navbar wordmark.
+      ghost.style.visibility = 'hidden'
+      ghost.style.opacity = '0'
+      title.style.removeProperty('opacity')
+      setFullOpacity(1)
+      setMarkShift(0)
+      setMarkGlow(0)
+      brandShort.style.opacity = '0'
       landed = true
     }
   }
 
-  const apply = () => {
+  const render = (scrollY) => {
+    const safeScroll = Math.max(0, scrollY)
+
     if (!geometry) {
-      setMode('rest') // the static mark: "TA" only
+      if (safeScroll > 140) {
+        setMode('fallback-docked')
+      } else {
+        brandShort.style.removeProperty('opacity')
+        setMode('rest')
+      }
       return
     }
+    brandShort.style.removeProperty('opacity')
 
-    const p = clamp01((window.scrollY - geometry.startScroll) / geometry.flight)
+    if (safeScroll === lastScroll && mode !== '') return
+    lastScroll = safeScroll
 
-    if (p <= 0) {
-      // The hero is in view: the navbar shows the initials.
+    const p = clamp01(safeScroll / geometry.flight)
+
+    if (p <= 0.001) {
       setMode('rest')
       return
     }
-    if (p >= 1) {
-      // Docked: the navbar shows the full name.
+    if (p >= 0.999) {
       setMode('docked')
       return
     }
 
     mode = 'flight'
-    // The flight is finished at LAND_AT; after that the name is simply docked.
-    const ease = easeOutQuad(clamp01(p / LAND_AT))
-    const scale = 1 + (geometry.endScale - 1) * ease
-    const launch = smoothstep(p, 0, LAUNCH_FADE)
-    const handoff = smoothstep(p, HANDOFF_FROM, HANDOFF_TO)
+    const flightT = clamp01(p / LAND_AT)
+    const brandIn = smoothstep(p, BRAND_IN_FROM, BRAND_IN_TO)
+    const ghostOut = smoothstep(p, GHOST_OUT_FROM, GHOST_OUT_TO)
 
-    ghost.style.transform =
-      `translate3d(${lerp(geometry.startX, geometry.endX, ease).toFixed(2)}px, ` +
-      `${lerp(geometry.startY, geometry.endY, ease).toFixed(2)}px, 0) ` +
-      `scale(${scale.toFixed(4)})`
-    ghost.style.letterSpacing = `${lerp(geometry.startTracking, geometry.endTracking, ease).toFixed(2)}px`
-    ghost.style.opacity = String(launch * (1 - handoff))
+    title.style.opacity = '0'
     ghost.style.visibility = 'visible'
-    title.style.opacity = String(1 - launch)
-    const markProgress = clamp01((p - MARK_FROM) / (MARK_TO - MARK_FROM))
-    setMarkShift(geometry.markShift * easeOutQuad(markProgress))
-    setMarkGlow(Math.sin(Math.PI * markProgress) * 0.55)
-    setFullOpacity(handoff)
+    ghost.style.opacity = String(1 - ghostOut)
 
-    // One pulse as the copy settles onto the wordmark.
+    const count = chars.length
+    const denom = Math.max(1, count - 1)
+    const stagger = geometry.isPhone ? STAGGER_SPAN * 0.7 : STAGGER_SPAN
+
+    for (let i = 0; i < count; i++) {
+      const item = chars[i]
+      const delay = (i / denom) * stagger
+      const localT = clamp01((flightT - delay) / (1 - stagger))
+
+      const ex = easeInOutSine(localT)
+      const ey = easeY(localT)
+      const es = easeScale(localT)
+
+      const x = lerp(item.startX, item.endX, ex)
+      const y = lerp(geometry.startY, geometry.endY, ey)
+      const scale = lerp(1, geometry.endScale, es)
+      const glow = Math.sin(Math.PI * localT)
+      const mergeFade = item.isInitial ? 1 - smoothstep(localT, 0.85, 1) : 1
+
+      item.el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`
+      item.el.style.opacity = mergeFade.toFixed(3)
+      if (!geometry.isPhone) {
+        item.el.style.setProperty('--ch-glow', (glow * 0.38).toFixed(3))
+      }
+    }
+
+    const markProgress = clamp01((p - MARK_FROM) / (MARK_TO - MARK_FROM))
+    setMarkShift(geometry.markShift * easeInOutSine(markProgress))
+    setMarkGlow(Math.sin(Math.PI * markProgress) * 0.42)
+    setFullOpacity(brandIn)
+
     if (p >= LAND_AT && !landed) {
       landed = true
       flashLogo()
-    } else if (p < LAND_AT - 0.02) {
+    } else if (p < LAND_AT - 0.04) {
       landed = false
     }
   }
 
-  const remeasure = () => {
-    const ok = measure()
-    apply()
-    // A glitch burst can hide the true box for ~330ms: try once more after it.
-    if (!ok && retries < 2 && title.classList.contains('is-glitching')) {
-      retries += 1
-      setTimeout(remeasure, 420)
-    }
+  const onLenisScroll = (e) => {
+    lastLenisTime = performance.now()
+    render(e.detail.scroll)
   }
 
-  const schedule = () => {
+  const onNativeScroll = () => {
+    if (performance.now() - lastLenisTime < 32) return
     if (frame) return
     frame = requestAnimationFrame(() => {
       frame = 0
-      apply()
+      render(window.scrollY)
     })
+  }
+
+  const remeasure = () => {
+    const ok = measure()
+    lastScroll = -1
+    if (!ok) {
+      render(window.scrollY)
+      if (retries < 2 && title.classList.contains('is-glitching')) {
+        retries += 1
+        setTimeout(remeasure, 420)
+      }
+      return
+    }
+    render(window.scrollY)
   }
 
   const scheduleRemeasure = () => {
@@ -252,10 +355,19 @@ if (title && brand && brandShort && brandShortA && header && !reducedMotion.matc
     })
   }
 
+  // On mobile, scrolling collapses/expands the address bar and fires `resize`
+  // without changing width — ignore height-only resizes so the dock never jumps.
+  const onResize = () => {
+    if (window.innerWidth === lastWidth) return
+    lastWidth = window.innerWidth
+    scheduleRemeasure()
+  }
+
   remeasure()
 
-  window.addEventListener('scroll', schedule, { passive: true })
-  window.addEventListener('resize', scheduleRemeasure)
+  window.addEventListener('ui:scroll', onLenisScroll)
+  window.addEventListener('scroll', onNativeScroll, { passive: true })
+  window.addEventListener('resize', onResize)
   window.addEventListener('orientationchange', scheduleRemeasure)
   window.addEventListener('pageshow', scheduleRemeasure)
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure)

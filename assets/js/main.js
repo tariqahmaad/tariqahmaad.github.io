@@ -44,6 +44,11 @@
   let lenis = null
   if (typeof Lenis !== 'undefined' && !reducedMotionQuery.matches) {
     lenis = new Lenis({ lerp: 0.1 })
+    const scrollDetail = { scroll: 0 }
+    lenis.on('scroll', ({ scroll }) => {
+      scrollDetail.scroll = scroll
+      window.dispatchEvent(new CustomEvent('ui:scroll', { detail: scrollDetail }))
+    })
     const raf = (time) => {
       lenis.raf(time)
       requestAnimationFrame(raf)
@@ -597,8 +602,114 @@
     };
   })();
 
+  /**
+   * Project category filters (#projects .project-filters)
+   */
+  const initProjectFilters = () => {
+    const bar = select('.project-filters');
+    if (!bar) return;
+    const buttons = select('.project-filter', true);
+    const items = select('#projects [data-category]', true);
+    const status = select('.project-filter-status');
+    if (!buttons.length || !items.length) return;
+
+    const applyFilter = (category) => {
+      let visible = 0;
+      items.forEach((item) => {
+        const show = category === 'all' || item.dataset.category === category;
+        item.classList.toggle('is-filtered-out', !show);
+        item.hidden = !show;
+        if (show) visible += 1;
+      });
+      buttons.forEach((btn) => {
+        const active = btn.dataset.filter === category;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      if (status) {
+        status.textContent = `Showing ${visible} ${visible === 1 ? 'project' : 'projects'}`;
+      }
+    };
+
+    bar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.project-filter');
+      if (!btn || !btn.dataset.filter) return;
+      applyFilter(btn.dataset.filter);
+    });
+
+    // If navigation targets a filtered-out project tile (e.g. command palette or hash), reveal all.
+    const revealTarget = (id) => {
+      if (!id || !id.startsWith('project-')) return;
+      const tile = document.getElementById(id);
+      const col = tile && tile.closest('[data-category]');
+      if (col && col.classList.contains('is-filtered-out')) applyFilter('all');
+    };
+    window.addEventListener('nav:goto', (e) => revealTarget(e.detail && e.detail.id));
+    window.addEventListener('hashchange', () => revealTarget(location.hash.slice(1)));
+  };
+
+  /**
+   * One-click copy email button in Contact section
+   */
+  const initCopyEmail = () => {
+    const buttons = select('[data-copy-email]', true);
+    if (!buttons.length) return;
+
+    const fallbackCopy = (text) => {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      try {
+        return document.execCommand('copy');
+      } catch {
+        return false;
+      } finally {
+        area.remove();
+      }
+    };
+
+    buttons.forEach((btn) => {
+      let resetTimer = null;
+      const defaultLabel = btn.textContent.trim();
+
+      btn.addEventListener('click', async () => {
+        const email = btn.dataset.copyEmail;
+        if (!email) return;
+        let copied = false;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(email);
+            copied = true;
+          } catch {
+            copied = fallbackCopy(email);
+          }
+        } else {
+          copied = fallbackCopy(email);
+        }
+
+        if (copied) {
+          btn.textContent = 'Copied!';
+          btn.classList.add('is-copied');
+          btn.setAttribute('aria-label', 'Email address copied to clipboard');
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(() => {
+            btn.textContent = defaultLabel;
+            btn.classList.remove('is-copied');
+            btn.setAttribute('aria-label', 'Copy email address');
+          }, 2000);
+        }
+      });
+    });
+  };
+
   // Initialize components when DOM is ready
   document.addEventListener("DOMContentLoaded", function () {
+    initProjectFilters();
+    initCopyEmail();
     // NOTE: Particles.js is initialized by particles-config.js
     // No need to load it here as particles-config.js handles initialization
 

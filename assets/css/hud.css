@@ -258,6 +258,7 @@ main .btn-ghost,
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
   padding: 11px 22px;
   border: 1px solid var(--primary-color);
   border-radius: 0;
@@ -267,6 +268,7 @@ main .btn-ghost,
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 700;
+  line-height: 1.2;
   letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;
@@ -295,7 +297,11 @@ main .action-btn:focus-visible,
 }
 
 main .btn-brand i,
+main .btn-ghost i,
 main .action-btn i {
+  margin: 0;
+  font-size: 1.05em;
+  line-height: 1;
   color: inherit;
   transition: none;
 }
@@ -932,8 +938,12 @@ main .about-me .content h3 {
   }
 }
 
-/* Hero on phones: stacked full-width buttons, stats in a 2x2 grid */
+/* Hero on phones: guaranteed single-line title (down to 320px), stacked CTAs, 2x2 stats */
 @media (max-width: 575.98px) {
+  .hero__title {
+    font-size: clamp(2.65rem, 13.5vw, 4.25rem);
+  }
+
   .hero__cta {
     flex-direction: column;
   }
@@ -1211,4 +1221,180 @@ main .resume .resume-group .resume-item ul {
   grid-column: 1 / -1;
   grid-row: 3;
   margin: 2px 0 0;
+}
+
+/* ---------- Projects: HUD category filter bar ---------- */
+main .project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+main .project-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  background: var(--hud-surface);
+  border: 1px solid var(--hud-line);
+  border-radius: 2px;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+main .project-filter:hover {
+  border-color: var(--hud-line-strong);
+  color: #fff;
+  background: rgba(24, 210, 110, 0.08);
+}
+
+main .project-filter:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+main .project-filter.is-active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000;
+}
+
+main .project-filter__count {
+  font-size: 0.72rem;
+  opacity: 0.72;
+}
+
+main .project-filter.is-active .project-filter__count {
+  opacity: 0.85;
+}
+
+#projects [data-category].is-filtered-out {
+  display: none !important;
+}
+
+/* ---------- Contact: one-click copy email button ---------- */
+main .contact .contact-email-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+main .contact .copy-email-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--hud-line-strong);
+  border-radius: 2px;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+main .contact .copy-email-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+main .contact .copy-email-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+main .contact .copy-email-btn.is-copied {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000;
+}
+
+@media (max-width: 767.98px) {
+  /* Resume CTA pair: full-width equal 2-column grid on phones, clean stack on <= 359px */
+  main .resume .resume-actions {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 14px !important;
+  }
+
+  main .resume .resume-actions a.btn-brand,
+  main .resume .resume-actions a.btn-ghost {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    min-width: 0;
+    min-height: 46px;
+    padding: 11px 12px;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+  }
+
+  main .resume .resume-actions a.btn-brand i,
+  main .resume .resume-actions a.btn-ghost i {
+    margin: 0;
+    font-size: 1.05em;
+    line-height: 1;
+  }
+
+  /* Compact 2-row edge-to-edge HUD filter grid on phones — every category visible, zero clipping */
+  main .project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  main .project-filter {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 11px;
+    gap: 6px;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  main .project-filter__count {
+    font-size: 0.68rem;
+  }
+
+  main .contact .contact-email-row {
+    row-gap: 8px;
+  }
+
+  main .contact .contact-email-row a {
+    overflow-wrap: anywhere;
+  }
+
+  main .contact .copy-email-btn {
+    min-height: 44px;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 359.98px) {
+  main .resume .resume-actions {
+    grid-template-columns: 1fr;
+  }
 }

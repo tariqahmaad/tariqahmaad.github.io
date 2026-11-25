@@ -9,7 +9,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { SLUGS, SITE, projectPages } from '../scripts/build-projects.mjs';
+import { SLUGS, SITE, projectPages, shorten } from '../scripts/build-projects.mjs';
 import { knowledgeBase as kb } from '../assets/js/knowledge-base.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -129,5 +129,24 @@ test('the previous case study keeps a real rel=prev link, and the first page has
         }
         assert.ok(prev, `${path}: missing the Previous project link`);
         assert.equal(prev[1], `/projects/${SLUGS[index - 1]}/`, `${path}: Previous points at ${prev[1]}`);
+    }
+});
+
+test('shorten trims long descriptions on a word boundary instead of mid-word', () => {
+    const sample = 'A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.';
+    const out = shorten(sample, 158);
+    assert.ok(out.length <= 158);
+    assert.ok(out.endsWith('…'));
+    assert.doesNotMatch(out, /Ful…$/);
+    assert.equal(shorten('Short text', 158), 'Short text');
+});
+
+test('every case study renders a Key Highlights section matching the knowledge base', () => {
+    for (const [index, { path, html }] of pages.entries()) {
+        const highlights = kb.projects[index].highlights || [];
+        assert.ok(highlights.length >= 3, `${path}: expected at least 3 highlights in knowledge-base.js`);
+        assert.match(html, /<h2>Key Highlights<\/h2>/, `${path}: missing Key Highlights section`);
+        const count = (html.match(/<ul class="case__list">[\s\S]*?<\/ul>/)?.[0].match(/<li>/g) || []).length;
+        assert.equal(count, highlights.length, `${path}: highlight item count mismatch`);
     }
 });

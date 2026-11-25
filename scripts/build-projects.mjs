@@ -6,7 +6,7 @@
  * Run by `npm run build`; tests/projects.test.mjs fails if the committed pages
  * are stale. The ?v= cache-buster is copied from index.html.
  */
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
@@ -47,7 +47,13 @@ function parseDetails(details = []) {
   return out
 }
 
-const shorten = (text, max = 158) => (text.length <= max ? text : text.slice(0, max - 1).trimEnd() + '…')
+export function shorten(text, max = 158) {
+  if (text.length <= max) return text
+  const slice = text.slice(0, max - 1)
+  const cut = slice.lastIndexOf(' ')
+  const clean = (cut > max * 0.6 ? slice.slice(0, cut) : slice).replace(/[\s,.;:–—-]+$/, '')
+  return clean + '…'
+}
 
 function header() {
   return `  <header id="site-header" class="site-header">
@@ -116,6 +122,25 @@ export function renderProject(project, index, all, version) {
         <h2>${esc(title)}</h2>
         <p>${esc(body)}</p>
       </section>`
+    : ''
+
+  const listBlock = (title, items) => (items && items.length)
+    ? `
+      <section class="case__block">
+        <h2>${esc(title)}</h2>
+        <ul class="case__list">
+          ${items.map((item) => `<li>${esc(item)}</li>`).join('\n          ')}
+        </ul>
+      </section>`
+    : ''
+
+  // Auto-embed a project screenshot if assets/img/projects/<slug>.{webp,jpg,png} exists.
+  const previewExt = ['webp', 'jpg', 'png'].find((ext) => existsSync(resolve(root, `assets/img/projects/${slug}.${ext}`)))
+  const preview = previewExt
+    ? `
+      <figure class="case__preview">
+        <img src="/assets/img/projects/${slug}.${previewExt}" alt="${esc(project.name)} interface preview" decoding="async">
+      </figure>`
     : ''
 
   const jsonLd = {
@@ -187,12 +212,29 @@ ${pagerLinks.map((link) => `        ${link}`).join('\n')}
   <link href="/favicon.ico" rel="icon" sizes="any">
   <link href="/assets/img/favicon.png" rel="icon" type="image/png" sizes="32x32">
   <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="/site.webmanifest" rel="manifest">
 
   <link href="/assets/css/critical.min.css?v=${version}" rel="stylesheet">
-  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=${version}" rel="stylesheet">
-  <link href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=${version}" rel="stylesheet">
-  <link href="/assets/vendor/remixicon/remixicon.subset.min.css?v=${version}" rel="stylesheet">
-  <link href="/assets/css/deferred.min.css?v=${version}" rel="stylesheet">
+  <link rel="preload" href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=${version}" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=${version}" rel="stylesheet">
+  </noscript>
+  <link rel="preload" href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=${version}" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=${version}" rel="stylesheet">
+  </noscript>
+  <link rel="preload" href="/assets/vendor/remixicon/remixicon.subset.min.css?v=${version}" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="/assets/vendor/remixicon/remixicon.subset.min.css?v=${version}" rel="stylesheet">
+  </noscript>
+  <link rel="preload" href="/assets/css/deferred.min.css?v=${version}" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="/assets/css/deferred.min.css?v=${version}" rel="stylesheet">
+  </noscript>
   <script src="/assets/vendor/particles.js/particles.min.js" defer></script>
   <script>document.documentElement.classList.add('js');</script>
 
@@ -232,8 +274,8 @@ ${actions.length ? `
       <dl class="case__facts">
         ${facts.Role ? `<div><dt>Role</dt><dd>${esc(facts.Role.replace(/\.$/, ''))}</dd></div>` : ''}
         <div><dt>Stack</dt><dd>${esc(project.technologies.join(', '))}</dd></div>
-      </dl>
-${block('Challenge', facts.Challenge)}${block('Outcome', facts.Outcome)}
+      </dl>${preview}
+${block('Challenge', facts.Challenge)}${block('Outcome', facts.Outcome)}${listBlock('Key Highlights', project.highlights)}
 ${pager}
     </article>
   </main>
