@@ -96,7 +96,6 @@ main .glass-projects,
 main .project-tile,
 main .contact .info-box,
 main .contact .php-email-form,
-main .count-card,
 main .skill-card,
 main .about-info-card,
 main .testimonial-item,
@@ -115,10 +114,8 @@ main .resume .resume-item {
 main .glass-projects::after,
 main .project-tile::after,
 main .contact .info-box::after,
-main .count-card::after,
 main .skill-card::after,
-main .about-info-card::after,
-main .light-reflection {
+main .about-info-card::after {
   display: none;
 }
 
@@ -127,7 +124,6 @@ main .glass-projects::before,
 main .project-tile::before,
 main .contact .info-box::before,
 main .contact .php-email-form::before,
-main .count-card::before,
 main .skill-card::before,
 main .about-info-card::before,
 main .testimonial-item::before,
@@ -159,7 +155,6 @@ main .resume .resume-item::before {
 main .glass-projects:hover,
 main .project-tile:hover,
 main .contact .info-box:hover,
-main .count-card:hover,
 main .skill-card:hover,
 main .about-info-card:hover,
 main .testimonial-item:hover,
@@ -173,7 +168,6 @@ main .resume .resume-item:hover {
 main .glass-projects:hover::before,
 main .project-tile:hover::before,
 main .contact .info-box:hover::before,
-main .count-card:hover::before,
 main .skill-card:hover::before,
 main .about-info-card:hover::before,
 main .testimonial-item:hover::before,
@@ -699,7 +693,6 @@ main .contact .php-email-form textarea:focus {
   main .glass-projects,
   main .project-tile,
   main .info-box,
-  main .count-card,
   main .skill-card,
   main .about-info-card,
   main .testimonial-item,
@@ -710,7 +703,6 @@ main .resume .resume-item {
   main .glass-projects:hover,
   main .project-tile:hover,
   main .info-box:hover,
-  main .count-card:hover,
   main .skill-card:hover,
   main .about-info-card:hover,
   main .testimonial-item:hover,
@@ -725,7 +717,7 @@ main .resume .resume-item:hover {
 }
 
 /* Legacy mobile rules hid the glass layers with !important; the brackets must stay on every screen. */
-main :is(.glass-projects, .project-tile, .count-card, .skill-card, .about-info-card, .testimonial-item, .resume-item)::before {
+main :is(.glass-projects, .project-tile, .skill-card, .about-info-card, .testimonial-item, .resume-item)::before {
   display: block !important;
 }
 

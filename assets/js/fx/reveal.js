@@ -9,7 +9,6 @@ import { reducedMotion, root } from './env.js'
 const TARGETS = [
   '.section-title',
   '.about-me .row > *',
-  '.count-card',
   '.skill-card',
   '.resume-item',
   '.project-tile',

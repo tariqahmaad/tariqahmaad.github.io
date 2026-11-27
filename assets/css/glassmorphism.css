@@ -1,17 +1,12 @@
 /* ==========================================================================
-   GLASSMORPHISM DESIGN SYSTEM - ENHANCED
-   Professional glass effect utilities with depth hierarchy and noise texture
+   GLASSMORPHISM DESIGN SYSTEM - SLIMMED FOR HUD THEME
+   Active layout, grid, icon, typography, and social-link rules used by HUD cards
    ========================================================================== */
 
-/* ── Glass Design Tokens ── */
 :root {
-  /* Blur Depth Levels — lower blur = closer to viewer = sharper */
-  --glass-blur-sm: blur(4px);       /* Level 3: Tags, buttons, social links */
-  --glass-blur-md: blur(8px);       /* Level 2: Cards (count, skill) */
-  --glass-blur-lg: blur(12px);      /* Level 1: Large panels (testimonials) */
-  --glass-blur-bg: blur(16px);      /* Level 0: Section containers (deepest) */
+  --glass-blur-sm: blur(4px);
+  --glass-blur-md: blur(8px);
 
-  /* Background Layers */
   --glass-bg-primary: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.07) 0%,
@@ -25,125 +20,32 @@
     rgba(24, 210, 110, 0.08) 100%
   );
 
-  /* Borders */
   --glass-border: 1px solid rgba(255, 255, 255, 0.1);
   --glass-border-hover: 1px solid rgba(24, 210, 110, 0.35);
-  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
 
-  /* Shadow System — depth hierarchy */
-  --glass-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
   --glass-shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --glass-shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.35);
   --glass-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08),
                         inset 0 -1px 0 rgba(255, 255, 255, 0.02);
-  --glass-shadow-hover: 0 16px 48px rgba(24, 210, 110, 0.12),
-                         0 4px 16px rgba(0, 0, 0, 0.3);
-  --glass-shadow-glow: 0 0 40px rgba(24, 210, 110, 0.08);
 
-  /* Social Link Shadows — green-tinted */
   --glass-shadow-social: 0 4px 16px rgba(0, 0, 0, 0.3);
   --glass-shadow-social-hover: 0 8px 24px rgba(24, 210, 110, 0.18),
                                 0 2px 8px rgba(0, 0, 0, 0.3);
 
-  /* Transitions */
   --glass-transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   --glass-transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  --glass-transition-slow: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-  /* Noise Texture — inline SVG for frosted glass realism */
-  --glass-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-
-  /* Radii */
   --glass-radius-lg: 20px;
   --glass-radius-md: 16px;
   --glass-radius-sm: 12px;
-
-  /* Edge Glow Gradients */
-  --glass-edge-glow-bottom: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(24, 210, 110, 0.3) 20%,
-    rgba(24, 210, 110, 0.7) 50%,
-    rgba(24, 210, 110, 0.3) 80%,
-    transparent 100%
-  );
 }
 
-/* ==========================================================================
-   GLASS PROJECTS — Base Class
-   Applied to: count-card, skill-card, testimonial-item, about-info-card
-   ========================================================================== */
-
+/* ── Layout & Card Structure ── */
 .glass-projects {
-  background: var(--glass-bg-primary);
-  border: var(--glass-border);
-  border-radius: var(--glass-radius-lg);
-  box-shadow: var(--glass-shadow-md), var(--glass-shadow-inset);
-  transition: var(--glass-transition);
   position: relative;
-  overflow: hidden;
   padding: 1.5rem;
-  cursor: pointer;
 }
-
-/* Noise texture overlay */
-.glass-projects::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--glass-noise);
-  background-size: 128px 128px;
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: overlay;
-}
-
-/* Bottom accent bar */
-.glass-projects::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background: var(--glass-edge-glow-bottom);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform var(--glass-transition-slow), opacity 0.4s ease;
-  opacity: 0;
-  z-index: 1;
-}
-
-/* ── Depth Overrides by Card Type ── */
-
-/* Level 2: Mid-depth cards */
-.count-card.glass-projects,
-.skill-card.glass-projects,
-.about-info-card.glass-projects {
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
-}
-
-/* Level 1: Large panels (testimonials) */
-.testimonial-item.glass-projects {
-  backdrop-filter: var(--glass-blur-lg);
-  -webkit-backdrop-filter: var(--glass-blur-lg);
-  box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
-  padding: 1.8rem 2rem 1.6rem;
-  cursor: default;
-}
-
-/* ── Layout Overrides ── */
 
 .skill-card.glass-projects {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.count-card.glass-projects {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -156,6 +58,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1.8rem 2rem 1.6rem;
+  cursor: default;
 }
 
 .about-info-card.glass-projects {
@@ -167,61 +71,7 @@
   cursor: default;
 }
 
-/* ── Hover States ── */
-
-.count-card.glass-projects:hover,
-.skill-card.glass-projects:hover,
-.about-info-card.glass-projects:hover {
-  background: var(--glass-bg-hover);
-  border: var(--glass-border-hover);
-  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
-              var(--glass-shadow-inset);
-  transform: translateY(-3px) scale(1.005);
-}
-
-.testimonial-item.glass-projects:hover {
-  background: var(--glass-bg-hover);
-  border: var(--glass-border-hover);
-  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
-              var(--glass-shadow-inset);
-  transform: translateY(-4px) scale(1.008);
-}
-
-/* Reveal bottom accent on hover */
-.glass-projects:hover::after {
-  transform: scaleX(1);
-  opacity: 1;
-}
-
-/* ── Light Reflection Sweep ── */
-
-.glass-projects .light-reflection {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.06) 45%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.06) 55%,
-    transparent 60%
-  );
-  transform: rotate(-45deg) translateX(-120%);
-  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.glass-projects:hover .light-reflection {
-  transform: rotate(-45deg) translateX(120%);
-}
-
-/* ── Icon Containers (Level 3 blur — smallest glass elements within cards) ── */
-
-.count-card.glass-projects .count-icon,
+/* ── Icon Containers ── */
 .skill-card.glass-projects .skill-icon,
 .about-info-card.glass-projects .about-info-icon {
   position: relative;
@@ -232,8 +82,6 @@
   height: 70px;
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1)),
     linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-  backdrop-filter: var(--glass-blur-sm);
-  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
   border-radius: 16px;
   margin: 0 auto 1rem;
@@ -242,7 +90,6 @@
   overflow: hidden;
 }
 
-.count-card.glass-projects:hover .count-icon,
 .skill-card.glass-projects:hover .skill-icon,
 .about-info-card.glass-projects:hover .about-info-icon {
   background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
@@ -252,27 +99,22 @@
   box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.4);
 }
 
-.count-card.glass-projects .count-icon i,
 .skill-card.glass-projects .skill-icon i,
 .about-info-card.glass-projects .about-info-icon i {
   font-size: 1.8rem;
   color: var(--primary-color);
   text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
   transition: var(--glass-transition-fast);
-  filter: drop-shadow(0 0 10px rgba(var(--primary-brand-rgb), 0.3));
   position: relative;
   z-index: 2;
 }
 
-.count-card.glass-projects:hover .count-icon i,
 .skill-card.glass-projects:hover .skill-icon i,
 .about-info-card.glass-projects:hover .about-info-icon i {
   color: var(--primary-color-hover);
   transform: scale(1.05);
-  filter: drop-shadow(0 0 15px rgba(var(--primary-brand-rgb), 0.6));
 }
 
-/* Compact icon size for about-info cards */
 .about-info-card.glass-projects .about-info-icon {
   width: 48px;
   height: 48px;
@@ -280,87 +122,12 @@
   margin: 0;
   flex-shrink: 0;
 }
+
 .about-info-card.glass-projects .about-info-icon i {
   font-size: 1.3rem;
 }
 
-/* ── About Info Card: Horizontal Glass Hover ── */
-
-/* Left accent bar — overrides the bottom accent via ::after */
-.about-info-card.glass-projects::after {
-  bottom: auto;
-  left: 0;
-  right: auto;
-  top: 15%;
-  bottom: 15%;
-  width: 2px;
-  height: auto;
-  transform: scaleY(0);
-  transform-origin: center;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(24, 210, 110, 0.4) 20%,
-    rgba(24, 210, 110, 0.8) 50%,
-    rgba(24, 210, 110, 0.4) 80%,
-    transparent 100%
-  );
-}
-.about-info-card.glass-projects:hover::after {
-  transform: scaleY(1);
-}
-
-/* Horizontal light sweep — overrides the diagonal default */
-.about-info-card.glass-projects .light-reflection {
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.04) 30%,
-    rgba(255, 255, 255, 0.09) 50%,
-    rgba(255, 255, 255, 0.04) 70%,
-    transparent 100%
-  );
-  transform: none;
-  transition: left 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.about-info-card.glass-projects:hover .light-reflection {
-  left: 120%;
-  transform: none;
-}
-
-/* Hover: horizontal shift instead of vertical lift */
-.about-info-card.glass-projects:hover {
-  background: linear-gradient(
-    110deg,
-    rgba(24, 210, 110, 0.14) 0%,
-    rgba(24, 210, 110, 0.06) 40%,
-    rgba(24, 210, 110, 0.09) 100%
-  );
-  border: 1px solid rgba(24, 210, 110, 0.4);
-  box-shadow:
-    -4px 0 20px rgba(24, 210, 110, 0.08),
-    0 8px 32px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.02);
-  transform: translateX(3px) translateY(-2px);
-}
-
-/* Enhanced icon glow on hover */
-.about-info-card.glass-projects:hover .about-info-icon {
-  background: linear-gradient(135deg,
-    rgba(var(--primary-brand-rgb), 0.35),
-    rgba(var(--primary-brand-rgb), 0.22)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.6);
-  box-shadow: 0 0 24px rgba(var(--primary-brand-rgb), 0.45);
-}
-
-/* ── About Info Card Typography ── */
-
+/* ── About Info Card Typography & Grid ── */
 .about-info-card.glass-projects .about-info-content {
   display: flex;
   flex-direction: column;
@@ -369,6 +136,7 @@
   position: relative;
   z-index: 2;
 }
+
 .about-info-card.glass-projects .about-info-label {
   font-size: 0.75rem;
   font-weight: 600;
@@ -377,9 +145,11 @@
   letter-spacing: 0.08em;
   transition: var(--glass-transition-fast);
 }
+
 .about-info-card.glass-projects:hover .about-info-label {
   color: rgba(var(--primary-brand-rgb), 0.85);
 }
+
 .about-info-card.glass-projects .about-info-value {
   font-size: 0.95rem;
   font-weight: 500;
@@ -387,13 +157,11 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   transition: var(--glass-transition-fast);
 }
+
 .about-info-card.glass-projects:hover .about-info-value {
   color: var(--primary-color-hover);
-  text-shadow: 0 1px 8px rgba(var(--primary-brand-rgb), 0.4);
   transform: translateX(2px);
 }
-
-/* ── About Info Grid Layout ── */
 
 .about-info-grid {
   display: grid;
@@ -401,67 +169,28 @@
   gap: 15px;
   margin-top: 10px;
 }
+
 @media (max-width: 480px) {
   .about-info-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* ── Typography ── */
-
-.count-card.glass-projects .purecounter {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--primary-color);
-  margin-bottom: 15px;
-  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.3);
-  transition: var(--glass-transition);
-  position: relative;
-  z-index: 2;
-}
-
-.count-card.glass-projects:hover .purecounter {
-  color: var(--primary-color-hover);
-  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
-  transform: scale(1.05);
-}
-
-.count-card.glass-projects h3,
+/* ── Skill Card Typography & Tags ── */
 .skill-card.glass-projects h3 {
   font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
   margin-bottom: 0.75rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
 
-.count-card.glass-projects:hover h3,
 .skill-card.glass-projects:hover h3 {
   color: var(--primary-color);
-  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
   transform: translateY(-1px);
 }
-
-.count-card.glass-projects .count-detail p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: var(--glass-transition);
-  position: relative;
-  z-index: 2;
-}
-
-.count-card.glass-projects:hover .count-detail p {
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-/* ── Tech Tags (Level 3 blur — smallest elements) ── */
 
 .skill-card.glass-projects .skill-tags {
   display: flex;
@@ -473,29 +202,21 @@
 }
 
 .skill-card.glass-projects .tech-tag {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
-  border-radius: 12px;
   padding: 0.25rem 0.65rem;
   font-size: 0.7rem;
   color: var(--primary-color);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: var(--glass-transition-fast);
   white-space: nowrap;
   font-weight: 500;
 }
 
 .skill-card.glass-projects:hover .tech-tag {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.25), rgba(var(--primary-brand-rgb), 0.15));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  box-shadow: 0 4px 12px rgba(var(--primary-brand-rgb), 0.2);
+  border-color: rgba(var(--primary-brand-rgb), 0.5);
   color: var(--primary-color-hover);
 }
 
-/* ── Testimonial-Specific Styling ── */
-
+/* ── Testimonial Typography ── */
 .testimonial-item.glass-projects p {
   font-style: italic;
   color: rgba(255, 255, 255, 0.9);
@@ -504,13 +225,6 @@
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: var(--glass-transition);
-}
-
-.testimonial-item.glass-projects:hover p {
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .testimonial-item.glass-projects .testimonial-img {
@@ -527,7 +241,6 @@
 .testimonial-item.glass-projects:hover .testimonial-img {
   border-color: rgba(var(--primary-brand-rgb), 0.8);
   transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.3);
 }
 
 .testimonial-item.glass-projects h3 {
@@ -535,8 +248,6 @@
   font-weight: 600;
   color: #fff;
   margin-bottom: 5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
@@ -545,19 +256,12 @@
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
 }
 
 .testimonial-item.glass-projects:hover h3 {
   color: var(--primary-color);
-  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
-}
-
-.testimonial-item.glass-projects:hover h4 {
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .testimonial-item.glass-projects .quote-icon-left,
@@ -570,35 +274,15 @@
 .testimonial-item.glass-projects:hover .quote-icon-left,
 .testimonial-item.glass-projects:hover .quote-icon-right {
   color: rgba(var(--primary-brand-rgb), 0.8);
-  text-shadow: 0 0 10px rgba(var(--primary-brand-rgb), 0.4);
 }
 
-/* ==========================================================================
-   GLASS BUTTON (fixes dead .glass-btn class used in HTML)
-   ========================================================================== */
-
-.glass-btn {
-  backdrop-filter: var(--glass-blur-sm);
-  -webkit-backdrop-filter: var(--glass-blur-sm);
-}
-
-.glass-btn:hover {
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-/* ==========================================================================
-   GLASS SOCIAL LINKS
-   ========================================================================== */
-
+/* ── Social Links ── */
 .glass-social a {
   font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-  backdrop-filter: var(--glass-blur-sm);
-  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
   line-height: 1;
@@ -619,7 +303,6 @@
   color: var(--primary-color);
 }
 
-/* Contact section social links */
 .contact .info-box .contact-social-links.glass-social {
   margin: 10px 0 0 0 !important;
   display: flex;
@@ -633,137 +316,25 @@
   font-size: 18px;
 }
 
-/* Platform-specific hover colors */
-.glass-social a.twitter:hover {
-  background: linear-gradient(135deg, rgba(29, 161, 242, 0.2), rgba(29, 161, 242, 0.1));
-  border: 1px solid rgba(29, 161, 242, 0.3);
-  box-shadow: 0 8px 24px rgba(29, 161, 242, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.glass-social a.facebook:hover {
-  background: linear-gradient(135deg, rgba(24, 119, 242, 0.2), rgba(24, 119, 242, 0.1));
-  border: 1px solid rgba(24, 119, 242, 0.3);
-  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.glass-social a.instagram:hover {
-  background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(225, 48, 108, 0.1));
-  border: 1px solid rgba(225, 48, 108, 0.3);
-  box-shadow: 0 8px 24px rgba(225, 48, 108, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
 .glass-social a.linkedin:hover {
   background: linear-gradient(135deg, rgba(0, 119, 181, 0.2), rgba(0, 119, 181, 0.1));
-  border: 1px solid rgba(0, 119, 181, 0.3);
-  box-shadow: 0 8px 24px rgba(0, 119, 181, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 119, 181, 0.3);
 }
 
 .glass-social a.github:hover {
   background: linear-gradient(135deg, rgba(51, 51, 51, 0.3), rgba(51, 51, 51, 0.2));
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 24px rgba(51, 51, 51, 0.25), 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* ==========================================================================
-   SMALL SCREEN ADJUSTMENTS (576px)
-   ========================================================================== */
-@media (max-width: 576px) {
-  .glass-projects {
-    padding: 1.2rem;
-  }
-
-  .glass-projects:hover {
-    transform: translateY(-1px);
-  }
-
-  .skill-card.glass-projects .skill-tags {
-    gap: 0.3rem;
-  }
-
-  .glass-social a {
-    width: 34px;
-    height: 34px;
-    font-size: 13px;
-  }
-
-  .contact .info-box .social-links.glass-social {
-    margin: 5px 0 0 0;
-    justify-content: center;
-  }
-}
-
-/* ==========================================================================
-   MOBILE PERFORMANCE OPTIMIZATIONS (<768px)
-   ========================================================================== */
 @media (max-width: 768px) {
-  /* Disable expensive effects on mobile to prevent scrolling lag */
-  .glass-projects,
-  .glass-social a {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: none !important;
-    transition: none !important;
-  }
-
-  /* A .glass-btn is still a .btn-brand / .btn-ghost: drop only the blur and
-     keep its own outline. Forcing a faint 8% white border plus a green glow on
-     it here left the phone download buttons with almost no outline, while the
-     desktop ones keep a crisp 1px stroke — the same element, two different
-     buttons. The button language lives in hud.css, at every width. */
-  .glass-btn {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    transition: none !important;
-  }
-
-  /* Remove costly transforms and hover effects on mobile */
-  .glass-projects:hover,
-  .glass-social a:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.05)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.35) !important;
-  }
-
-  /* Remove pseudo-elements and light reflection on mobile */
-  .glass-projects::before,
-  .glass-projects::after,
-  .glass-projects .light-reflection {
-    display: none !important;
-  }
-
-  /* Simplify icon and tag styling on mobile */
-  .glass-projects .count-icon,
-  .glass-projects .skill-icon,
-  .glass-projects .icon,
-  .glass-projects .about-info-icon,
-  .glass-projects .tech-tag,
-  .glass-projects .action-btn {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    transition: none !important;
-  }
-
-  .glass-projects:hover .count-icon,
-  .glass-projects:hover .skill-icon,
-  .glass-projects:hover .icon,
-  .glass-projects:hover .about-info-icon {
-    transform: none !important;
-    box-shadow: none !important;
-  }
-
-  .glass-projects {
-    padding: 1.5rem;
-  }
-
-  .glass-projects .count-icon,
-  .glass-projects .skill-icon,
-  .glass-projects .icon {
+  .glass-projects .skill-icon {
     width: 60px;
     height: 60px;
     margin-bottom: 0.75rem;
+  }
+
+  .glass-projects .skill-icon i {
+    font-size: 1.5rem;
   }
 
   .glass-projects .about-info-icon {
@@ -775,26 +346,10 @@
     font-size: 1.1rem;
   }
 
-  .glass-projects .count-icon i,
-  .glass-projects .skill-icon i,
-  .glass-projects .icon i {
-    font-size: 1.5rem;
-  }
-
-  .glass-projects h4 {
-    font-size: 1.1rem;
-  }
-
-  .glass-projects .purecounter {
-    font-size: 2rem;
-  }
-
   .glass-projects .tech-tag {
     font-size: 0.7rem;
     padding: 0.2rem 0.6rem;
   }
-
-  /* Glass button — keeps its HUD stroke on phones (see the note above) */
 
   .contact .info-box .contact-social-links.glass-social {
     margin: 5px 0 0 0 !important;
@@ -809,68 +364,21 @@
   }
 }
 
-/* ==========================================================================
-   TABLET OPTIMIZATION (769px - 1024px)
-   ========================================================================== */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .glass-projects {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-
-  .testimonials .glass-projects {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+@media (max-width: 576px) {
+  .skill-card.glass-projects .skill-tags {
+    gap: 0.3rem;
   }
 }
 
-/* ==========================================================================
-   TOUCH DEVICE OPTIMIZATION
-   ========================================================================== */
-@media (hover: none) and (pointer: coarse) {
-  .glass-projects,
-  .glass-social a {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: none !important;
-  }
-
-  .glass-projects::before,
-  .glass-projects::after,
-  .glass-projects .light-reflection {
-    display: none !important;
-  }
-
-  /* Hover-revealed content must be visible on touch devices */
-  .count-card .count-detail {
-    max-height: none;
-    opacity: 1;
-  }
-}
-
-/* ==========================================================================
-   ACCESSIBILITY: REDUCED MOTION
-   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .glass-projects,
-  .glass-projects .count-icon,
   .glass-projects .skill-icon,
-  .glass-projects .icon,
   .glass-projects .about-info-icon,
   .glass-projects .tech-tag,
-  .glass-projects .action-btn,
-  .glass-projects .light-reflection,
-  .glass-projects .purecounter,
-  .glass-projects h4,
-  .glass-projects p,
   .glass-projects .testimonial-img,
-  .glass-projects h3,
   .glass-projects .quote-icon-left,
   .glass-projects .quote-icon-right,
-  .glass-social a,
-  .glass-btn {
+  .glass-social a {
     animation: none !important;
     transition: none !important;
   }

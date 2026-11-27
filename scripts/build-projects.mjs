@@ -276,7 +276,7 @@ ${actions.length ? `
         ${facts.Role ? `<div><dt>Role</dt><dd>${esc(facts.Role.replace(/\.$/, ''))}</dd></div>` : ''}
         <div><dt>Stack</dt><dd>${esc(project.technologies.join(', '))}</dd></div>
       </dl>${preview}
-${block('Challenge', facts.Challenge)}${block('Outcome', facts.Outcome)}${listBlock('Key Highlights', project.highlights)}
+${block('Challenge', facts.Challenge)}${block('Outcome', facts.Outcome)}${block('Architecture & Trade-offs', project.architecture)}${listBlock('Key Highlights', project.highlights)}
 ${pager}
     </article>
   </main>

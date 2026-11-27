@@ -4,7 +4,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -339,4 +339,19 @@ test('future-proofing: dark color-scheme, view-transition, userAgentData, and ve
     assert.equal(nextVersion('20261125l', day), '20261125m');
     assert.equal(nextVersion('20261125z', day), '20261125z1');
     assert.equal(nextVersion('20261120a', day), '20261125a');
+});
+
+test('every --glass-* CSS custom property referenced in source stylesheets is defined', () => {
+    const glassCss = read('assets/css/glassmorphism.css');
+    const defined = new Set([...glassCss.matchAll(/(--glass-[a-z-]+)\s*:/g)].map(m => m[1]));
+    const editableCss = readdirSync(resolve(root, 'assets/css'))
+        .filter(file => file.endsWith('.css') && !file.endsWith('.min.css'));
+    const undefinedRefs = [];
+    for (const file of editableCss) {
+        const css = read(`assets/css/${file}`);
+        for (const [, name] of css.matchAll(/var\((--glass-[a-z-]+)\)/g)) {
+            if (!defined.has(name)) undefinedRefs.push(`${file}: ${name}`);
+        }
+    }
+    assert.deepEqual(undefinedRefs, []);
 });

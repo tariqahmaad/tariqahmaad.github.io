@@ -280,13 +280,13 @@ ${contextualAddition}`;
                     return `You can contact Tariq through:
 
 📧 **Email:** ${kb.personal.email}
-📞 **Prefer to talk?** Email me and we'll arrange a call
+📞 **Prefer to talk?** Send an email to arrange a call
 📍 **Location:** ${kb.personal.location}
 ${this.getSocialLinks()}
 
 **Freelance Status:** ${kb.personal.freelance} ✅
 
-He's actively seeking new opportunities and open to discussing projects!`;
+He's open to full-time roles and freelance projects—feel free to reach out.`;
                 }
             },
             {
@@ -344,9 +344,9 @@ ${kb.personal.bio}`;
 **Best ways to reach him:**
 📧 ${kb.personal.email}
 💼 [LinkedIn](${kb.personal.linkedin})
-📞 Prefer to talk? Just email and arrange a call
+📞 Prefer to talk? Send an email to arrange a call
 
-He's particularly interested in innovative projects and opportunities to apply his research background in practical applications!`;
+He's especially interested in full-stack product work and projects where strong engineering and applied research overlap.`;
                 }
             },
             {
@@ -362,7 +362,7 @@ He's particularly interested in innovative projects and opportunities to apply h
                     kb.workPhilosophy.forEach(item => {
                         response += `• ${item}\n`;
                     });
-                    response += "\nHe's passionate about creating high-quality, user-focused solutions.";
+                    response += "\nHe focuses on clear code, solid architecture, and software that works well for the people using it.";
                     return response;
                 }
             },
@@ -529,7 +529,7 @@ He's particularly interested in innovative projects and opportunities to apply h
                         response += `📚 ${cert.issuer}\n`;
                         response += `📅 ${cert.date}\n\n`;
                     });
-                    response += "His certifications demonstrate his commitment to continuous learning and staying current with industry trends.";
+                    response += "These courses complement his Computer Engineering degree with focused training in mobile development, machine learning, and Python.";
                     return response;
                 }
             },
@@ -558,8 +558,8 @@ You can find his latest projects, thoughts on technology, and professional updat
                     'age', 'old', 'born', 'birthday', 'birth', 'young', 'years old', 'how old',
                     'what\'s his age', 'his age', 'what age', 'date of birth', 'when was he born'
                 ],
-                handler: (kb, message) => {
-                    return `I don't have Tariq's date of birth to share, but I can tell you he's a dynamic ${kb.personal.title}. He graduated from ${kb.personal.university} and has been actively building his career in full-stack development and research since 2023. His passion for technology and innovation makes him particularly adept at modern development practices and emerging technologies.`;
+                handler: (kb) => {
+                    return `I don't share Tariq's date of birth, but I can tell you he's a ${kb.personal.title} who graduated from ${kb.personal.university} and has been working across software development, networking, and research roles since 2023.`;
                 }
             },
 
@@ -570,13 +570,13 @@ You can find his latest projects, thoughts on technology, and professional updat
                     'hobby', 'interest', 'like', 'enjoy', 'passion', 'free time', 'outside work',
                     'personal interests', 'hobbies', 'recreation', 'leisure activities', 'what does he do for fun'
                 ],
-                handler: (kb, message) => {
+                handler: (kb) => {
                     this.conversationMemory.currentTopic = 'interests';
                     return `Beyond his professional work, Tariq enjoys:
 
-🎮 **${kb.personalInterests.join(', ')}**
+⚽ **${kb.personalInterests.join(', ')}**
 
-These interests help him maintain a balanced lifestyle and bring creativity to his technical work. His passion for soccer reflects his teamwork skills, while reading keeps him intellectually engaged with new ideas and perspectives.`;
+Outside of engineering, these keep him balanced and connected to his community.`;
                 }
             },
 
@@ -595,7 +595,7 @@ These interests help him maintain a balanced lifestyle and bring creativity to h
 
 **${spokenLanguages.join(', ')}**
 
-His diverse language skills are a valuable asset in the global tech industry, enabling him to collaborate effectively with international teams and work on projects across different regions.`;
+Speaking four languages helps him communicate clearly across international engineering teams.`;
                 }
             },
 
@@ -606,21 +606,18 @@ His diverse language skills are a valuable asset in the global tech industry, en
                     'future', 'plan', 'goal', 'aspire', 'want to', 'looking forward', 'next', 'career goal',
                     'ambitions', 'objectives', 'targets', 'aspirations', 'what\'s next', 'future projects'
                 ],
-                handler: (kb, message) => {
-                    return `Tariq has ambitious plans for his future in technology:
+                handler: () => {
+                    return `Here is what Tariq is focused on next:
 
-🚀 **Short-term Goals:**
-• Deepen expertise in AI/ML applications
-• Lead complex software projects
-• Build innovative solutions for industrial challenges
+🚀 **Short-term Focus:**
+• Join a strong software engineering team building full-stack products
+• Deepen hands-on work in backend architecture and applied ML
+• Ship well-tested tools and open-source work
 
-🎯 **Long-term Vision:**
-• Become a technology leader in Industry 4.0
-• Contribute to open-source projects
-• Mentor aspiring developers
-• Start his own tech venture
-
-He's continuously learning and adapting to stay at the forefront of technological advancements!`;
+🎯 **Longer-term Direction:**
+• Grow into technical leadership across web systems and Industry 4.0 applications
+• Contribute steadily to open-source software
+• Mentor newer developers starting out`;
                 }
             }
         ];
@@ -665,25 +662,6 @@ He's continuously learning and adapting to stay at the forefront of technologica
                     ]
                 }
             },
-            skills: {
-                enthusiastic: [
-                    `Tariq's technical skill set is broad, with particular depth in full-stack development.`,
-                    `Here's an overview of Tariq's technology stack, from languages and frameworks to databases and tools.`,
-                    `Tariq works across the stack. Here are his main technical strengths.`
-                ],
-                professional: [
-                    `Tariq has developed a comprehensive technical skill set throughout his academic and professional journey.`,
-                    `His technical expertise spans multiple domains, with particular strength in full-stack development.`,
-                    `Let me provide you with a detailed overview of Tariq's technical capabilities and proficiencies.`
-                ]
-            },
-            projects: {
-                storytelling: [
-                    `Here's one of Tariq's projects that shows how he approaches a problem end to end.`,
-                    `This project is a good example of how Tariq turns an idea into a working product.`,
-                    `Here's a project that highlights Tariq's practical problem-solving.`
-                ]
-            },
             humor: {
                 tech: [
                     `Tariq's projects span web, mobile and machine learning.`,
@@ -703,39 +681,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
     initializePersonalityExpressions() {
         return {
             enthusiastic: {
-                adjectives: ['absolutely', 'incredibly', 'seriously', 'remarkably', 'genuinely', 'truly'],
-                exclamations: ['🚀', '⚡', '✨', '💫', '🌟', '🎯'],
-                phrases: [
-                    'I\'m genuinely excited to share...',
-                    'This is worth highlighting...',
-                    'Here is an overview of...',
-                    'What makes this special is...',
-                    'I\'m particularly proud to show you...'
-                ]
-            },
-            professional: {
-                adjectives: ['comprehensive', 'extensive', 'proficient', 'skilled', 'experienced'],
-                transitions: ['Furthermore', 'Additionally', 'Moreover', 'In addition'],
-                phrases: [
-                    'Let me provide you with...',
-                    'I can share detailed insights about...',
-                    'Here\'s comprehensive information regarding...',
-                    'Allow me to explain...'
-                ]
-            },
-            empathetic: {
-                encouragements: [
-                    'That\'s an excellent question!',
-                    'You\'re asking all the right things!',
-                    'Your curiosity shows great insight!',
-                    'I appreciate your interest in...'
-                ],
-                support: [
-                    'I\'m here to help you explore...',
-                    'Let me guide you through...',
-                    'I\'d be delighted to assist you with...',
-                    'Feel free to ask me anything about...'
-                ]
+                exclamations: ['🚀', '⚡', '✨', '💫', '🌟', '🎯']
             }
         };
     }
@@ -764,19 +710,19 @@ He's continuously learning and adapting to stay at the forefront of technologica
             },
             contextualAdditions: {
                 career: [
-                    'His career has grown steadily across research and development roles.',
-                    'Each role has contributed uniquely to his growth.',
-                    'His professional development shows remarkable progression.'
+                    'His background spans networking, frontend Angular work, and three research terms.',
+                    'You can check the Resume section for dates and responsibilities across all five roles.',
+                    'Each role gave him more ownership over code, data, and technical reporting.'
                 ],
                 learning: [
-                    'Continuous learning is one of Tariq\'s core values!',
-                    'He\'s always expanding his technical horizons.',
-                    'His dedication to staying current is impressive.'
+                    'He backs up coursework with side projects and certifications in Python, React Native, and ML.',
+                    'You can see how those skills show up across the case studies in the Projects section.',
+                    'He likes pairing fundamentals with hands-on builds from database to UI.'
                 ],
                 innovation: [
-                    'Innovation is at the heart of everything Tariq does!',
-                    'His creative problem-solving is truly remarkable.',
-                    'He approaches challenges with such ingenuity!'
+                    'Each project on the page links to a short case study covering its stack and challenge.',
+                    'Most of his projects started as practical tools or systems he wanted to build end to end.',
+                    'Let me know if you want the breakdown on any specific project.'
                 ]
             }
         };
@@ -881,8 +827,8 @@ He's continuously learning and adapting to stay at the forefront of technologica
         return `
             <div class="welcome-message">
               <i class="ri-message-3-line ai-icon"></i>
-              <h3>Professional AI Assistant</h3>
-              <p>Hello! I can tell you about Tariq's skills, experience, projects, and more. Just ask or select a quick question below!</p>
+              <h3>Portfolio Assistant</h3>
+              <p>Hi! Ask me about Tariq's skills, experience, projects, or how to get in touch, or pick a quick question below.</p>
             </div>
         `;
     }
@@ -910,7 +856,7 @@ He's continuously learning and adapting to stay at the forefront of technologica
                 <i class="ri-message-3-line"></i>
               </div>
               <div class="assistant-details">
-                <h4>Professional Assistant</h4>
+                <h4>Portfolio Assistant</h4>
                 <span><div class="status-dot" aria-hidden="true"></div>Available 24/7</span>
               </div>
             </div>
@@ -1569,87 +1515,30 @@ He's continuously learning and adapting to stay at the forefront of technologica
         // Get relevant skills from knowledge base
         const relevantSkills = getRelevantSkills(kb, tech);
 
-        // Build comprehensive response with knowledge base data
-        const knownTechs = ['python', 'java', 'javascript', 'react', 'django', 'mysql', 'mongodb', 'docker', 'git', 'ai'];
-        const userStyle = this.determineUserResponseStyle();
-        const builderMethod = `${userStyle}TechResponse`;
-
-        if (knownTechs.includes(tech) && typeof this[builderMethod] === 'function') {
-            return this[builderMethod](kb, tech, relevantProjects, relevantExperience, relevantSkills);
-        }
-
-        return this.buildGenericTechResponse(kb, tech, relevantProjects, relevantExperience, relevantSkills);
+        return this.buildTechResponse(tech, relevantProjects, relevantExperience, relevantSkills);
     }
 
     /**
-     * Build professional technology response with knowledge base data
+     * Build technology response from knowledge-base matches
      */
-    buildProfessionalTechResponse(kb, tech, projects, experience, skills) {
+    buildTechResponse(tech, projects, experience, skills) {
         let response = skills.length
             ? `Tariq works with ${skills.join(', ')}. `
             : `Tariq has worked with ${techLabel(tech)}. `;
 
         if (projects.length > 0) {
-            response += `He's applied this in ${projects.length} projects, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
+            response += `He has applied this in ${projects.length} ${projects.length === 1 ? 'project' : 'projects'}, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
         }
 
         if (experience.length > 0) {
-            response += `His experience includes ${experience.length} roles where ${techLabel(tech)} was utilized, such as ${experience.slice(0, 2).map(e => e.title).join(', ')}. `;
+            response += `His experience includes ${experience.length} ${experience.length === 1 ? 'role' : 'roles'} involving ${techLabel(tech)}, such as ${experience.slice(0, 2).map(e => e.title).join(', ')}. `;
         }
-
-
-        return response;
-    }
-
-    /**
-     * Build enthusiastic technology response with knowledge base data
-     */
-    buildEnthusiasticTechResponse(kb, tech, projects, experience, skills) {
-        const techEmojis = {
-            'python': '🐍',
-            'java': '☕',
-            'javascript': '🚀',
-            'react': '⚛️',
-            'django': '🎸',
-            'mysql': '🗄️',
-            'mongodb': '🍃',
-            'docker': '🐳',
-            'git': '📚',
-            'ai': '🤖'
-        };
-
-        const emoji = techEmojis[tech] || '💻';
-
-        let response = `${emoji} ${techLabel(tech)} is a highlight of Tariq's work.${skills.length ? ` His skills include ${skills.join(', ')}.` : ''} `;
 
         if (projects.length > 0) {
-            response += `He's built ${projects.length} projects with ${techLabel(tech)}, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
+            response += `Would you like details on any of these ${techLabel(tech)} projects?`;
+        } else {
+            response += `You can check the Skills section for the rest of his stack.`;
         }
-
-        if (experience.length > 0) {
-            response += `His ${experience.length} professional roles demonstrate his ${techLabel(tech)} mastery, especially ${experience.slice(0, 2).map(e => e.title).join(', ')}! `;
-        }
-
-        response += `From web development to machine learning, his ${techLabel(tech)} work is seriously impressive!`;
-
-        return response;
-    }
-
-    /**
-     * Build generic technology response with knowledge base data
-     */
-    buildGenericTechResponse(kb, tech, projects, experience, skills) {
-        let response = `Tariq has experience with ${techLabel(tech)} and has applied it in various projects. `;
-
-        if (projects.length > 0) {
-            response += `He's worked on ${projects.length} projects using ${techLabel(tech)}, including ${projects.slice(0, 2).map(p => p.name).join(', ')}. `;
-        }
-
-        if (experience.length > 0) {
-            response += `His experience includes ${experience.length} roles where ${techLabel(tech)} was utilized. `;
-        }
-
-        response += `Would you like to see specific examples of his work with ${techLabel(tech)}?`;
 
         return response;
     }
@@ -1822,17 +1711,17 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
      */
     getProjectPersonalityIntro(project) {
         const techTypes = {
-            'django': '🎸 Django project alert! This is where Tariq\'s Python wizardry really shines!',
-            'react': '⚛️ React project! Get ready for some beautiful, interactive user interfaces!',
-            'java': '☕ Java project time! Enterprise-level development at its finest!',
-            'mobile': '📱 Mobile app project! Tariq\'s cross-platform skills on full display!',
-            'database': '🗄️ Database-focused project! Watch Tariq organize data like a pro!',
-            'ai': '🤖 AI/ML project! This is where Tariq explores the cutting edge!'
+            'django': '🎸 Here is a Django project built with Python.',
+            'react': '⚛️ Here is a React project focused on a clean, responsive UI.',
+            'java': '☕ Here is a Java project built around structured object-oriented design.',
+            'mobile': '📱 Here is a cross-platform mobile project.',
+            'database': '🗄️ Here is a database-backed project.',
+            'ai': '🤖 Here is an applied machine learning project.'
         };
 
         const lowerTech = project.technologies.join(' ').toLowerCase();
         const techKey = Object.keys(techTypes).find(key => lowerTech.includes(key));
-        return techKey ? techTypes[techKey] : "🚀 Project showcase! This is where Tariq\'s creativity meets technical excellence!";
+        return techKey ? techTypes[techKey] : "🚀 Here's a closer look at this project:";
     }
 
     /**
@@ -1885,16 +1774,16 @@ ${project.details.map(detail => `• ${detail}`).join('\n')}`;
      */
     getTechProjectIntro(tech) {
         const techIntros = {
-            'python': '🐍 Python projects! Get ready to see some elegant and powerful code!',
-            'java': '☕ Java projects! Enterprise-level development at its finest!',
-            'react': '⚛️ React projects! Beautiful, interactive user interfaces ahead!',
-            'django': '🎸 Django projects! Full-stack web development magic!',
-            'mysql': '🗄️ MySQL projects! Watch how Tariq organizes data beautifully!',
-            'mongodb': '🍃 MongoDB projects! Flexible NoSQL database implementations!',
-            'javascript': '🚀 JavaScript projects! The language of the web in action!'
+            'python': '🐍 Python projects by Tariq:',
+            'java': '☕ Java projects by Tariq:',
+            'react': '⚛️ React projects by Tariq:',
+            'django': '🎸 Django projects by Tariq:',
+            'mysql': '🗄️ MySQL-backed projects by Tariq:',
+            'mongodb': '🍃 MongoDB projects by Tariq:',
+            'javascript': '🚀 JavaScript projects by Tariq:'
         };
 
-        return techIntros[tech.toLowerCase()] || `🚀 ${techLabel(tech)} projects! Here's where Tariq applies this technology!`;
+        return techIntros[tech.toLowerCase()] || `🚀 Projects using ${techLabel(tech)}:`;
     }
 
     /**
@@ -1969,7 +1858,7 @@ Each project addresses a practical problem, across web, mobile and machine learn
         const researchProjects = kb.projects.filter(isResearch);
         const webApps = kb.projects.filter(p => !isMobile(p) && !isResearch(p));
 
-        return `Tariq has completed ${kb.stats.projects} diverse projects showcasing his technical expertise:
+        return `Tariq has completed ${kb.stats.projects} projects across web, mobile, backend systems, and machine learning:
 
 **Web Applications:**
 ${webApps.slice(0, 5).map(p => `- ${p.name} - ${p.technologies.join(', ')}`).join('\n')}
@@ -1980,7 +1869,7 @@ ${mobileApps.map(p => `- ${p.name} - ${p.technologies.join(', ')}`).join('\n')}
 **Research Projects:**
 ${researchProjects.map(p => `- ${p.name} - ${p.technologies.join(', ')}`).join('\n')}
 
-Each project demonstrates practical application of technical skills, problem-solving abilities, and attention to user requirements and system design principles.`;
+Each project includes a case study covering its stack, challenge, and key highlights.`;
     }
 
     /**
@@ -1990,7 +1879,7 @@ Each project demonstrates practical application of technical skills, problem-sol
         const lowerMessage = message.toLowerCase();
 
         if (lowerMessage.includes('tariq') && (lowerMessage.includes('is') || lowerMessage.includes('are'))) {
-            return `Tariq Ahmad is a talented ${kb.personal.title}. He's a graduate from ${kb.personal.university} with a passion for full-stack development and research in Industry 4.0 technologies. His most recent role was ${kb.experience[0].title}, and he's known for his expertise in Python/Django, Java/Spring Boot, and modern web technologies.`;
+            return `Tariq Ahmad is a ${kb.personal.title} and full-stack developer who graduated from ${kb.personal.university}. Most recently he worked as a ${kb.experience[0].title} at ${kb.experience[0].company}, and he builds software with Python/Django, Java/Spring Boot, and React.`;
         }
 
         if (lowerMessage.includes('work') || lowerMessage.includes('company')) {
@@ -2004,7 +1893,7 @@ Each project demonstrates practical application of technical skills, problem-sol
             return `Several professors and colleagues have provided professional references for Tariq. ${testimonials} are among those who have worked with him directly.`;
         }
 
-        return "Tariq Ahmad is a Computer Engineer and full-stack developer specializing in Python, Java, and JavaScript technologies. He's passionate about creating innovative solutions and has experience in research, software development, and system design.";
+        return "Tariq Ahmad is a Computer Engineer and full-stack developer focused on Python, Java, and JavaScript, with experience across software development, networking, and applied research.";
     }
 
     /**
@@ -2124,22 +2013,22 @@ Each project demonstrates practical application of technical skills, problem-sol
         const lowerMessage = message.toLowerCase();
 
         if (lowerMessage.includes('choose') && lowerMessage.includes('computer')) {
-            return `Tariq chose Computer Engineering because of his passion for technology and problem-solving. He was drawn to the field by the opportunity to create innovative solutions and the constant evolution of technology. His interest in how systems work and his desire to build useful applications led him to this rewarding career path.`;
+            return `Tariq chose Computer Engineering because he enjoys understanding how systems work under the hood and turning that into practical software people can use.`;
         }
 
         if (lowerMessage.includes('work') && lowerMessage.includes('research')) {
-            return `Tariq works in research because he's fascinated by cutting-edge technologies and their practical applications. Research allows him to explore Industry 4.0 concepts, contribute to technological advancement, and develop innovative solutions for real-world industrial challenges.`;
+            return `Tariq joined the Industrial 4.0 Research Center as a second-year student to apply engineering coursework to real datasets, experiments, and prototypes, returning for three terms with growing responsibility.`;
         }
 
         if (lowerMessage.includes('freelance') || lowerMessage.includes('available')) {
-            return `Tariq is available for freelance work because he enjoys taking on diverse projects and collaborating with different teams. Freelancing allows him to apply his skills broadly, learn new technologies, and build relationships in the tech community. He's particularly interested in innovative projects and challenging technical problems.`;
+            return `Tariq takes on freelance projects alongside looking for a full-time engineering role because shipping scoped products for real users keeps his full-stack skills sharp.`;
         }
 
         if (lowerMessage.includes('recommend')) {
-            return `People recommend Tariq because of his technical expertise, reliability, and collaborative approach. His professors and colleagues praise his problem-solving abilities, dedication to quality work, and passion for technology. His track record of successful projects and positive work relationships speaks to his professional competence.`;
+            return `Professors and industry supervisors who worked with Tariq highlight his reliability, follow-through on projects outside coursework, and readiness to take on unglamorous research and engineering tasks.`;
         }
 
-        return "Tariq's career choices are driven by his passion for technology, desire for continuous learning, and interest in creating meaningful solutions. He believes in the power of technology to solve real-world problems and contribute to industrial advancement.";
+        return "Tariq focuses on building clear, reliable software and learning by taking real projects from database design to user interface.";
     }
 
     /**
@@ -2214,7 +2103,7 @@ His projects demonstrate both technical proficiency and practical application of
 • Spring Boot for robust backend systems
 • Excellent for large-scale applications
 
-**In his projects:** Python powers his Hand-Written Digit Classifier, while Java powers his Hospital Management System (Spring Boot) and Banking Management System (Swing).`;
+**In his projects:** Python powers his Handwritten Digit Classifier, while Java powers his Hospital Management System (Spring Boot) and Banking Management System (Swing).`;
         }
 
         if (lowerMessage.includes('react') && lowerMessage.includes('angular')) {
@@ -2356,8 +2245,8 @@ His projects demonstrate both technical proficiency and practical application of
      */
     handlePricingInquiry() {
         const personalityResponses = [
-            "💰 Regarding rates and pricing, Tariq believes in fair value exchange! His compensation is project-based and depends on complexity, timeline, and requirements. He's open to discussing how his expertise can bring value to your project. Feel free to reach out directly - he loves talking about potential collaborations!",
-            "💼 Tariq's approach to pricing is all about value alignment! Each project is unique, so he customizes his rates based on scope and impact. He's happy to discuss your specific needs and find a arrangement that works for both sides. Let's connect!"
+            "💰 Rates depend on project scope, complexity, and timeline. If you have something in mind, email tariq2u24@gmail.com with a quick overview and Tariq will get back to you.",
+            "💼 Tariq quotes freelance projects based on scope and timeline. Feel free to send over the details so you can find an arrangement that works for both sides."
         ];
         return this.getRandomResponse(personalityResponses);
     }

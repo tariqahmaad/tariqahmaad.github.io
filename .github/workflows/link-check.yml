@@ -1,0 +1,54 @@
+name: External Link Check
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check external URLs in index.html and knowledge-base.js
+        run: |
+          node --input-type=module - <<'EOF'
+          import { readFileSync } from 'node:fs';
+
+          const sources = [
+            readFileSync('index.html', 'utf8'),
+            readFileSync('assets/js/knowledge-base.js', 'utf8')
+          ].join('\n');
+
+          const urls = [...new Set(sources.match(/https:\/\/[^\s"'`<>)]+/g) || [])]
+            .filter((url) => !url.startsWith('https://tariqahmaad.github.io') && !url.startsWith('https://schema.org'));
+
+          let failed = false;
+          for (const url of urls) {
+            try {
+              let res = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(15000) });
+              if (res.status === 405 || res.status === 403) {
+                res = await fetch(url, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(15000) });
+              }
+              if (res.status === 999 && url.includes('linkedin.com')) {
+                console.log(`WARN ${res.status} (bot check) ${url}`);
+                continue;
+              }
+              if (res.status >= 400) {
+                console.error(`FAIL ${res.status} ${url}`);
+                failed = true;
+              } else {
+                console.log(`OK   ${res.status} ${url}`);
+              }
+            } catch (err) {
+              console.error(`ERR  ${url}: ${err.message}`);
+              failed = true;
+            }
+          }
+          if (failed) process.exit(1);
+          EOF

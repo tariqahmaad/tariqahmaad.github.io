@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>BudgetWise – React Native Expense Tracker | Tariq Ahmad</title>
-  <meta name="description" content="Mobile-first finance tracker built with React Native and Firebase for seamless cloud-sync.">
+  <meta name="description" content="Cross-platform mobile expense tracker built with React Native and Firebase for logging daily spending, setting category budgets, and syncing data in real…">
   <meta name="author" content="Tariq Ahmad">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="color-scheme" content="dark">
@@ -15,12 +15,12 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://tariqahmaad.github.io/projects/budgetwise/">
   <meta property="og:title" content="BudgetWise – React Native Expense Tracker | Tariq Ahmad">
-  <meta property="og:description" content="Mobile-first finance tracker built with React Native and Firebase for seamless cloud-sync.">
+  <meta property="og:description" content="Cross-platform mobile expense tracker built with React Native and Firebase for logging daily spending, setting category budgets, and syncing data in real…">
   <meta property="og:site_name" content="Tariq Ahmad">
   <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BudgetWise – React Native Expense Tracker | Tariq Ahmad">
-  <meta name="twitter:description" content="Mobile-first finance tracker built with React Native and Firebase for seamless cloud-sync.">
+  <meta name="twitter:description" content="Cross-platform mobile expense tracker built with React Native and Firebase for logging daily spending, setting category budgets, and syncing data in real…">
   <meta name="twitter:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
 
   <link href="/favicon.ico" rel="icon" sizes="any">
@@ -28,26 +28,26 @@
   <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
   <link href="/site.webmanifest" rel="manifest">
 
-  <link href="/assets/css/critical.min.css?v=20261125m" rel="stylesheet">
-  <link rel="preload" href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125m" as="style"
+  <link href="/assets/css/critical.min.css?v=20261127d" rel="stylesheet">
+  <link rel="preload" href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261127d" rel="stylesheet">
   </noscript>
-  <link rel="preload" href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125m" as="style"
+  <link rel="preload" href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261127d" rel="stylesheet">
   </noscript>
-  <link rel="preload" href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261125m" as="style"
+  <link rel="preload" href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261127d" rel="stylesheet">
   </noscript>
-  <link rel="preload" href="/assets/css/deferred.min.css?v=20261125m" as="style"
+  <link rel="preload" href="/assets/css/deferred.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/css/deferred.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/css/deferred.min.css?v=20261127d" rel="stylesheet">
   </noscript>
   <script src="/assets/vendor/particles.js/particles.min.js" defer></script>
   <script>document.documentElement.classList.add('js');</script>
@@ -60,7 +60,7 @@
       "@type": "SoftwareSourceCode",
       "@id": "https://tariqahmaad.github.io/projects/budgetwise/#project",
       "name": "BudgetWise – React Native Expense Tracker",
-      "description": "Mobile-first finance tracker built with React Native and Firebase for seamless cloud-sync.",
+      "description": "Cross-platform mobile expense tracker built with React Native and Firebase for logging daily spending, setting category budgets, and syncing data in real time.",
       "url": "https://tariqahmaad.github.io/projects/budgetwise/",
       "author": {
         "@id": "https://tariqahmaad.github.io/#person"
@@ -139,7 +139,7 @@
 
       <p class="case__eyebrow">Case study 03 / 09</p>
       <h1 class="case__title">BudgetWise – React Native Expense Tracker</h1>
-      <p class="case__lead">Mobile-first finance tracker built with React Native and Firebase for seamless cloud-sync.</p>
+      <p class="case__lead">Cross-platform mobile expense tracker built with React Native and Firebase for logging daily spending, setting category budgets, and syncing data in real time.</p>
 
       <ul class="case__tags" aria-label="Technologies">
         <li class="tech-tag">React Native</li>
@@ -164,7 +164,11 @@
       </section>
       <section class="case__block">
         <h2>Outcome</h2>
-        <p>Developed a cross-platform mobile app with positive user feedback on its intuitive interface.</p>
+        <p>Shipped a cross-platform mobile expense tracker with responsive logging and real-time cloud sync.</p>
+      </section>
+      <section class="case__block">
+        <h2>Architecture &amp; Trade-offs</h2>
+        <p>React Native handles cross-platform views backed by a lightweight Node.js REST layer and Firebase real-time sync. Expense records are normalized by category and month so summary charts recalculate locally without heavy queries, keeping daily logging responsive even on unreliable mobile connections.</p>
       </section>
       <section class="case__block">
         <h2>Key Highlights</h2>
@@ -203,6 +207,6 @@
 
   <script src="/assets/vendor/lenis/lenis.min.js" defer></script>
   <script src="/assets/vendor/emailjs/email.min.js" defer></script>
-  <script src="/assets/js/site.min.js?v=20261125m" defer></script>
+  <script src="/assets/js/site.min.js?v=20261127d" defer></script>
 </body>
 </html>

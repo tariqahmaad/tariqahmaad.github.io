@@ -20,13 +20,8 @@
 }
 
 /* ── Card ──
-   Reuses glass-projects base. Only overrides what's different here.
-   Fixed min-height keeps all cards the same size regardless of quote length. */
+   Reuses hud.css bracketed frame. Only layout properties live here. */
 .testimonials .testimonial-item {
-  border-radius: var(--glass-radius-lg);
-  border: var(--glass-border-subtle);
-  box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
-  transition: var(--glass-transition);
   padding: 1.8rem 2rem 1.6rem;
   margin: 6px 0;
   cursor: default;
@@ -34,39 +29,6 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-
-/* Subtle top accent line — appears on hover */
-.testimonials .testimonial-item::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 20%;
-  right: 20%;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(var(--primary-brand-rgb), 0.7),
-    transparent
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease, left 0.4s ease, right 0.4s ease;
-  z-index: 3;
-}
-
-/* Hover — uses glass system hover vars */
-.testimonials .testimonial-item:hover {
-  background: var(--glass-bg-hover);
-  border: var(--glass-border-hover);
-  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-inset);
-  transform: translateY(-3px);
-}
-
-.testimonials .testimonial-item:hover::after {
-  opacity: 1;
-  left: 10%;
-  right: 10%;
 }
 
 /* ── Decorative opening quote ── */
@@ -145,7 +107,6 @@
   margin: 0 0 var(--space-xs, 0.5rem) 0;
   position: relative;
   z-index: 3;
-  box-shadow: var(--glass-shadow-sm);
 }
 
 .testimonials .testimonial-item:hover .testimonial-img {
@@ -387,7 +348,6 @@
 @media (max-width: 576px) {
   .testimonials .testimonial-item {
     padding: 1.2rem 1.2rem 1rem;
-    border-radius: var(--glass-radius-md);
   }
 
   .testimonials .testimonial-avatar,

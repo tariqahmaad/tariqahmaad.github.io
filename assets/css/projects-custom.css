@@ -1,9 +1,8 @@
 /* ==========================================================================
    PROJECT TILES CUSTOM STYLES
-   Custom styling for project tiles — uses glassmorphism design system variables
+   Custom styling for project tiles — aligned with the HUD design system
    ========================================================================== */
 
-/* Project tiles container */
 #projects .row {
   display: flex;
   flex-wrap: wrap;
@@ -15,94 +14,16 @@
   margin-bottom: 0.5rem;
 }
 
-/* ── Project tile base — Level 2 glass (mid-depth cards) ── */
 .project-tile {
-  background: var(--glass-bg-primary);
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
-  border: var(--glass-border);
-  border-radius: var(--glass-radius-lg);
-  box-shadow: var(--glass-shadow-md), var(--glass-shadow-inset);
-  transition: var(--glass-transition);
   position: relative;
-  overflow: hidden;
   padding: 1.5rem;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
 }
 
-/* Noise texture overlay */
-.project-tile::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--glass-noise);
-  background-size: 128px 128px;
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: overlay;
-}
-
-/* Bottom accent bar */
-.project-tile::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background: var(--glass-edge-glow-bottom);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform var(--glass-transition-slow), opacity 0.4s ease;
-  opacity: 0;
-  z-index: 1;
-}
-
-/* ── Hover ── */
-.project-tile:hover {
-  background: var(--glass-bg-hover);
-  border: var(--glass-border-hover);
-  box-shadow: var(--glass-shadow-hover), var(--glass-shadow-glow),
-              var(--glass-shadow-inset);
-  transform: translateY(-3px) scale(1.005);
-}
-
-.project-tile:hover::after {
-  transform: scaleX(1);
-  opacity: 1;
-}
-
-/* ── Light reflection sweep ── */
-.project-tile .light-reflection {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.06) 45%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.06) 55%,
-    transparent 60%
-  );
-  transform: rotate(-45deg) translateX(-120%);
-  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.project-tile:hover .light-reflection {
-  transform: rotate(-45deg) translateX(120%);
-}
-
-/* ── Icon (Level 3 blur — smallest glass element) ── */
+/* ── Icon ── */
 .project-tile .icon {
   position: relative;
   display: inline-flex;
@@ -110,12 +31,6 @@
   justify-content: center;
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2));
-  backdrop-filter: var(--glass-blur-sm);
-  -webkit-backdrop-filter: var(--glass-blur-sm);
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
-  border-radius: 16px;
   margin: 0 auto 1rem;
   transition: var(--glass-transition);
   z-index: 2;
@@ -123,27 +38,19 @@
 }
 
 .project-tile:hover .icon {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.3), rgba(var(--primary-brand-rgb), 0.2)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(var(--primary-brand-rgb), 0.4);
+  transform: scale(1.06);
 }
 
 .project-tile .icon i {
   font-size: 1.8rem;
   color: var(--primary-color);
-  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.5);
   transition: var(--glass-transition-fast);
-  filter: drop-shadow(0 0 10px rgba(var(--primary-brand-rgb), 0.3));
   position: relative;
   z-index: 2;
 }
 
 .project-tile:hover .icon i {
   color: var(--primary-color-hover);
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 15px rgba(var(--primary-brand-rgb), 0.6));
 }
 
 /* ── Typography ── */
@@ -152,17 +59,10 @@
   font-weight: 600;
   color: #fff;
   margin-bottom: 0.75rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   transition: var(--glass-transition);
   position: relative;
   z-index: 2;
   text-align: center;
-}
-
-.project-tile:hover h3 {
-  color: var(--primary-color);
-  text-shadow: 0 2px 8px rgba(var(--primary-brand-rgb), 0.4);
-  transform: translateY(-1px);
 }
 
 .project-tile h3 a {
@@ -171,6 +71,8 @@
   transition: var(--glass-transition-fast);
 }
 
+.project-tile h3 a:hover,
+.project-tile:hover h3,
 .project-tile:hover h3 a {
   color: var(--primary-color);
 }
@@ -180,20 +82,13 @@
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0 0 1rem 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: var(--glass-transition);
   position: relative;
   z-index: 2;
   flex-grow: 1;
   text-align: center;
 }
 
-.project-tile:hover p {
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-/* ── Tech Tags (Level 3 blur — smallest elements) ── */
+/* ── Tech Tags ── */
 .project-tile .tech-tags {
   display: flex;
   flex-wrap: wrap;
@@ -205,28 +100,21 @@
 }
 
 .project-tile .tech-tag {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08));
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
   border: 1px solid rgba(var(--primary-brand-rgb), 0.3);
-  border-radius: 12px;
   padding: 0.25rem 0.65rem;
   font-size: 0.72rem;
   color: var(--primary-color);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: var(--glass-transition-fast);
   white-space: nowrap;
   font-weight: 500;
 }
 
 .project-tile:hover .tech-tag {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.25), rgba(var(--primary-brand-rgb), 0.15));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.5);
-  transform: scale(1.05);
+  border-color: rgba(var(--primary-brand-rgb), 0.5);
   color: #fff;
 }
 
-/* ── Action Buttons (Level 3 blur) ── */
+/* ── Action Buttons ── */
 .project-actions {
   display: flex;
   gap: 12px;
@@ -239,138 +127,31 @@
 }
 
 .action-btn {
-  background: linear-gradient(135deg, rgba(15, 15, 15, 0.75), rgba(8, 8, 8, 0.65));
-  backdrop-filter: var(--glass-blur-sm);
-  -webkit-backdrop-filter: var(--glass-blur-sm);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 10px 20px;
-  color: #fff;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
   transition: var(--glass-transition-fast);
   position: relative;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
-  transform: translateZ(0);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
-}
-
-/* Glass Specular Highlight */
-.action-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  border-radius: 12px 12px 0 0;
-  background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.02) 60%,
-    transparent 100%);
-  pointer-events: none;
-  z-index: 1;
-  transition: background 0.4s ease;
-}
-
-/* Glass Light Streak */
-.action-btn::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 15%;
-  right: 15%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  pointer-events: none;
-  z-index: 1;
-  transition: background 0.4s ease, left 0.4s ease, right 0.4s ease;
-}
-
-.action-btn:hover {
-  background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.18), rgba(10, 10, 10, 0.7));
-  border: 1px solid rgba(var(--primary-brand-rgb), 0.4);
-  box-shadow:
-    0 6px 20px rgba(var(--primary-brand-rgb), 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-  color: var(--primary-color);
-}
-
-.action-btn:hover::before {
-  background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    transparent 100%);
-}
-
-.action-btn:hover::after {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
-  left: 10%;
-  right: 10%;
-}
-
-.action-btn:active {
-  box-shadow:
-    0 2px 8px rgba(var(--primary-brand-rgb), 0.15),
-    inset 0 2px 6px rgba(0, 0, 0, 0.25);
-}
-
-.action-btn:active::before {
-  opacity: 0.5;
 }
 
 .action-btn i {
   font-size: 1rem;
-  transition: color 0.3s ease, filter 0.3s ease;
-}
-
-.action-btn:hover i {
-  filter: drop-shadow(0 0 5px rgba(var(--primary-brand-rgb), 0.6));
 }
 
 /* ── Responsive Design ── */
 @media (max-width: 768px) {
-  /* Disable expensive effects on mobile to prevent scrolling lag */
   .project-tile {
     padding: 1.2rem;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    background: linear-gradient(135deg, rgba(24, 210, 110, 0.05), rgba(255, 255, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: none !important;
-    transition: none !important;
-  }
-
-  .project-tile:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.05)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.35) !important;
-  }
-
-  .project-tile::before,
-  .project-tile::after,
-  .project-tile .light-reflection,
-  .action-btn::before,
-  .action-btn::after {
-    display: none !important;
   }
 
   .project-tile .icon {
     width: 60px;
     height: 60px;
     margin-bottom: 0.75rem;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    transition: none !important;
   }
 
   .project-tile .icon i {
@@ -384,46 +165,6 @@
   .project-tile .tech-tag {
     font-size: 0.7rem;
     padding: 0.2rem 0.6rem;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    transition: none !important;
-  }
-
-  .project-tile:hover .icon {
-    transform: none !important;
-    box-shadow: none !important;
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.2), rgba(var(--primary-brand-rgb), 0.1)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.3) !important;
-  }
-
-  .project-tile:hover h3 {
-    color: var(--primary-color) !important;
-  }
-
-  .project-tile:hover .tech-tag {
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.3) !important;
-    color: var(--primary-color) !important;
-  }
-
-  .action-btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-    width: 90%;
-    margin: 0 auto;
-    justify-content: center;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    transition: none !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.02);
-  }
-
-  .action-btn:hover {
-    background: linear-gradient(135deg, rgba(var(--primary-brand-rgb), 0.15), rgba(var(--primary-brand-rgb), 0.08)) !important;
-    border: 1px solid rgba(var(--primary-brand-rgb), 0.3) !important;
-    color: var(--primary-color) !important;
   }
 
   .project-actions {
@@ -438,34 +179,16 @@
     padding: 1rem;
   }
 
-  .project-tile:hover {
-    transform: translateY(-1px);
-  }
-
   .project-tile .tech-tags {
     gap: 0.3rem;
   }
-
-  .action-btn {
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.02);
-  }
 }
 
-/* ==========================================================================
-   ACCESSIBILITY: REDUCED MOTION
-   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .project-tile,
   .project-tile .icon,
   .project-tile .tech-tag,
   .action-btn,
-  .action-btn::before,
-  .action-btn::after,
-  .project-tile .light-reflection,
   .project-tile h3,
   .project-tile p,
   .project-tile .icon i {

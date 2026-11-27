@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>CV Builder | Tariq Ahmad</title>
-  <meta name="description" content="A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication…">
+  <meta name="description" content="Privacy-first resume builder with a dual-pane live editor, ATS-friendly templates, clean PDF export, and version history, built with Next.js and Firebase.">
   <meta name="author" content="Tariq Ahmad">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="color-scheme" content="dark">
@@ -15,12 +15,12 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://tariqahmaad.github.io/projects/cv-builder/">
   <meta property="og:title" content="CV Builder | Tariq Ahmad">
-  <meta property="og:description" content="A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication…">
+  <meta property="og:description" content="Privacy-first resume builder with a dual-pane live editor, ATS-friendly templates, clean PDF export, and version history, built with Next.js and Firebase.">
   <meta property="og:site_name" content="Tariq Ahmad">
   <meta property="og:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CV Builder | Tariq Ahmad">
-  <meta name="twitter:description" content="A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication…">
+  <meta name="twitter:description" content="Privacy-first resume builder with a dual-pane live editor, ATS-friendly templates, clean PDF export, and version history, built with Next.js and Firebase.">
   <meta name="twitter:image" content="https://tariqahmaad.github.io/assets/img/og-image.jpg">
 
   <link href="/favicon.ico" rel="icon" sizes="any">
@@ -28,26 +28,26 @@
   <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
   <link href="/site.webmanifest" rel="manifest">
 
-  <link href="/assets/css/critical.min.css?v=20261125m" rel="stylesheet">
-  <link rel="preload" href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125m" as="style"
+  <link href="/assets/css/critical.min.css?v=20261127d" rel="stylesheet">
+  <link rel="preload" href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.subset.min.css?v=20261127d" rel="stylesheet">
   </noscript>
-  <link rel="preload" href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125m" as="style"
+  <link rel="preload" href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.subset.min.css?v=20261127d" rel="stylesheet">
   </noscript>
-  <link rel="preload" href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261125m" as="style"
+  <link rel="preload" href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/vendor/remixicon/remixicon.subset.min.css?v=20261127d" rel="stylesheet">
   </noscript>
-  <link rel="preload" href="/assets/css/deferred.min.css?v=20261125m" as="style"
+  <link rel="preload" href="/assets/css/deferred.min.css?v=20261127d" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link href="/assets/css/deferred.min.css?v=20261125m" rel="stylesheet">
+    <link href="/assets/css/deferred.min.css?v=20261127d" rel="stylesheet">
   </noscript>
   <script src="/assets/vendor/particles.js/particles.min.js" defer></script>
   <script>document.documentElement.classList.add('js');</script>
@@ -60,7 +60,7 @@
       "@type": "SoftwareSourceCode",
       "@id": "https://tariqahmaad.github.io/projects/cv-builder/#project",
       "name": "CV Builder",
-      "description": "A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.",
+      "description": "Privacy-first resume builder with a dual-pane live editor, ATS-friendly templates, clean PDF export, and version history, built with Next.js and Firebase.",
       "url": "https://tariqahmaad.github.io/projects/cv-builder/",
       "author": {
         "@id": "https://tariqahmaad.github.io/#person"
@@ -138,7 +138,7 @@
 
       <p class="case__eyebrow">Case study 01 / 09</p>
       <h1 class="case__title">CV Builder</h1>
-      <p class="case__lead">A modern, privacy-first resume builder with real-time preview, multiple ATS-friendly templates, PDF export, version control, and Firebase authentication. Full-stack application deployed on Vercel.</p>
+      <p class="case__lead">Privacy-first resume builder with a dual-pane live editor, ATS-friendly templates, clean PDF export, and version history, built with Next.js and Firebase.</p>
 
       <ul class="case__tags" aria-label="Technologies">
         <li class="tech-tag">Next.js</li>
@@ -164,6 +164,10 @@
       <section class="case__block">
         <h2>Outcome</h2>
         <p>Delivered a production-ready application with guest mode, dark mode, auto-save, and multiple resume templates.</p>
+      </section>
+      <section class="case__block">
+        <h2>Architecture &amp; Trade-offs</h2>
+        <p>Client-first Next.js and TypeScript state powers the dual-pane editor so previews update synchronously on every keystroke without server round-trips. Guests store drafts in local storage with zero sign-up friction, while signed-in users sync snapshots to Firebase with timestamped conflict checks. Printable layouts use dedicated CSS print rules rather than headless screenshots so exported PDFs stay crisp and ATS-parseable.</p>
       </section>
       <section class="case__block">
         <h2>Key Highlights</h2>
@@ -201,6 +205,6 @@
 
   <script src="/assets/vendor/lenis/lenis.min.js" defer></script>
   <script src="/assets/vendor/emailjs/email.min.js" defer></script>
-  <script src="/assets/js/site.min.js?v=20261125m" defer></script>
+  <script src="/assets/js/site.min.js?v=20261127d" defer></script>
 </body>
 </html>

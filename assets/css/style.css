@@ -88,7 +88,7 @@ a:hover {
 }
 
 #role {
-  font-family: 'Cascadia Mono', monospace;
+  font-family: var(--font-mono);
   border-right: 2px solid rgba(255, 255, 255, 0);
   display: inline-block;
   margin-left: 5px;
@@ -236,14 +236,6 @@ a:hover {
     text-align: left;
   }
   
-  .count-card .purecounter {
-    font-size: 36px;
-  }
-  
-  .count-card h3 {
-    font-size: 16px;
-  }
-  
   .skill-card h3 {
     font-size: 1.2rem;
   }
@@ -276,14 +268,6 @@ a:hover {
 
   .about-me .content h3 {
     font-size: 24px;
-  }
-
-  .count-card .purecounter {
-    font-size: 32px;
-  }
-
-  .count-card h3 {
-    font-size: 14px;
   }
 
   .skill-card h3 {
@@ -369,9 +353,6 @@ section .container {
   padding: 30px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: var(--glass-blur-bg);
-  -webkit-backdrop-filter: var(--glass-blur-bg);
-  box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
 }
 
 /*--------------------------------------------------------------
@@ -391,7 +372,7 @@ section .container {
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 20px;
-  text-align: justify;
+  text-align: left;
 }
 
 .about-me .content p:last-child {
@@ -414,148 +395,6 @@ section .container {
 
 .about-me img:hover {
   transform: scale(1.02);
-}
-
-/*--------------------------------------------------------------
-# Counts
---------------------------------------------------------------*/
-.counts {
-  padding: 70px 0 60px;
-}
-
-/* Modern Count Cards */
-.counts-modern {
-  position: relative;
-  z-index: 1;
-  margin-top: 30px;
-}
-
-.count-card {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 24px 16px;
-  text-align: center;
-  height: 100%;
-  border: var(--card-border);
-  transition: all 0.3s ease;
-  box-shadow: var(--card-shadow);
-  overflow: hidden;
-  position: relative;
-  animation: scaleIn 0.5s ease forwards;
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.count-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--card-hover-shadow);
-  background: var(--card-hover-bg);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.count-card:before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-  transform: scaleX(0);
-  transform-origin: bottom right;
-  transition: transform 0.5s ease-out;
-}
-
-.count-card:hover:before {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-.count-icon {
-  margin-bottom: 10px;
-  display: inline-block;
-}
-
-.count-icon i {
-  font-size: 2.5rem;
-  color: var(--primary-color);
-  transition: all 0.3s ease;
-}
-
-.count-card:hover .count-icon i {
-  transform: scale(1.2);
-  color: #000; /* Black icon on hover */
-}
-
-.count-card .purecounter {
-  font-size: 42px;
-  display: block;
-  font-weight: 800;
-  color: #fff;
-  margin: 12px 0 6px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.count-card h3 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  line-height: 1.3;
-}
-
-.count-detail {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.count-detail p {
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.7);
-  padding: 0 12px;
-  margin: 0;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-.count-card:hover .count-detail {
-  max-height: 100px;
-  opacity: 1;
-  margin-top: 10px;
-}
-
-.count-card:hover h3,
-.count-card:hover .purecounter,
-.count-card:hover .count-detail p {
-  color: #000; /* Black text on hover */
-}
-
-/* Animation for count cards */
-.counts-modern .count-card {
-  animation: fadeInUp 0.6s ease-out forwards;
-  opacity: 0;
-}
-
-.counts-modern .col-lg-3:nth-child(1) .count-card { animation-delay: 0.1s; }
-.counts-modern .col-lg-3:nth-child(2) .count-card { animation-delay: 0.2s; }
-.counts-modern .col-lg-3:nth-child(3) .count-card { animation-delay: 0.3s; }
-.counts-modern .col-lg-3:nth-child(4) .count-card { animation-delay: 0.4s; }
-
-/* Enhanced title for counts section */
-.counts .section-title p {
-  background: linear-gradient(to right, var(--primary-color), var(--tertiary-color));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /*--------------------------------------------------------------
@@ -821,19 +660,6 @@ section .container {
   overflow: hidden;
 }
 
-/* Noise texture overlay */
-.contact .info-box::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--glass-noise);
-  background-size: 128px 128px;
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: overlay;
-}
-
 .contact .info-box p a {
   font-size: 1.1rem;
   font-weight: 600;
@@ -936,19 +762,6 @@ section .container {
   transition: var(--glass-transition);
   position: relative;
   overflow: hidden;
-}
-
-/* Noise texture overlay on form */
-.contact .php-email-form::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--glass-noise);
-  background-size: 128px 128px;
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: overlay;
 }
 
 .contact .php-email-form .error-message {
@@ -1091,7 +904,6 @@ section .container {
     border: 1px solid rgba(var(--primary-brand-rgb), 0.35) !important;
   }
 
-  .contact .info-box::before,
   .contact .info-box::after {
     display: none !important;
   }
@@ -1112,10 +924,6 @@ section .container {
     backdrop-filter: none !important;
     box-shadow: none !important;
     padding: 20px;
-  }
-
-  .contact .php-email-form::before {
-    display: none !important;
   }
 
   .contact .php-email-form input,
@@ -1146,49 +954,10 @@ section .container {
   transition: all 0.3s ease;
 }
 
-/* Disable hover/click animations for stats on mobile and iPad */
-@media (max-width: 1023px) {
-  .count-card:hover {
-    transform: none;
-    box-shadow: var(--card-shadow);
-    background: var(--card-bg);
-    border-color: var(--card-border);
-  }
-
-  .count-card:hover:before {
-    transform: scaleX(0);
-  }
-
-  .count-card:hover .count-icon i {
-    transform: none;
-    color: var(--primary-color);
-  }
-
-  .count-card:hover h3,
-  .count-card:hover .purecounter,
-  .count-card:hover .count-detail p {
-    color: rgba(255, 255, 255, 0.9);
-  }
-
-  .count-card:hover .count-detail {
-    max-height: 100px;
-    opacity: 1;
-    margin-top: 10px;
-  }
-
-  /* Make count details always visible on mobile/iPad */
-  .count-detail {
-    max-height: 100px;
-    opacity: 1;
-    margin-top: 10px;
-  }
-}
-
 /* ==========================================================================
    ACCESSIBILITY: REDUCED MOTION
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .count-card,
   .skill-card,
   .about-info-card,
   .testimonials .testimonial-item p,
@@ -1203,7 +972,6 @@ section .container {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
-  .count-card:hover,
   .skill-card:hover,
   .about-info-card:hover,
   .contact .info-box:hover {

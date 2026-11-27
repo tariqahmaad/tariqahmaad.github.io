@@ -60,13 +60,16 @@ export function mentionsTech(text, tech) {
 const TECH_SKILL_ALIASES = {
     python: ['python', 'django'],
     java: ['java', 'spring boot'],
-    javascript: ['javascript', 'react', 'bootstrap'],
-    react: ['react'],
+    javascript: ['javascript', 'typescript', 'react', 'next.js', 'node.js', 'bootstrap'],
+    react: ['react', 'next.js'],
+    angular: ['angular'],
     django: ['django', 'python'],
     mysql: ['mysql'],
     mongodb: ['mongodb'],
     docker: ['docker'],
     git: ['git'],
+    neural: ['tensorflow'],
+    ai: ['tensorflow'],
     csharp: ['c#'],
     cpp: ['c++'],
     php: ['php']

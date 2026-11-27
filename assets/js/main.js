@@ -473,23 +473,6 @@ import { activeSectionId, nextHashForScroll } from './nav-hash.js'
   const referencesSlider = select('.testimonials-slider')
   if (referencesSlider) initCarousel(referencesSlider)
 
-  // Initialize Pure Counter (disabled on mobile and iPad)
-  const isMobileOrTablet = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-      window.innerWidth < 1024;
-  };
-
-  if (!isMobileOrTablet() && typeof PureCounter !== 'undefined') {
-    new PureCounter();
-  } else {
-    // Set static values for mobile and iPad
-    const counters = document.querySelectorAll('.purecounter');
-    counters.forEach(counter => {
-      const endValue = parseInt(counter.getAttribute('data-purecounter-end'));
-      counter.textContent = endValue;
-    });
-  }
-
   // Optimized typing effect for role text
   const roles = ["Full-Stack Developer", "Software Engineer", "Computer Engineer", "Python Developer", "React Developer"];
   const typeEffect = (() => {

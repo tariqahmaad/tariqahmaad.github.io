@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://tariqahmaad.github.io/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -18,76 +18,76 @@
     </image:image>
     <image:image>
       <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-1.jpg</image:loc>
-      <image:title>Professional Testimonial 1</image:title>
+      <image:title>Alparslan Horasan - Assistant Professor</image:title>
     </image:image>
     <image:image>
       <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-2.jpg</image:loc>
-      <image:title>Professional Testimonial 2</image:title>
+      <image:title>Selçuk Şener - Senior Software Developer</image:title>
     </image:image>
     <image:image>
       <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-3.jpg</image:loc>
-      <image:title>Professional Testimonial 3</image:title>
+      <image:title>Roa'a Ali - Assistant Professor</image:title>
     </image:image>
     <image:image>
       <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-4.jpg</image:loc>
-      <image:title>Professional Testimonial 4</image:title>
+      <image:title>Wasim Raed - Senior Professor</image:title>
     </image:image>
     <image:image>
       <image:loc>https://tariqahmaad.github.io/assets/img/testimonials/testimonials-5.jpg</image:loc>
-      <image:title>Professional Testimonial 5</image:title>
+      <image:title>Zafer Aslan - Vice Dean</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/cv-builder/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/quizlet/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/budgetwise/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/graduation-presentation/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/note-taking-app/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/hospital-management/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/digit-classifier/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/hotel-management/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tariqahmaad.github.io/projects/banking-management/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
